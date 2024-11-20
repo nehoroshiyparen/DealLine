@@ -1,0 +1,23 @@
+$secondary-dark: #575757;
+
+.dicussion-list {
+    border-top: 3px solid $secondary-dark;
+}
+
+.discussion-component {
+    border-bottom: 3px solid $secondary-dark;
+    padding: 20px 30px 20px 30px;
+    box-sizing: border-box;
+}
+
+.disc-title {
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+    font-family: "Inter", sans-serif;
+}
+
+.disc-status {
+    float: left;
+    margin-right: 30px;
+}
