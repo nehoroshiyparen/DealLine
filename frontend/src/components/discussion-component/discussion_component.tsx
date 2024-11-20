@@ -8,7 +8,7 @@ export default function Discussion_component() {
                 <div className='disc-title'>
                     <img src='/images/direction-w.png' className='disc-status' width={'20px'}>
                     </img>
-                    Название обсуждения
+                    Название обсуждения Йоу
                 </div>
             </div>
         </>
