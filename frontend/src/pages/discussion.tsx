@@ -4,6 +4,7 @@ import './discussion.scss'
 import Discussion_component from '../components/discussion-component/discussion_component'
 import { useDiscussion } from '../hooks/useDiscussion'
 import { discussions_example } from '../disc-example'
+import { Discussion } from '../types'
 
 export default function Index() {
     const [isAuth, setIsAuth] = useState(true)
@@ -28,8 +29,9 @@ export default function Index() {
                 <div className='discussion-inside'>
                     {isAuth ? (
                         <div className='dicussion-list'>
-                            <Discussion_component/>
-                            <Discussion_component/>
+                            {discussions.map((discussion) => (
+                                <Discussion_component discussion={discussion}/>
+                            ))}
                         </div>
                     ) : (
                         <div className='auth-form'>

@@ -31,7 +31,7 @@ export default function Menu() {
                             <Link to={'/'} className='profile menu-block'>
                                 <img src='/images/add.png' width={'24px'} className='func-icon'>
                                 </img>
-                                <span className='function'>Создать обсуждение</span>
+                                <span className='function function-create'>Создать обсуждение</span>
                             </Link>
                             <Link to={'/'} className='calendar menu-block'>
                                 <img src='/images/calendar.png' width={'24px'} className='func-icon'>

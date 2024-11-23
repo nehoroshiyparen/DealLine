@@ -1,17 +1,19 @@
 $secondary-dark: #575757;
+$secondary-dark-title: #a2a2a2;
 
 .dicussion-list {
-    border-top: 3px solid $secondary-dark;
+   
 }
 
 .discussion-component {
-    border-bottom: 3px solid $secondary-dark;
+    border: 3px solid $secondary-dark;
     padding: 20px 30px 20px 30px;
     box-sizing: border-box;
+    margin: 0 0 20px 0;
 }
 
 .disc-title {
-    font-size: 35px;
+    font-size: 38px;
     display: flex;
     align-items: center;
     font-family: "Inter", sans-serif;
@@ -20,4 +22,71 @@ $secondary-dark: #575757;
 .disc-status {
     float: left;
     margin-right: 30px;
+}
+
+.disc-content {
+    width: 100%;
+}
+
+.disc-top-info {
+    display: flex;
+}
+
+.disc-block {
+    font-size: 16px;
+    margin-right: 40px;
+}
+
+.disc-content-inside {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 25px 50px 0 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.disc-block-title {
+    color: $secondary-dark-title;
+    margin-bottom: 10px;
+}
+
+.owner-name, .members-images {
+    display: flex;
+    align-items: center;
+}
+
+.members-images {
+    height: 30px;
+}
+
+.disc-block-img {
+    margin-right: 10px;
+}
+
+.member-image {
+    position: absolute;
+    border-radius: 60px;
+    border: 2px solid $secondary-dark;
+    aspect-ratio: 1/1;
+    background-position: cover;
+}
+
+.disc-description {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px 0px 20px 0;
+    font-size: 33px;
+    font-weight: bold;
+    border-bottom: 1px solid $secondary-dark;
+}
+
+.tasks-tasks {
+    margin: 40px 0 0px 0;
+    font-size: 25px;
+}
+
+.task-list {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 40px 0px 20px;
 }

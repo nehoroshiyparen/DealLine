@@ -15,8 +15,8 @@ export const useDiscussion = () => {
         //dispatch(setDiscussion(fetchedDiscussions))
     }
 
-    const createDiscussion = (discussion: Discussion) => {
-        dispatch(addDiscussion(discussion))
+    const createDiscussion = async(discussion: Discussion) => {
+        await dispatch(addDiscussion(discussion))
     }
 
     const modifyDiscussion = (discussion: Discussion) => {

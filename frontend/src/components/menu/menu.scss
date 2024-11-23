@@ -4,7 +4,8 @@
     background: #282828;
     border-right: 2px solid #606060;
     float: left;
-
+    grid-row: 1;
+    position: fixed;
 }
 
 .menu-inside {
@@ -42,6 +43,10 @@
     box-sizing: border-box;
     border-bottom: 2px solid;
     transition: 0.2s;
+}
+
+.function-create:hover {
+    border-bottom: 2px solid rgb(63, 187, 71) !important;
 }
 
 .function-tasks:hover {

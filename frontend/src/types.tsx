@@ -1,3 +1,10 @@
+export interface User {
+    id: number;
+    user_name: string;
+    password: string;
+    avatar: File;
+}
+
 export interface File {
     id: number;
     name: string;
@@ -11,7 +18,8 @@ export interface Task {
     description: string;
     priority: TaskPriority;
     deadline: string;
-    status: TaskStatus
+    status: TaskStatus;
+    responsible: User[];
 }
 
 export enum TaskStatus {
@@ -31,8 +39,8 @@ export interface Discussion {
     title: string;
     description: string;
     creation_date: string;
-    owner: string;
-    members: string[];
+    owner: User;
+    members: User[];
     tasks: Task[]
     files: File[];
 }
