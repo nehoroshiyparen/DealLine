@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Task } from '../../types'
 import './task-component.scss'
-import { openTask } from './task-component'
 
 interface TaskComponentProps {
     task: Task,
@@ -10,7 +9,16 @@ interface TaskComponentProps {
 
 const Task_Component: React.FC<TaskComponentProps> = ({task, index}) => {
 
-    const [isOpen, setIsOpen] = useState(true)
+    const openTask = (event: React.MouseEvent<HTMLElement>) => {
+        const task_title = event.target as HTMLElement;
+    
+        const task_top = task_title.closest('.task-top') as HTMLElement;
+        const task_info = task_top?.querySelector('.task-info') as HTMLElement;
+    
+        if (task_info) {
+            task_info.classList.toggle('task-open');
+        }
+    };
 
     return(
         <div className='task'>

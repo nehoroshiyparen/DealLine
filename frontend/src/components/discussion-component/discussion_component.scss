@@ -17,6 +17,7 @@ $secondary-dark-title: #a2a2a2;
     display: flex;
     align-items: center;
     font-family: "Inter", sans-serif;
+    cursor: pointer;
 }
 
 .disc-status {
@@ -26,6 +27,15 @@ $secondary-dark-title: #a2a2a2;
 
 .disc-content {
     width: 100%;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: 0.8s;
+}
+
+.disc-content-open {
+    opacity: 1;
+    max-height: 2000px;
 }
 
 .disc-top-info {

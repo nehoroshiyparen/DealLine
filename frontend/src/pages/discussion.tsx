@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import React from 'react'
 import './discussion.scss'
-import Discussion_component from '../components/discussion-component/discussion_component'
+import Discussion_component from '../components/discussion-component/discussion_component.tsx' 
 import { useDiscussion } from '../hooks/useDiscussion'
 import { discussions_example } from '../disc-example'
 import { Discussion } from '../types'

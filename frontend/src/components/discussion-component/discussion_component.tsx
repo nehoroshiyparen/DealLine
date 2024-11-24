@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import './discussion_component.scss'
 import { Discussion } from '../../types'
-import TaskComponent from '../task-component/task-component'
-import Task_Component from '../task-component/task-component';
+import Task_Component from '../task-component/task-component.tsx'
+import { openDiscussion } from './discussion_component.ts'
 
 interface DiscussionComponentProps {
     discussion: Discussion; // Пропс discussion должен быть типа Discussion
@@ -10,17 +10,15 @@ interface DiscussionComponentProps {
 
 const Discussion_component: React.FC<DiscussionComponentProps>  = ({discussion}) => {
 
-    const [isOpen, setIsOpen] = useState(false)
-
     return (
         <>
             <div className='discussion-component'>
-                <div className='disc-title'>
+                <div className='disc-title' onClick={openDiscussion}>
                     <img src='/images/direction-w.png' className='disc-status' width={'20px'}>
                     </img>
                     {discussion.title}
                 </div>
-                <div className={`disc-content ${isOpen ? 'visible' : ''}`}>
+                <div className={`disc-content`}>
                     <div className='disc-content-inside'>
                         <div className='disc-top-info'>
                             <div className='owner disc-block'>
@@ -58,7 +56,7 @@ const Discussion_component: React.FC<DiscussionComponentProps>  = ({discussion})
                         </div>
                         <div className='task-list'>
                             {discussion.tasks.map((task, index) => (
-                                <TaskComponent key={task.id} task={task} index={index}/>
+                                <Task_Component key={task.id} task={task} index={index}/>
                             ))}
                         </div>
                     </div>
