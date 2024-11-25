@@ -3,22 +3,40 @@ import sequelize from './db';
 
 class User extends Model {
     public id!: number;
+    public email!: string;
     public username!: string;
     public description!: string;
     public contacts!: object[];
     public avatar!: string;
     public password!: string;
+    public isActivated!: boolean;
+    public activationLink!: string;
 }
 
 User.init({
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    email: { type: DataTypes.STRING, allowNull: false, unique: true},
     username: {type: DataTypes.STRING(30), unique: true, allowNull: false},
     description: {type: DataTypes.TEXT, allowNull: true},
     contacts: {type: DataTypes.JSONB, allowNull: true},
     avatar: {type: DataTypes.STRING, allowNull: true},
-    password: {type: DataTypes.STRING, allowNull: false}
+    password: {type: DataTypes.STRING, allowNull: false},
+    isActivated: { type: DataTypes.BOOLEAN, defaultValue: false },
+    activationLink: { type: DataTypes.STRING, allowNull: false },
 }, {
     sequelize, modelName: 'User'
+})
+
+class Token extends Model {
+    public user!: object;
+    public refreshToken!: string;
+}
+
+Token.init({
+    user: { type: DataTypes.JSONB, references: {model: User, key: 'id'} },
+    refreshToken: { type: DataTypes.STRING, allowNull: false },
+}, {
+    sequelize, modelName: 'Token'
 })
 
 class Discussion extends Model {
@@ -109,4 +127,4 @@ Comment.belongsTo(User, { foreignKey: 'userId' });
 Notifications.belongsTo(User, { as: 'Sender', foreignKey: 'senderId' }); // Уведомление от отправителя
 Notifications.belongsTo(User, { as: 'Receiver', foreignKey: 'receiverId' }); 
 
-export { sequelize, User, Discussion, Task, Comment, Notifications };
+export { sequelize, User, Discussion, Task, Comment, Notifications, Token };

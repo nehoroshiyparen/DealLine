@@ -5,8 +5,9 @@ import fileUpload from "express-fileupload";
 import path from "path";
 import sequelize from "./database/db";
 import { Discussion, User, Task, Comment } from "./database/models";
+import router from "./routes";
 
-dotenv.config
+dotenv.config({ path: './.env' });
 
 const PORT = process.env.PORT || 5665
 const app = express()
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static")));
 app.use(fileUpload({}));
+app.use('/api', router)
 
 //app.use(errorHandler)
 

@@ -1,10 +1,13 @@
 import { Router } from 'express'
-import { getUserInfo, log_in, sign_in } from '../controllers/userController'
+import { activate, getUserInfo, log_in, log_out, refresh, registration } from '../controllers/userController'
 
 const router = Router()
 
-router.post('/signIn', sign_in)
-router.get('/logIn', log_in)
+router.post('/signIn', registration)
+router.post('/logIn', log_in)
+router.post('/logout', log_out)
+router.get('/activate/:link', activate)
+router.get('/refresh', refresh)
 router.get('/', getUserInfo)
 
 export default router
