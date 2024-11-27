@@ -8,8 +8,8 @@ interface IUser {
 export default class UserDTO {
     email: string;
     id: number;
-    username: string;
     isActivated: boolean;
+    username: string;
 
     constructor(model: IUser) {
         this.email = model.email

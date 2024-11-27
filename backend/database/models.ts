@@ -28,12 +28,12 @@ User.init({
 })
 
 class Token extends Model {
-    public user!: object;
+    public user_id!: number;
     public refreshToken!: string;
 }
 
 Token.init({
-    user: { type: DataTypes.JSONB, references: {model: User, key: 'id'} },
+    user_id: { type: DataTypes.INTEGER, references: {model: User, key: 'id'} },
     refreshToken: { type: DataTypes.STRING, allowNull: false },
 }, {
     sequelize, modelName: 'Token'

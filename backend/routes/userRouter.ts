@@ -3,7 +3,7 @@ import { activate, getUserInfo, log_in, log_out, refresh, registration } from '.
 
 const router = Router()
 
-router.post('/signIn', registration)
+router.post('/registration', registration)
 router.post('/logIn', log_in)
 router.post('/logout', log_out)
 router.get('/activate/:link', activate)

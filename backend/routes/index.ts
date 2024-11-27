@@ -8,7 +8,7 @@ const router = Router()
 
 router.use('/discussions', discussionRouter)
 router.use('/tasks', taskRouter)
-router.use('/user', userRouter)
-router.use('notification', notificationRouter)
+router.use('/users', userRouter)
+router.use('notifications', notificationRouter)
 
 export default router

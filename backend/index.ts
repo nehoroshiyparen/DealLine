@@ -6,6 +6,7 @@ import path from "path";
 import sequelize from "./database/db";
 import { Discussion, User, Task, Comment } from "./database/models";
 import router from "./routes";
+import errorMiddleware from "./middleware/ErrorMiddleware";
 
 dotenv.config({ path: './.env' });
 
@@ -18,13 +19,14 @@ app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static")));
 app.use(fileUpload({}));
 app.use('/api', router)
+app.use(errorMiddleware)
 
 //app.use(errorHandler)
 
 const start = async() => {
     try {
         await sequelize.authenticate();
-        await sequelize.sync({ force: true });
+        await sequelize.sync();
 
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
       } catch (e) {
