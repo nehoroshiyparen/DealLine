@@ -7,13 +7,14 @@ import sequelize from "./database/db";
 import { Discussion, User, Task, Comment } from "./database/models";
 import router from "./routes";
 import errorMiddleware from "./middleware/ErrorMiddleware";
+import cookieParser from 'cookie-parser';
 
 dotenv.config({ path: './.env' });
 
 const PORT = process.env.PORT || 5665
 const app = express()
 
-app.use(cors())
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static")));
