@@ -8,6 +8,7 @@ import { Discussion, User, Task, Comment } from "./database/models";
 import router from "./routes";
 import errorMiddleware from "./middleware/ErrorMiddleware";
 import cookieParser from 'cookie-parser';
+import './scheludes/notificationSchedule'
 
 dotenv.config({ path: './.env' });
 
@@ -27,7 +28,7 @@ app.use(errorMiddleware)
 const start = async() => {
     try {
         await sequelize.authenticate();
-        await sequelize.sync();
+        await sequelize.sync({ force: true });
 
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
       } catch (e) {
