@@ -5,12 +5,12 @@ class MailService {
 
     constructor() {
         this.transporter = nodemailer.createTransport({
-            host: 'smtp.yandex.ru', // почтовый сервер Яндекса
-            port: 465, // порт для STARTTLS
-            secure: true, // для STARTTLS secure должен быть false
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
             auth: {
-                user: 'ZxcGhoul.123@yandex.ru', // ваш SMTP-пользователь
-                pass: 'czdrcskipuhysaom'  // ваш пароль
+                user: 'ivankuzin616@gmail.com', // ваш SMTP-пользователь
+                pass: 'ycia gnuy kjbz jkuy '  // ваш пароль
             },
         })
     }
@@ -18,7 +18,7 @@ class MailService {
     public async sendActivationMail(to: string, link: string): Promise<void> {
         try {
             await this.transporter.sendMail({
-                from: 'ZxcGhoul.123@yandex.ru',
+                from: 'ivankuzin616@gmail.com',
                 to,
                 subject: 'Активация аккаунта DealLine',
                 text: '',

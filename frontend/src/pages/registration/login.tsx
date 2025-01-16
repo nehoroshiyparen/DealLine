@@ -1,23 +1,19 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import '../../index.css'
-import './login.scss'
+import './style.scss'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../../store/store'
+import { loginUser } from '../../store/userSlice'
 
 export default function LogIn() {
-    const [have_account, setHave_account] = useState(true)
+    const [usernameOrEmail, setUsernameOrEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
 
-    const log_in = async() => {
-        const usernameOrEmail = document.querySelector('.user-email-input')?.textContent
-        const password = document.querySelector('.password')?.textContent
+    const dispatch = useDispatch<AppDispatch>()
 
-        console.log(usernameOrEmail, password)
-    }
-
-    const registration = async() => {
-        const email = document.querySelector('.email')?.textContent
-        const username = document.querySelector('.username')?.textContent
-        const password = document.querySelector('.second-password')?.textContent
-
-        console.log(email, username, password)
+    const handleLogin = () => {
+        dispatch(loginUser({user: usernameOrEmail, password}))
     }
 
     return (
@@ -25,22 +21,30 @@ export default function LogIn() {
             <div className="container">
                 <div className="container-display-block align-items-center">
                     <div className='log-in-block'>
-                        {have_account ? 
                         <>
                             <div className="logblock-title">
                                 Вход в аккаунт
                             </div>
                             <div className='log-in-form'>
-                                <input className='user-email-input input' placeholder={'Почта или юзернейм'} style={{marginBottom: '15px'}}>
+                                <input className='user-email-input input' 
+                                onChange={e => setUsernameOrEmail(e.target.value)}
+                                placeholder={'Почта или юзернейм'} 
+                                type='usernameOrEmail'
+                                value={usernameOrEmail}
+                                style={{marginBottom: '15px'}}>
 
                                 </input>
                                 <div className='password-help'>
                                     <a href="">Забыли пароль?</a>
                                 </div>
-                                <input className='password input' placeholder={'Пароль'}>
+                                <input className='password input'
+                                onChange={e => setPassword(e.target.value)}
+                                type='password'
+                                placeholder={'Пароль'}
+                                value={password}>
 
                                 </input>
-                                <div className='confirm-log-button' onClick={log_in}>
+                                <div className='confirm-log-button' onClick={handleLogin}>
                                     Войти
                                 </div>
                                 <div className='Incase-test'>
@@ -48,36 +52,9 @@ export default function LogIn() {
                                 </div>
                             </div> 
                             <div className='change-way-help'>
-                                Нет аккаунта? <b style={{cursor: 'pointer'}} onClick={() => setHave_account(false)}>Зарегистрироваться</b>
+                                Нет аккаунта? <Link to='/registration' style={{cursor: 'pointer', fontWeight: 'bold'}} >Зарегистрироваться</Link>
                             </div>
                         </>
-                            : 
-                        <>
-                            <div className="logblock-title">
-                                Регистрация
-                            </div>
-                            <div className='registration-form'>
-                                <input className='email input' placeholder={'Введите почту'} style={{marginBottom: '15px'}}>
-
-                                </input>
-                                <input className='username input' placeholder={'Введите юзернейм'} style={{marginBottom: '15px'}}>
-
-                                </input>
-                                <input className='first-password input' placeholder={'Пароль'} style={{marginBottom: '15px'}}>
-
-                                </input>
-                                <input className='second-password input' placeholder={'Повторите пароль'}>
-
-                                </input>
-                                <div className='confirm-log-button' onClick={registration}>
-                                    Зарегистрироваться
-                                </div>
-                            </div>
-                            <div className='change-way-help'>
-                                Уже есть аккаунт? <b style={{cursor: 'pointer'}} onClick={() => setHave_account(true)}>Войти</b>
-                            </div>
-                        </>
-                        }
                     </div>
                 </div>
             </div>

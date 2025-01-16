@@ -8,11 +8,12 @@ export const registration = async(req: Request, res: Response, next: NextFunctio
     try {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
-            next(ApiError.BadRequest('Ошибка при валидации', errors.array()))
+            return next(ApiError.BadRequest('Ошибка при валидации', errors.array()))
         }
-        const { email , password , username } = req.body
+        const { username, email , password } = req.body
         const userData = await userService.registration(username, email, password)
-        res.cookie('refrashToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+        res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: process.env.NODE_ENV === 'production'})
+        console.log('Set cookie:', userData.refreshToken);
         res.json(userData)
     } catch (error) {
         next(error)
@@ -55,7 +56,7 @@ export const refresh = async(req: Request, res: Response, next: NextFunction) =>
     try {
         const {refreshToken} = req.cookies
         const userData = await userService.refresh(refreshToken)
-        res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+        res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: process.env.NODE_ENV === 'production'})
         res.json(userData)
     } catch (error) {
         next(error)

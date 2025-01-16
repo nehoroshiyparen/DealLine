@@ -1,0 +1,96 @@
+$border-color: #616161;
+
+
+.side-menu {
+    width: 20%;
+    height: 100%;
+    float: left;
+}
+
+.top-part {
+    border-bottom: 1px solid $border-color;
+    border-right: 1px solid $border-color;
+    height: 50%;
+    box-sizing: border-box;
+}
+
+.logo-place {
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    padding: 40px 0 40px 0;
+}
+
+.logo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.logo-image {
+    float: left;
+    width: 55px;
+    aspect-ratio: 1/1;
+    margin-left: 25px;
+}
+
+.logo-name {
+    font-size: 35px;
+    font-family: "Funnel Display", serif;
+    margin-left: 25px;
+}
+
+.main-menu {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 25px;
+    box-sizing: border-box;
+}
+
+.main-menu-header {
+    font-size: 19px;
+    padding-left: 10px;
+    color: rgb(165, 165, 165);
+}
+
+.functions {
+    
+}
+
+.main-menu-function {
+    width: 100%;
+    border: 1px solid #242424;
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 7px 16px 7px 16px;
+    margin-top: 13px;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.main-menu-function:hover {
+    border: 1px solid rgb(193, 193, 193);
+}
+
+.function-image {
+    display: block;
+    width: 17px;
+    aspect-ratio: 1/1;
+    background-color: white;
+    float: left;
+    margin-right: 10px;
+}
+
+.bottom-part {
+    border-right: 1px solid $border-color;
+    height: 50%;
+}
+
+.support {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 35px 25px 35px 25px;
+}

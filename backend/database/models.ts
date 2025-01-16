@@ -29,7 +29,7 @@ User.init({
     contacts: {type: DataTypes.JSONB, allowNull: true},
     avatar: {type: DataTypes.STRING, allowNull: true},
     password: {type: DataTypes.STRING, allowNull: false},
-    isActivated: { type: DataTypes.BOOLEAN, defaultValue: false },
+    isActivated: { type: DataTypes.BOOLEAN, defaultValue: true },
     activationLink: { type: DataTypes.STRING, allowNull: false },
 }, {
     sequelize, modelName: 'User'
@@ -54,7 +54,7 @@ class Token extends Model {
 
 Token.init({
     user_id: { type: DataTypes.INTEGER, references: {model: User, key: 'id'} },
-    refreshToken: { type: DataTypes.STRING, allowNull: false },
+    refreshToken: { type: DataTypes.TEXT, allowNull: false },
 }, {
     sequelize, modelName: 'Token'
 })

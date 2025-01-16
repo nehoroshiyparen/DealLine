@@ -11,7 +11,7 @@ import { Op } from 'sequelize';
 class UserService {
     async registration(username: string, email: string, password: string) {
         const candidate_email = await User.findOne({where: {email}})
-        const candidate_username = await User.findOne({where: {email}})
+        const candidate_username = await User.findOne({ where: { username } });
         if (candidate_email) {
             throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`)
         }
@@ -21,12 +21,13 @@ class UserService {
         const hashPassword = await bcrypt.hash(password, 3)
         const activationLink = uuid()
 
-        await mailService.sendActivationMail(email, `${process.env.API_URL}/api/users/activate/${activationLink}`)
         const user = await User.create({ username, email, password: hashPassword, activationLink })
 
         const userDTO = new UserDTO(user)
         const tokens = tokenService.generateTokens({...userDTO})
         await tokenService.saveToken(userDTO.id, tokens.refreshToken)
+
+        console.log(userDTO, tokens)
 
         return { ...tokens, user: userDTO }
     }

@@ -1,15 +1,25 @@
+import Discussion from './pages/discussions/discussions.tsx'
 import LogIn from './pages/registration/login.tsx'
-import {INDEX_ROUTE, REGISTER_ROUTE} from './utils/consts'
+import Registration from './pages/registration/registration.tsx'
+import {INDEX_ROUTE, REGISTRATION_ROUTE, LOGIN_ROUTE, DISCUSSION_ROUTE} from './utils/consts'
 
 
 import { Component } from 'react'
 
 export const PublicRoutes = [
     {
-        path: INDEX_ROUTE,
+        path: LOGIN_ROUTE,
+        Component: LogIn
     },
     {
-        path: REGISTER_ROUTE,
-        Component: LogIn
+        path: REGISTRATION_ROUTE,
+        Component: Registration
+    }
+]
+
+export const PrivateRoutes = [
+    {
+        path: DISCUSSION_ROUTE,
+        Component: Discussion
     }
 ]

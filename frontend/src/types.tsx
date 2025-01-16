@@ -1,8 +1,7 @@
 export interface User {
-    id: number;
-    user_name: string;
-    password: string;
-    avatar: File;
+    username: string;
+    email: string;
+    avatar: string;
 }
 
 export interface File {
