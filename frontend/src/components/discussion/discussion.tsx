@@ -1,16 +1,19 @@
 import React from 'react'
 import './discussion.scss'
+import { Discussion as DiscussionType} from '../../types'
 
 interface DiscussionProps {
-    title: string
+    discussion: DiscussionType
 }
 
-export default function Discussion({title}: DiscussionProps) {
+export default function Discussion({discussion}: DiscussionProps) {
+
+    console.log(discussion)
 
     return (
         <div className='discussion'>
             <div className='title'>
-                {title}
+                {discussion.title}
             </div>
         </div>
     )

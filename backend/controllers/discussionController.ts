@@ -1,14 +1,14 @@
 import { Discussion } from "../database/models";
 import { Request, Response } from "express";
 import { Op } from 'sequelize'
-import discussionService from "../services/discussionService";
+import discussionService from "../src/services/discussionService";
 import { create } from "domain";
 import { DiscussionInterface } from "../types/types";
 
 export const getAllDiscussions = async(req: Request, res: Response) => {
     try {
-        const { user_id } = req.body
-        const discussions = discussionService.getAllUsersDiscussions(user_id)
+        const { user_id } = req.params
+        const discussions = await discussionService.getAllUsersDiscussions(Number(user_id))
         res.json(discussions) 
     } catch (error) {
         res.json({message :'Ошибка получения обсуждений: ', error})
@@ -18,11 +18,12 @@ export const getAllDiscussions = async(req: Request, res: Response) => {
 export const createDiscussion = async(req: Request, res: Response) => {
     try {
         const { creatorId, participants, title, description, tasks }: DiscussionInterface = req.body
+        console.log(title, req.body)
         const createdDiscussion = await discussionService.createDiscussion(title, tasks, description, participants, creatorId)
         if (!createdDiscussion) {
             res.json('При создании обсуждения произошла ошибка. Некорректные данные')
         } 
-        res.json(createDiscussion)
+        res.json(createdDiscussion)
     } catch (error) {
         res.json({message :'Ошибка создания обсуждения: ', error})
     }
@@ -58,8 +59,8 @@ export const changeDiscussionStatus = async(req: Request, res: Response) => {
 
 export const deleteDiscussion = async(req: Request, res: Response) => {
     try {
-        const { id } = req.body
-        const removeDiscussion = await discussionService.deleteDiscussion(id)
+        const { id } = req.params
+        const removeDiscussion = await discussionService.deleteDiscussion(Number(id))
         res.json(removeDiscussion)
     } catch (error) {
         res.json({message :'Ошибка при удалении обсуждения: ', error})    

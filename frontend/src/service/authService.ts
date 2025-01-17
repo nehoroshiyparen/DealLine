@@ -9,8 +9,6 @@ export default class AuthService {
 
     static async registration(username: string, email: string,  password: string): Promise<AxiosResponse<AuthResponse>> {
         const reps =  await $api.post<AuthResponse>('users/registration', {username, email, password})
-        console.log(reps.data.accessToken)
-        console.log(reps)
         return reps
     }
 

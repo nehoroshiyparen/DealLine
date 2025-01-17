@@ -5,12 +5,25 @@ import axios from 'axios'
 import { AuthResponse } from '../models/response/authResponse'
 import { API_URL } from '../http'
 
+interface UserState {
+    isAuthentcated: boolean;
+    user: User | null;
+    loading: boolean;
+    error: string | null;
+}
+
+const initialState: UserState = {
+        isAuthentcated: false,
+        user: null,
+        loading: false,
+        error: null
+}
+
 export const registerUser = createAsyncThunk(
     'user/register',
     async (userData: {username: string, email: string,  password: string}) => {
         const response = await AuthService.registration(userData.username, userData.email, userData.password)
         localStorage.setItem('token', response.data.accessToken)
-        console.log(response.data.accessToken)
         return response.data
     }
 )
@@ -41,20 +54,6 @@ export const checkAuth = createAsyncThunk(
     }
 )
 
-interface UserState {
-    isAuthentcated: boolean;
-    user: User | null;
-    loading: boolean;
-    error: string | null;
-}
-
-const initialState: UserState = {
-        isAuthentcated: false,
-        user: null,
-        loading: false,
-        error: null
-}
-
 const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -68,6 +67,7 @@ const userSlice = createSlice({
             state.loading = false,
             state.isAuthentcated = true,
             state.user = {
+                id: apiUser.id,
                 username: apiUser.username,
                 email: apiUser.email,
                 avatar: apiUser.avatar,
@@ -86,6 +86,7 @@ const userSlice = createSlice({
             state.loading = false
             state.isAuthentcated = true
             state.user = {
+                id: apiUser.id,
                 username: apiUser.username,
                 email: apiUser.email,
                 avatar: apiUser.avatar
@@ -118,6 +119,7 @@ const userSlice = createSlice({
             state.loading = false
             state.isAuthentcated = true
             state.user = {
+                id: apiUser.id,
                 username: apiUser.username,
                 email: apiUser.email,
                 avatar: apiUser.avatar

@@ -1,4 +1,4 @@
-import { User } from "../database/models"
+import { User } from "../../database/models"
 import ApiError from "../exceptions/api-error"
 
 class UploadService {

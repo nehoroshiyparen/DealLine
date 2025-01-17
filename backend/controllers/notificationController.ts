@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Notifications } from '../database/models'
-import notificationService from "../services/notificationService";
+import notificationService from "../src/services/notificationService";
 import { json } from "sequelize";
 
 export const getAllNotifications = async(req: Request, res: Response) => {

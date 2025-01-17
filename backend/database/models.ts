@@ -65,37 +65,38 @@ class Discussion extends Model {
     public description!: string;
     public createdAt!: Date;
     public creatorId!: number;
-    public participants!: number[];
     public status!: string;
 
-    public addUser!: BelongsToManyAddAssociationMixin<User, number>;
-    public setUser!: BelongsToManySetAssociationsMixin<User, number>;
-    public getTask!: BelongsToGetAssociationMixin<Task>
+    public addParticipants!: BelongsToManyAddAssociationMixin<User, number>;
+    public setParticipants!: BelongsToManySetAssociationsMixin<User, number>;
+    public getParticipants!: BelongsToGetAssociationMixin<Task>
 }
 
 Discussion.init({
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    titile: { type: DataTypes.STRING, allowNull: false },
+    title: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.TEXT, allowNull: true },
     createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     creatorId: { type: DataTypes.INTEGER, references: {model: User, key: 'id'} },
     status: { type: DataTypes.STRING, allowNull: false, defaultValue: 'Active' },
-    participants: { type: DataTypes.JSONB, allowNull: true },
 }, {
     sequelize, modelName: 'Discussion'
 })
 
-class DiscusionParticipants extends Model {
+class DiscussionParticipants extends Model {
     public discussionId!: number;
-    public userId!: number[];
+    public userId!: number;
 }
 
-DiscusionParticipants.init({
+DiscussionParticipants.init({
     discussionId: { type: DataTypes.INTEGER, primaryKey: true },
-    userId: { type: DataTypes.JSONB }
+    userId: { type: DataTypes.INTEGER, primaryKey: true }
 }, {
-    sequelize, modelName: 'DiscusionParticipants'
-})
+    sequelize,
+    modelName: 'DiscussionParticipants',
+    tableName: 'DiscussionParticipants',
+    timestamps: true,  // если хотите использовать createdAt и updatedAt
+});
 
 class Task extends Model {
     public id!: number;
@@ -121,7 +122,6 @@ Task.init({
     deadline: { type: DataTypes.DATE, allowNull: true },
     status: {type: DataTypes.STRING, allowNull: false, defaultValue: 'In Progress', validate: { isIn: [['In Progress', 'Completed']],} },
     discussionId: { type: DataTypes.INTEGER, references: { model: Discussion, key: 'id' } },
-    assignees: { type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: true },
 }, {
     sequelize, modelName: 'Task'
 })
@@ -133,7 +133,7 @@ class TaskAssignees extends Model {
 
 TaskAssignees.init({
     taskId: { type: DataTypes.INTEGER, references: { model: 'Tasks', key: 'id' } },
-    userId: { type: DataTypes.JSONB, references: { model: 'Users', key: 'id' } }
+    userId: { type: DataTypes.ARRAY(DataTypes.INTEGER) }, 
 }, {
     sequelize, modelName: 'TaskAssignees'
 });
@@ -177,16 +177,24 @@ Notifications.init({
 })
 
 
-User.belongsToMany(Discussion, { through: 'DiscussionParticipants', foreignKey: 'userId' });
-Discussion.belongsToMany(User, { through: 'DiscussionParticipants', foreignKey: 'discussionId' });
-Task.belongsTo(Discussion, { foreignKey: 'discussionId' });
-Task.belongsToMany(User, { through: 'TaskAssignees', foreignKey: 'taskId' });
-User.belongsToMany(Task, { through: 'TaskAssignees', foreignKey: 'userId' });
-Comment.belongsTo(Task, { foreignKey: 'taskId' });
-Comment.belongsTo(User, { foreignKey: 'userId' });
-Notifications.belongsTo(User, { as: 'Sender', foreignKey: 'senderId' });
-Notifications.belongsTo(User, { as: 'Receiver', foreignKey: 'receiverId' }); 
+Discussion.belongsToMany(User, { through: 'DiscussionParticipants', foreignKey: 'discussionId', as: 'participants' });
+Discussion.belongsTo(User, { foreignKey: 'creatorId', as: 'owner'})
+Discussion.hasMany(Task, { foreignKey: 'discussionId', as: 'tasks' });
+
+Task.belongsTo(Discussion, { foreignKey: 'discussionId', as: 'discussion' });
+Task.belongsToMany(User, { through: 'TaskAssignees', foreignKey: 'taskId', as: 'assignees' });
+Task.hasMany(Comment, { foreignKey: 'taskId', as: 'comments' });
+
+User.hasMany(Discussion, { foreignKey: 'creatorId', as: 'ownedDiscussions' })
+User.belongsToMany(Task, { through: 'TaskAssignees', foreignKey: 'userId', as: 'assignees' });
+User.belongsToMany(Discussion, { through: 'DiscussionParticipants', foreignKey: 'userId', as: 'discussions'});
 User.belongsToMany(User, {through: UserFriends, as: 'friends', foreignKey: 'friendId'})
 User.belongsToMany(User, {through: UserFriends, as: 'friendOf', foreignKey: 'UserId'})
+
+Comment.belongsTo(Task, { foreignKey: 'taskId', as: 'task' });
+Comment.belongsTo(User, { foreignKey: 'userId', as: 'author' });
+
+Notifications.belongsTo(User, { as: 'Sender', foreignKey: 'senderId' });
+Notifications.belongsTo(User, { as: 'Receiver', foreignKey: 'receiverId' }); 
 
 export { sequelize, User, Discussion, Task, Comment, Notifications, Token };

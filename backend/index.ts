@@ -4,11 +4,11 @@ import cors from "cors";
 import path from "path";
 import sequelize from "./database/db";
 import { Discussion, User, Task, Comment } from "./database/models";
-import router from "./routes";
-import errorMiddleware from "./middleware/ErrorMiddleware";
+import router from "./src/routes";
+import errorMiddleware from "./src/middleware/ErrorMiddleware";
 import cookieParser from 'cookie-parser';
-import './scheludes/notificationSchedule'
-import upload from "./picture-store/multerConfig";
+import './src/scheludes/notificationSchedule'
+import upload from "./src/picture-store/multerConfig";
 
 dotenv.config({ path: './.env' });
 

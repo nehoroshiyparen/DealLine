@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { User } from "../database/models";
-import userService from "../services/userService";
+import userService from "../src/services/userService";
 import { validationResult } from "express-validator";
-import ApiError from "../exceptions/api-error";
+import ApiError from "../src/exceptions/api-error";
 
 export const registration = async(req: Request, res: Response, next: NextFunction) => {
     try {

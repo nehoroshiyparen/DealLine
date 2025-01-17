@@ -1,6 +1,6 @@
 import { Task } from "../database/models";
 import { Response, Request } from 'express'
-import taskService from "../services/taskService";
+import taskService from "../src/services/taskService";
 
 export const getAllTasks = async(req: Request, res: Response) => {
     try {

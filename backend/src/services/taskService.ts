@@ -1,6 +1,6 @@
-import { Discussion, Task } from "../database/models"
+import { Discussion, Task } from "../../database/models"
 import ApiError from "../exceptions/api-error"
-import { TaskInterface } from "../types/types"
+import { TaskInterface } from "../../types/types"
 
 class taskService {
     async getTasks(discussionId: number) {

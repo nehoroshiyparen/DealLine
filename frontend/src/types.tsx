@@ -1,7 +1,15 @@
 export interface User {
+    id: number;
     username: string;
     email: string;
     avatar: string;
+}
+
+export interface Comment {
+    id: number;
+    content: string;
+    createdAt: string;
+    author: User;
 }
 
 export interface File {
@@ -19,6 +27,7 @@ export interface Task {
     deadline: string;
     status: TaskStatus;
     responsible: User[];
+    comments: Comment[];
 }
 
 export enum TaskStatus {
@@ -41,5 +50,4 @@ export interface Discussion {
     owner: User;
     members: User[];
     tasks: Task[]
-    files: File[];
 }

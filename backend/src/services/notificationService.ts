@@ -1,6 +1,6 @@
-import { Discussion, Notifications, User } from "../database/models";
+import { Discussion, Notifications, User } from "../../database/models";
 import ApiError from "../exceptions/api-error";
-import { NotificationsInterface } from "../types/types";
+import { NotificationsInterface } from "../../types/types";
 
 class notificationService {
     async getNotifications(recieverId: number) {
@@ -63,7 +63,7 @@ class notificationService {
                     throw ApiError.BadRequest(`Не существует либо пользователя либо обсуждения user: ${reciever}, discussion: ${discussion}`)
                 }
 
-                await discussion.addUser(reciever.id)
+                await discussion.addParticipants(reciever.id)
 
                 return { message: 'Добавлен новый участник голосования' }
             }

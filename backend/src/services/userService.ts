@@ -1,5 +1,5 @@
 import { error } from "console";
-import { User } from "../database/models";
+import { User } from "../../database/models";
 import bcrypt from 'bcrypt'
 import { v4 as uuid} from 'uuid'
 import mailService from "./mailService";

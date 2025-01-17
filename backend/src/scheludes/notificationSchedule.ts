@@ -1,4 +1,4 @@
-import { Discussion, Notifications, Task, User } from "../database/models"
+import { Discussion, Notifications, Task, User } from "../../database/models"
 import { Op } from 'sequelize'
 import ApiError from "../exceptions/api-error"
 

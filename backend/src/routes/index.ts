@@ -9,7 +9,7 @@ import authMiddleware from '../middleware/AuthMiddleware'
 
 const router = Router()
 
-router.use('/discussions', authMiddleware, discussionRouter)
+router.use('/discussions', discussionRouter)
 router.use('/tasks', taskRouter)
 router.use('/users', userRouter)
 router.use('/notifications', notificationRouter)

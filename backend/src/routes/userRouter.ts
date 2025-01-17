@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { activate, getUserInfo, log_in, log_out, refresh, registration } from '../controllers/userController'
+import { activate, getUserInfo, log_in, log_out, refresh, registration } from '../../controllers/userController'
 import { body } from 'express-validator'
 import authMiddleware from '../middleware/AuthMiddleware'
 
