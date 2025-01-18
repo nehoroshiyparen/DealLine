@@ -3,7 +3,7 @@ import { acceptOffer, getAllNotifications, rejectOffer, sendNotification } from 
 
 const router = Router()
 
-router.get('/', getAllNotifications)
+router.get('/:receiver_id', getAllNotifications)
 router.post('/send_notification', sendNotification)
 router.post('/reject', rejectOffer)
 router.post('/accept', acceptOffer)

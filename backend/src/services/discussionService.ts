@@ -78,6 +78,7 @@ class discussionService {
                     title: task.title,
                     description: task.description,
                     deadline: task.deadline,
+                    priority: task.priority,
                     status: task.status,
                     responsible: task.assignees.map((assignee: any) => ({
                         id: assignee.id,
@@ -145,9 +146,16 @@ class discussionService {
             let updatedDiscussion = null;
             let updatedTasks:TaskInterface[] = [];
             if (patch.discussion) {
-                updatedDiscussion = await Discussion.update(patch.discussion, { where: { id }, transaction })
+                updatedDiscussion = await Discussion.update(patch.discussion, { where: { id }, transaction, returning: true })
             }
             if (patch.tasks) {
+                const taskIds = patch.tasks.map(task => task.id);
+                const existingTasks = await Task.findAll({ where: { id: taskIds, discussionId: id } });
+
+                if (existingTasks.length !== taskIds.length) {
+                    throw ApiError.BadRequest('Некоторые задачи не принадлежат обсуждению или не существуют');
+                }
+                
                 updatedTasks = await Promise.all(
                     patch.tasks.map(async (task) => {
                         const [affectedCount, tasks] = await Task.update(
@@ -176,7 +184,8 @@ class discussionService {
             };
         } catch (error) {
             await transaction.rollback()
-            throw new Error(`Ошибка при обновлении обсуждения: ${error}`);
+            console.log(error)
+            throw new Error(`Ошибка при обновлении обсуждения: `);
         }
     }
 

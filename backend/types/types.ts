@@ -34,6 +34,9 @@ export interface Patch {
 export interface NotificationsInterface  {
     type: string,
     senderId: number,
-    receiverId: number,
+    recieverId: number,
     date: Date,
+    message: string,
+    discussionId?: number,
+    taskId?: number,
 }

@@ -1,15 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './top-menu.scss'
 import { useDispatch } from 'react-redux'
 import { AppDispatch, RootState } from '../../store/store'
 import { useSelector } from 'react-redux'
+import { useNotifications } from '../../hooks/useNotification'
+import { useDiscussion } from '../../hooks/useDiscussion'
 
 export default function Top_Menu() {
-    const [disc_title, setDisc_title] = useState<string>('')
-
     const dispatch = useDispatch<AppDispatch>()
 
     const user = useSelector((state: RootState) => state.user.user)
+    const { notificationsState, fetchNotifications } = useNotifications()
+    const { updateSearchQuery, searchQuery } = useDiscussion()
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        updateSearchQuery(event.target.value)
+    }
+
+    useEffect(() => {
+        if (user) {
+            fetchNotifications(user.id)
+        }
+    }, [user])
+
+    if (notificationsState.notifications) {
+        console.log(notificationsState)        
+    }
 
     return (
         <div className='top-menu'>
@@ -19,8 +35,8 @@ export default function Top_Menu() {
 
                     </div>
                     <input className='d-input_form'
-                    onChange={e => setDisc_title(e.target.value)}
-                    value={disc_title}
+                    onChange={handleSearchChange}
+                    value={searchQuery}
                     type='search'
                     placeholder='Поиск'/>
                 </div>

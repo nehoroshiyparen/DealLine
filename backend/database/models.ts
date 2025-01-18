@@ -37,12 +37,12 @@ User.init({
 
 class UserFriends extends Model {
     public userId!: number;
-    public friendsId!: number[];
+    public friendId!: number;
 }
 
 UserFriends.init({
-    userId: { type: DataTypes.INTEGER, primaryKey: true, references: { model: 'Users', key: 'id' } },
-    friendsId: { type: DataTypes.JSONB }
+    userId: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'Users', key: 'id' } },
+    friendId: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'Users', key: 'id' }  }
 }, {
     sequelize, modelName: 'UserFriends'
 })
@@ -160,18 +160,22 @@ class Notifications extends Model {
     public id!: number;
     public type!: string;
     public senderId!: number;
-    public receiverId!: number;
+    public recieverId!: number;
     public date!: Date;
     public message?: string;
+    public dicussionId?: number;
+    public taskId?: number;
 }
 
 Notifications.init({
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     type: { type: DataTypes.STRING, allowNull: false, validate: {isIn: [['friend_request', 'discussion_invitation', 'reminder']]} },
     senderId: { type: DataTypes.INTEGER, references: { model: User, key: 'id' } },
-    receiverId: {type: DataTypes.INTEGER, references: { model: User, key: 'id' } },
+    recieverId: {type: DataTypes.INTEGER, references: { model: User, key: 'id' } },
     date: {type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     message: { type: DataTypes.STRING, allowNull: true }, 
+    discussionId: { type: DataTypes.INTEGER, allowNull: true },
+    taskId: { type: DataTypes.INTEGER, allowNull: true }
 }, {
     sequelize, modelName: 'Notifications'
 })
@@ -188,13 +192,13 @@ Task.hasMany(Comment, { foreignKey: 'taskId', as: 'comments' });
 User.hasMany(Discussion, { foreignKey: 'creatorId', as: 'ownedDiscussions' })
 User.belongsToMany(Task, { through: 'TaskAssignees', foreignKey: 'userId', as: 'assignees' });
 User.belongsToMany(Discussion, { through: 'DiscussionParticipants', foreignKey: 'userId', as: 'discussions'});
-User.belongsToMany(User, {through: UserFriends, as: 'friends', foreignKey: 'friendId'})
-User.belongsToMany(User, {through: UserFriends, as: 'friendOf', foreignKey: 'UserId'})
+User.belongsToMany(User, {through: UserFriends, as: 'friends', foreignKey: 'userId'})
+User.belongsToMany(User, {through: UserFriends, as: 'friendOf', foreignKey: 'friendId'})
 
 Comment.belongsTo(Task, { foreignKey: 'taskId', as: 'task' });
 Comment.belongsTo(User, { foreignKey: 'userId', as: 'author' });
 
 Notifications.belongsTo(User, { as: 'Sender', foreignKey: 'senderId' });
-Notifications.belongsTo(User, { as: 'Receiver', foreignKey: 'receiverId' }); 
+Notifications.belongsTo(User, { as: 'Receiver', foreignKey: 'recieverId' }); 
 
-export { sequelize, User, Discussion, Task, Comment, Notifications, Token };
+export { sequelize, User, Discussion, Task, Comment, Notifications, Token, UserFriends, DiscussionParticipants };

@@ -12,13 +12,6 @@ export interface Comment {
     author: User;
 }
 
-export interface File {
-    id: number;
-    name: string;
-    type: string;
-    url: string;
-  }
-
 export interface Task {
     id: number;
     title: string;
@@ -50,4 +43,11 @@ export interface Discussion {
     owner: User;
     members: User[];
     tasks: Task[]
+}
+
+export interface Notification {
+    type: string;
+    senderId: number;
+    date: Date;
+    content: string;
 }

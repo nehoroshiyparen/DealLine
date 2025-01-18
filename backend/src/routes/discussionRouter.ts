@@ -1,10 +1,11 @@
 import { Router } from 'express'
-import { deleteDiscussion, changeDiscussionStatus, invitePeesonToDiscussion, createDiscussion, getAllDiscussions } from '../../controllers/discussionController'
+import { deleteDiscussion, changeDiscussionStatus, invitePeesonToDiscussion, createDiscussion, getAllDiscussions, editDiscussion } from '../../controllers/discussionController'
 
 const router = Router()
 
 router.get('/:user_id', getAllDiscussions) // with userId
 router.post('/', createDiscussion)
+router.post('/update', editDiscussion)
 router.post('/addPeson/:id', invitePeesonToDiscussion)
 router.post('/status/:id', changeDiscussionStatus)
 router.delete('/:id', deleteDiscussion)

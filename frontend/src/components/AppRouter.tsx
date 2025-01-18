@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { PrivateRoutes, PublicRoutes } from '../routes.tsx'
 import { useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store/store'
+import MainLayout from './layouts/main-layout.tsx'
+import EmptyLayout from './layouts/empty-layout.tsx'
 
 export default function AppRouter() {
 
@@ -18,9 +20,19 @@ export default function AppRouter() {
                 </>
             )}
             {
-                isAuthentcated && PrivateRoutes.map(({path, Component}) => (
+                isAuthentcated && PrivateRoutes.map(({path, Component, layout}) => (
                     isAuthentcated ? (
-                        <Route key={path} path={path} element={<Component/>}/>
+                        <Route key={path} path={path} element={
+                            layout === 'main' ? (
+                                <MainLayout>
+                                    <Component/>
+                                </MainLayout>
+                            ) : (
+                                <EmptyLayout>
+                                    <Component/>
+                                </EmptyLayout>
+                            )
+                        }/>
                     ) : (
                         <Route key={path} path={path} element={<Navigate to="/login" replace />} />
                     )

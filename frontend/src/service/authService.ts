@@ -4,7 +4,7 @@ import { AuthResponse } from '../models/response/authResponse.ts'
 
 export default class AuthService {
     static async login(usernameOrEmail: string, password: string): Promise<AxiosResponse<AuthResponse>> {
-        return $api.post<AuthResponse>('users/login', {usernameOrEmail, password})
+        return await $api.post<AuthResponse>('users/login', {usernameOrEmail, password})
     }
 
     static async registration(username: string, email: string,  password: string): Promise<AxiosResponse<AuthResponse>> {
@@ -13,6 +13,6 @@ export default class AuthService {
     }
 
     static async logout(): Promise<void> {
-        return $api.post('users/logout')
+        return await $api.post('users/logout')
     }
 }

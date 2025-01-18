@@ -8,13 +8,15 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { getDiscussions } from '../../store/DiscussionSlice'
 import { useDiscussion } from '../../hooks/useDiscussion'
+import { Discussion as DiscussionType } from '../../types'
 
 export default function Discussions() {
 
-    const dispatch = useDispatch<AppDispatch>()
     const user = useSelector((state: RootState) => state.user)
+    const { discussionsState, fetchDiscussions, searchQuery } = useDiscussion()
 
-    const { discussionsState, fetchDiscussions } = useDiscussion()
+    const [filteredDiscussions, setFilteredDiscussions] = useState<DiscussionType[]>([])
+    const discussions = discussionsState.discussions
 
     useEffect(() => {
         if (user && user.user != null) {
@@ -22,24 +24,45 @@ export default function Discussions() {
         }
     }, [user])
 
+    useEffect(() => {
+        if (discussions) {
+            if (searchQuery.trim() === '') {
+                setFilteredDiscussions(discussions)
+            } else {
+                const filter = discussions.filter((discussion) => 
+                    discussion.title.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                setFilteredDiscussions(filter)
+            }
+        }
+    }, [searchQuery, discussions])
+
+    const renderDiscussions = () => {
+        if (discussionsState.loading === true) {
+            return (
+                <>
+                    loading...
+                </>
+            )
+        } 
+
+        if (filteredDiscussions.length === 0) {
+            return (
+                <>
+                    Таких обсуждений не найдено
+                </>
+            )
+        }
+
+        return filteredDiscussions.map(discussion => (
+            <Discussion discussion={discussion} key={discussion.id}/>
+        ))
+    }
+
     return (
         <>
-            <div className="container" style={{overflow: 'hidden'}}>
-                <Side_Menu/>
-                <Top_Menu/>
-                <div className='discussion-display'>
-                    {discussionsState.loading === true ? (
-                        <>
-                            loading...
-                        </>
-                    ) : (
-                        <>
-                            {discussionsState.discussions?.map(discussion => (
-                                <Discussion discussion={discussion} key={discussion.id}/>
-                            ))}
-                        </>
-                    )}
-                </div>
+            <div className='discussion-display'>
+                {renderDiscussions()}
             </div>
         </>
     )
