@@ -1,6 +1,6 @@
 import { Router } from "express";
 import upload from "../picture-store/multerConfig";
-import { getFile, uploadFiles } from "../../controllers/uploadController";
+import { getFile, uploadFiles } from "../controllers/uploadController";
 
 const router = Router()
 

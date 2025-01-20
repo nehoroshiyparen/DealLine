@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { acceptOffer, getAllNotifications, rejectOffer, sendNotification } from '../../controllers/notificationController'
+import { acceptOffer, getAllNotifications, rejectOffer, sendNotification } from '../controllers/notificationController'
 
 const router = Router()
 

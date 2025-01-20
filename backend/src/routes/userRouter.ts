@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { activate, getUserInfo, log_in, log_out, refresh, registration } from '../../controllers/userController'
+import { activate, deleteAccount, deleteFriend, getUserInfo, getUsersByUsername, log_in, log_out, refresh, registration } from '../controllers/userController'
 import { body } from 'express-validator'
 import authMiddleware from '../middleware/AuthMiddleware'
 
@@ -14,6 +14,9 @@ router.post('/logIn', log_in)
 router.post('/logOut', log_out)
 router.get('/activate/:link', activate)
 router.get('/refresh', refresh)
+router.get('/getUsersByUsername', getUsersByUsername)
 router.get('/', authMiddleware, getUserInfo)
+router.post('/deleteFriend', deleteFriend)
+router.post('/deleteAccount', deleteAccount)
 
 export default router

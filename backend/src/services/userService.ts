@@ -1,5 +1,5 @@
 import { error } from "console";
-import { User } from "../../database/models";
+import { Comment, Token, User, UserFriends } from "../../database/models";
 import bcrypt from 'bcrypt'
 import { v4 as uuid} from 'uuid'
 import mailService from "./mailService";
@@ -47,7 +47,8 @@ class UserService {
     async log_in(usernameOrEmail: string, password: string) {
         const user = await User.findOne({
             where: {
-                [Op.or]: [{ email: usernameOrEmail }, { username: usernameOrEmail }]
+                [Op.or]: [{ email: usernameOrEmail }, { username: usernameOrEmail }],
+                isDeleted: false
             }
         });
         if (!user) {
@@ -87,14 +88,108 @@ class UserService {
         }
         const userDTO = new UserDTO(user)
         const tokens = tokenService.generateTokens({...userDTO})
+
+        console.log(userDTO)
         await tokenService.saveToken(userDTO.id, tokens.refreshToken)
 
         return { ...tokens, user: userDTO }
     }
 
+    async getUsersByUsername(name: string, page: number, limit: number) {
+        try {
+            const offset = (page - 1) * limit
+            const users = await User.findAll({ 
+                where: { 
+                    username: 
+                    {
+                        [Op.like]: `%${name}%`
+                    },
+                    isDeleted: false
+                },
+                offset,
+                limit
+            })
+            if (!users) {
+                throw ApiError.BadRequest('Пользователей с таким именем не сущечтвует')
+            }
+            return { users }
+        } catch (error) {
+            console.log(error)
+            throw ApiError.BadRequest('Непредвиденная ошибка при получении данных о пользователях')
+        }
+    }
+
     async getOneUser(id: number) {
         const user = await User.findOne({where: {id}})
         return user
+    }
+
+    async deleteFriend(firstId: number, secondId: number) {
+        try {
+            const userExist = await User.findAll({
+                where: { id: { [Op.in]: [ firstId, secondId ] }},
+                attributes: ['id']
+            })
+    
+            if (userExist.length < 2) {
+                throw ApiError.BadRequest('Не все пользователи существуют')
+            }
+    
+            const friendship = UserFriends.findAll({
+                where: {
+                    [Op.or]: [
+                        { userId: firstId, friendId: secondId },
+                        { userId: secondId, friendId: firstId }
+                    ]
+                }
+            })
+    
+            if (!friendship) {
+                throw ApiError.BadRequest('Пользователи не являются друзьями')
+            }
+    
+            const deleteResponse = await UserFriends.destroy({
+                where: {
+                    [Op.or]: [
+                        { userId: firstId, friendId: secondId },
+                        { userId: secondId, friendId: firstId }
+                    ]
+                }
+            })
+    
+            return { message: 'Человек удален из друзей'}
+        } catch (error) {
+            console.log(error)
+            throw ApiError.BadRequest('Непредвиденная ошибка при удалении человека из друзей')
+        }
+    }
+
+    async deleteAccount(userId: number) {
+        try {
+            const user = await User.findOne({
+                where: { id: userId, isDeleted: false }
+            })
+    
+            if (!user) {
+                throw ApiError.BadRequest(`Юзера с id: ${userId} не существует`)
+            }
+    
+            await user.update({
+                username: 'Deleted account',
+                email: 'Deleted account',
+                avatar: null,
+                isDeleted: true,
+            })
+    
+            await Token.destroy({
+                where: { user_id: user.id }
+            })
+    
+            return { message: 'Аккаунт удален' }
+        } catch (error) {
+            console.log(error)
+            throw ApiError.BadRequest('Непредвиденная ошибка при удалении аккаунта')
+        }
     }
 }
 

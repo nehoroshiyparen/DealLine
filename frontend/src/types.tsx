@@ -1,4 +1,4 @@
-export interface User {
+export interface MiniUser {
     id: number;
     username: string;
     email: string;
@@ -9,7 +9,7 @@ export interface Comment {
     id: number;
     content: string;
     createdAt: string;
-    author: User;
+    author: MiniUser;
 }
 
 export interface Task {
@@ -19,7 +19,7 @@ export interface Task {
     priority: TaskPriority;
     deadline: string;
     status: TaskStatus;
-    responsible: User[];
+    responsible: MiniUser[];
     comments: Comment[];
 }
 
@@ -40,8 +40,8 @@ export interface Discussion {
     title: string;
     description: string;
     creation_date: string;
-    owner: User;
-    members: User[];
+    owner: MiniUser;
+    members: MiniUser[];
     tasks: Task[]
 }
 

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { deleteDiscussion, changeDiscussionStatus, invitePeesonToDiscussion, createDiscussion, getAllDiscussions, editDiscussion } from '../../controllers/discussionController'
+import { deleteDiscussion, changeDiscussionStatus, invitePeesonToDiscussion, createDiscussion, getAllDiscussions, editDiscussion } from '../controllers/discussionController'
 
 const router = Router()
 

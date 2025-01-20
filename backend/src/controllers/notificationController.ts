@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { Notifications } from '../database/models'
-import notificationService from "../src/services/notificationService";
+import { Notifications } from '../../database/models'
+import notificationService from "../services/notificationService";
 import { json } from "sequelize";
-import ApiError from "../src/exceptions/api-error";
+import ApiError from "../exceptions/api-error";
 
 export const getAllNotifications = async(req: Request, res: Response) => {
     try {

@@ -1,7 +1,7 @@
-import ApiError from "../src/exceptions/api-error";
-import upload from "../src/picture-store/multerConfig"
+import ApiError from "../exceptions/api-error";
+import upload from "../picture-store/multerConfig"
 import { NextFunction, Request, Response } from "express"
-import uploadService from "../src/services/uploadService";
+import uploadService from "../services/uploadService";
 import path from "path";
 
 export const uploadFiles = async(req: Request, res: Response, next: NextFunction) => {

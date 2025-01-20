@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "../database/models";
-import userService from "../src/services/userService";
+import { User } from "../../database/models";
+import userService from "../services/userService";
 import { validationResult } from "express-validator";
-import ApiError from "../src/exceptions/api-error";
+import ApiError from "../exceptions/api-error";
 
 export const registration = async(req: Request, res: Response, next: NextFunction) => {
     try {
@@ -63,6 +63,27 @@ export const refresh = async(req: Request, res: Response, next: NextFunction) =>
     }
 }
 
+export const getUsersByUsername = async(req: Request, res: Response) => {
+    try {
+        const { username, page = 1, limit = 10 } = req.query
+        if (!username) {
+            throw ApiError.BadRequest('Имя пользователя не указано')
+        }
+        const users = await userService.getUsersByUsername(String(username), Number(page), Number(limit))
+        res.json(users)
+    } catch (error) {
+        if (error instanceof ApiError) {
+            res.status(error.status).json({
+                message: error.message,
+                error: error.errors || []
+            })
+        } else {
+            console.log(error)
+            res.status(500).json({message: 'Ошибка при получении информации о пользователях'})
+        }
+    }
+}
+
 export const getUserInfo = async(req: Request, res: Response, next: NextFunction) => {
     try {
         const {id} = req.body
@@ -70,5 +91,41 @@ export const getUserInfo = async(req: Request, res: Response, next: NextFunction
         res.json(user)
     } catch (error) {
         next(error)
+    }
+}
+
+export const deleteFriend = async(req: Request, res: Response) => {
+    try {
+        const {  firstId, secondId } = req.body
+        const response = await userService.deleteFriend(firstId, secondId)
+        res.json(response)
+    } catch (error) {
+        if (error instanceof ApiError) {
+            res.status(error.status).json({
+                message: error.message,
+                error: error.errors || []
+            })
+        } else {
+            console.log(error)
+            res.status(500).json({message: 'Ошибка при удалении человека из друзей'})
+        }
+    }
+}
+
+export const deleteAccount = async(req: Request, res: Response) => {
+    try {
+        const { userId } = req.body
+        const response = await userService.deleteAccount(userId)
+        res.json(response)
+    } catch (error) {
+        if (error instanceof ApiError) {
+            res.status(error.status).json({
+                message: error.message,
+                error: error.errors || []
+            })
+        } else {
+            console.log(error)
+            res.status(500).json({message: 'Ошибка при удалении аккаунта'})
+        }
     }
 }

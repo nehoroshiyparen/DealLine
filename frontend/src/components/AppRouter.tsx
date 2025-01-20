@@ -1,53 +1,65 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { PrivateRoutes, PublicRoutes } from '../routes.tsx'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store/store'
+import { checkAuth } from '../store/userSlice' // Подставь правильный импорт
 import MainLayout from './layouts/main-layout.tsx'
 import EmptyLayout from './layouts/empty-layout.tsx'
+import { PrivateRoutes, PublicRoutes } from '../routes.tsx'
 
 export default function AppRouter() {
+    const dispatch = useDispatch<AppDispatch>()
+    const isAuthenticated = useSelector((state: RootState) => state.user.isAuthentcated)
+    const [isLoading, setIsLoading] = useState(true)
 
-    const isAuthentcated = useSelector((state: RootState) => state.user.isAuthentcated)
-    console.log(isAuthentcated)
-    
-    return(
+    useEffect(() => {
+        if (localStorage.getItem('token') && !isAuthenticated) {
+            dispatch(checkAuth()).finally(() => {
+                setIsLoading(false)
+            })
+        } else {
+            setIsLoading(false)
+        }
+    }, [dispatch, isAuthenticated])
+
+    if (isLoading) {
+        return <div>Загрузка...</div>
+    }
+
+    return (
         <Routes>
-            {isAuthentcated && (
+            {isAuthenticated && (
                 <>
                     <Route path="/login" element={<Navigate to="/discussions" replace />} />
                     <Route path="/registration" element={<Navigate to="/discussions" replace />} />
                 </>
             )}
-            {
-                isAuthentcated && PrivateRoutes.map(({path, Component, layout}) => (
-                    isAuthentcated ? (
-                        <Route key={path} path={path} element={
+            {isAuthenticated &&
+                PrivateRoutes.map(({ path, Component, layout }) => (
+                    <Route
+                        key={path}
+                        path={path}
+                        element={
                             layout === 'main' ? (
                                 <MainLayout>
-                                    <Component/>
+                                    <Component />
                                 </MainLayout>
                             ) : (
                                 <EmptyLayout>
-                                    <Component/>
+                                    <Component />
                                 </EmptyLayout>
                             )
-                        }/>
-                    ) : (
-                        <Route key={path} path={path} element={<Navigate to="/login" replace />} />
-                    )
-                ))
-            }
-            {!isAuthentcated && (
+                        }
+                    />
+                ))}
+            {!isAuthenticated &&
                 PrivateRoutes.map(({ path }) => (
                     <Route key={path} path={path} element={<Navigate to="/login" replace />} />
-                ))
-            )}
-            {!isAuthentcated && (
+                ))}
+            {!isAuthenticated &&
                 PublicRoutes.map(({ path, Component }) => (
-                    <Route key={path} path={path} element={<Component/>} />
-                ))
-            )}
+                    <Route key={path} path={path} element={<Component />} />
+                ))}
         </Routes>
     )
 }

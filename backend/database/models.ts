@@ -12,6 +12,7 @@ class User extends Model {
     public isActivated!: boolean;
     public activationLink!: string;
     public assigneeTasks!: Task[];
+    public isDeleted!: boolean;
 
     public getTasks!: BelongsToManyGetAssociationsMixin<Task>;
 
@@ -31,6 +32,7 @@ User.init({
     password: {type: DataTypes.STRING, allowNull: false},
     isActivated: { type: DataTypes.BOOLEAN, defaultValue: true },
     activationLink: { type: DataTypes.STRING, allowNull: false },
+    isDeleted: { type: DataTypes.BOOLEAN, defaultValue: false }
 }, {
     sequelize, modelName: 'User'
 })

@@ -4,7 +4,7 @@ import ApiError from "../exceptions/api-error"
 class UploadService {
     async setAvatar(userId: number, picture: string) {
         try {
-            const user = await User.findOne({where: {id: userId}})
+            const user = await User.findOne({where: {id: userId, isDeleted: false}})
             if (!user) {
                 throw ApiError.BadRequest(`Пользователя с id:${userId} не существует`)
             }

@@ -32,10 +32,14 @@ class notificationService {
                 throw ApiError.BadRequest(`Уведомление такого типа уже отправлено этому человеку`)
             }
 
-            const reciever = await User.findOne({ where: {id: patch.recieverId} })
+            const reciever = await User.findOne({ where: {id: patch.recieverId, isDeleted: false} })
 
             if (!reciever) {
                 throw ApiError.BadRequest(`Пользователя, которому вы хотите отправить запрос, не существует`)
+            }
+
+            if (patch.recieverId === patch.senderId) {
+                throw ApiError.BadRequest(`Нельзя отправить уведомление самому себе :)`)
             }
 
             const validation: Record<string, () => Promise<void>> = {

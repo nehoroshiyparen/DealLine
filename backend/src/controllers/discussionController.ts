@@ -1,9 +1,9 @@
-import { Discussion } from "../database/models";
+import { Discussion } from "../../database/models";
 import { Request, Response } from "express";
 import { Op } from 'sequelize'
-import discussionService from "../src/services/discussionService";
+import discussionService from "../services/discussionService";
 import { create } from "domain";
-import { DiscussionInterface } from "../types/types";
+import { DiscussionInterface } from "../../types/types";
 
 export const getAllDiscussions = async(req: Request, res: Response) => {
     try {
