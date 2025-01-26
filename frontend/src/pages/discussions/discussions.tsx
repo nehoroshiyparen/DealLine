@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import Side_Menu from '../../components/side-menu/side-menu'
-import Top_Menu from '../../components/top-menu/top-menu'
 import Discussion from '../../components/discussion/discussion'
 import { AppDispatch, RootState } from '../../store/store'
 import './discussions.scss'
 import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
-import { getDiscussions } from '../../store/DiscussionSlice'
 import { useDiscussion } from '../../hooks/useDiscussion'
 import { Discussion as DiscussionType } from '../../types'
 

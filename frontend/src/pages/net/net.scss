@@ -1,0 +1,40 @@
+.net-content {
+    width: 80%;
+    height: 800px;
+    float: left;
+}
+
+.discussion_node {
+    width: 200px;
+    font-size: 50px;
+    aspect-ratio: 1/1;
+    background: lightblue;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.theme_node {
+    width: 120px;
+    background: rgb(255, 194, 80);
+    border-radius: 150px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.task_node {
+    width: 80px;
+    border-radius: 100px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    background-color: lightgreen;
+    font-size: 8px;
+}

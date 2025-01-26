@@ -17,9 +17,9 @@ export const getAllDiscussions = async(req: Request, res: Response) => {
 
 export const createDiscussion = async(req: Request, res: Response) => {
     try {
-        const { creatorId, participants, title, description, tasks }: DiscussionInterface = req.body
+        const { creatorId, participants, title, description, topics }: DiscussionInterface = req.body
         console.log(title, req.body)
-        const createdDiscussion = await discussionService.createDiscussion(title, tasks, description, participants, creatorId)
+        const createdDiscussion = await discussionService.createDiscussion(title, topics, description, participants, creatorId)
         if (!createdDiscussion) {
             res.json('При создании обсуждения произошла ошибка. Некорректные данные')
         } 

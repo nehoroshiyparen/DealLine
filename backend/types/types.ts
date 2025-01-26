@@ -1,5 +1,5 @@
 type TaskPriority = 'High' | 'Medium' | 'Low';
-import { Task, Discussion } from "../database/models";
+import { Task, Discussion, Topic } from "../database/models";
 import * as express from 'express'
 
 enum TaskStatus {
@@ -14,8 +14,14 @@ export interface TaskInterface {
     priority: string,
     deadline: Date,
     status: string,
+    topicId: number,
     discussionId: number,
     assignees?: number[],
+}
+
+export interface TopicInterface {
+    title: string,
+    tasks: TaskInterface[]
 }
 
 export interface DiscussionInterface {
@@ -23,11 +29,12 @@ export interface DiscussionInterface {
     description?: string,
     creatorId?: number,
     participants?: number[],
-    tasks?: TaskInterface[]
+    topics?: TopicInterface[]
 }
 
 export interface Patch {
     discussion?: Partial<Discussion>;
+    topics? : Partial<Topic>[];
     tasks?: Partial<Task>[];
 }
 

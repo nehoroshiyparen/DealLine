@@ -49,18 +49,6 @@ UserFriends.init({
     sequelize, modelName: 'UserFriends'
 })
 
-class Token extends Model {
-    public user_id!: number;
-    public refreshToken!: string;
-}
-
-Token.init({
-    user_id: { type: DataTypes.INTEGER, references: {model: User, key: 'id'} },
-    refreshToken: { type: DataTypes.TEXT, allowNull: false },
-}, {
-    sequelize, modelName: 'Token'
-})
-
 class Discussion extends Model {
     public id!: number;
     public title!: string;
@@ -100,6 +88,20 @@ DiscussionParticipants.init({
     timestamps: true,  // если хотите использовать createdAt и updatedAt
 });
 
+class Topic extends Model {
+    public id!: number;
+    public title!: string;
+    public discussionId!: number;
+}
+
+Topic.init({
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    title: { type: DataTypes.STRING, allowNull: false },
+    discussionId: { type: DataTypes.INTEGER, allowNull: false }
+}, {
+    sequelize, modelName: 'Topic'
+})
+
 class Task extends Model {
     public id!: number;
     public title!: string;
@@ -107,6 +109,7 @@ class Task extends Model {
     public priority!: string;
     public deadline!: Date;
     public status!: string;
+    public topicId!: number;
     public discussionId!: number;
     public assignees!: number[];
 
@@ -123,7 +126,8 @@ Task.init({
     priority: { type: DataTypes.STRING, allowNull: true, validate: {isIn: [['High' , 'Medium' , 'Low']]} },
     deadline: { type: DataTypes.DATE, allowNull: true },
     status: {type: DataTypes.STRING, allowNull: false, defaultValue: 'In Progress', validate: { isIn: [['In Progress', 'Completed']],} },
-    discussionId: { type: DataTypes.INTEGER, references: { model: Discussion, key: 'id' } },
+    topicId: { type: DataTypes.INTEGER, references: { model: Topic, key: 'id' } },
+    discussionId: { type: DataTypes.INTEGER, allowNull: false, references: { model: Discussion, key: 'id' } },
 }, {
     sequelize, modelName: 'Task'
 })
@@ -182,14 +186,30 @@ Notifications.init({
     sequelize, modelName: 'Notifications'
 })
 
+class Token extends Model {
+    public user_id!: number;
+    public refreshToken!: string;
+}
+
+Token.init({
+    user_id: { type: DataTypes.INTEGER, references: {model: User, key: 'id'} },
+    refreshToken: { type: DataTypes.TEXT, allowNull: false },
+}, {
+    sequelize, modelName: 'Token'
+})
 
 Discussion.belongsToMany(User, { through: 'DiscussionParticipants', foreignKey: 'discussionId', as: 'participants' });
 Discussion.belongsTo(User, { foreignKey: 'creatorId', as: 'owner'})
+Discussion.hasMany(Topic, { foreignKey: 'discussionId', as: 'topics' });
 Discussion.hasMany(Task, { foreignKey: 'discussionId', as: 'tasks' });
 
-Task.belongsTo(Discussion, { foreignKey: 'discussionId', as: 'discussion' });
+Topic.belongsTo(Discussion, { foreignKey: 'discussionId' });
+Topic.hasMany(Task, { foreignKey: 'topicId', as: 'tasks', onDelete: 'CASCADE' });
+
+Task.belongsTo(Topic, { foreignKey: 'topicId', as: 'topic'});
 Task.belongsToMany(User, { through: 'TaskAssignees', foreignKey: 'taskId', as: 'assignees' });
 Task.hasMany(Comment, { foreignKey: 'taskId', as: 'comments' });
+Task.belongsTo(Discussion, { foreignKey: 'discussionId' });
 
 User.hasMany(Discussion, { foreignKey: 'creatorId', as: 'ownedDiscussions' })
 User.belongsToMany(Task, { through: 'TaskAssignees', foreignKey: 'userId', as: 'assignees' });
@@ -203,4 +223,4 @@ Comment.belongsTo(User, { foreignKey: 'userId', as: 'author' });
 Notifications.belongsTo(User, { as: 'Sender', foreignKey: 'senderId' });
 Notifications.belongsTo(User, { as: 'Receiver', foreignKey: 'recieverId' }); 
 
-export { sequelize, User, Discussion, Task, Comment, Notifications, Token, UserFriends, DiscussionParticipants };
+export { sequelize, User, Discussion, Task, Comment, Notifications, Token, UserFriends, DiscussionParticipants, Topic };

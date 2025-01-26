@@ -22,7 +22,7 @@ export default function Side_Menu() {
                                 Список обсуждений
                             </div>
                         </Link>
-                        <Link to={'/discussions'}>
+                        <Link to={'/net'}>
                             <div className="main-menu-function" style={{marginTop: '25px'}}>
                                 <image className="function-image"/>
                                 Календарь
@@ -34,7 +34,7 @@ export default function Side_Menu() {
                                 Фильтры задач
                             </div>
                         </Link>
-                        <Link to={'/discussions'}>
+                        <Link to={'/friends'}>
                             <div className="main-menu-function">
                                 <image className="function-image"/>
                                 Поиск людей

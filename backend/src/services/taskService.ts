@@ -1,4 +1,4 @@
-import { Discussion, Task } from "../../database/models"
+import { Discussion, Task, Topic } from "../../database/models"
 import ApiError from "../exceptions/api-error"
 import { TaskInterface } from "../../types/types"
 
@@ -12,12 +12,12 @@ class taskService {
         return tasks
     }
 
-    async createTask(discussionId: number, params: TaskInterface) {
-        const discussion = await Discussion.findByPk(discussionId)
-        if (!discussion) {
-            throw ApiError.BadRequest(`Обсуждения с айди ${discussionId} не существует`)
+    async createTask(topicId: number, params: TaskInterface) {
+        const topic = await Topic.findByPk(topicId)
+        if (!topic) {
+            throw ApiError.BadRequest(`Темы с айди ${topicId} не существует`)
         }
-        const task = await Task.create({ ...params, discussionId })
+        const task = await Task.create({ ...params, topicId, discussionId: topic.discussionId })
         return task
     }
 

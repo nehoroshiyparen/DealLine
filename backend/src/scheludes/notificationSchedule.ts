@@ -8,7 +8,7 @@ async function checkAndSendReminders() {
     target_date.setDate(current_date.getDate() + 3)
 
     const tasks = await Task.findAll({ 
-        where: {dedline: {[Op.between]: [current_date, target_date]}},
+        where: {deadline: {[Op.between]: [current_date, target_date]}},
         include: [{ model: User, as: 'assignees' }],
     })
     for (const task of tasks) {

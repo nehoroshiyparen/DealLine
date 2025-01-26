@@ -34,6 +34,11 @@ export enum TaskPriority {
     Medium = 'Средний',
     High = 'Высокий'
 }
+export interface Topic {
+    id: number;
+    title: string;
+    tasks: Task[];
+}
 
 export interface Discussion {
     id: number;
@@ -42,7 +47,7 @@ export interface Discussion {
     creation_date: string;
     owner: MiniUser;
     members: MiniUser[];
-    tasks: Task[]
+    topics: Topic[];
 }
 
 export interface Notification {
