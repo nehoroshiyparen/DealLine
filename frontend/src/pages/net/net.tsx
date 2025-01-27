@@ -1,138 +1,138 @@
-import React, { useState, useEffect } from "react";
-import ReactFlow, { addEdge, Background, Controls, MiniMap, Handle, Position, Node, Edge } from "reactflow";
+import { useState, useEffect, useCallback } from "react";
+import ReactFlow, { Background, Controls, Node, Edge, useNodesState, useEdgesState, ReactFlowProvider } from "reactflow";
 import "reactflow/dist/style.css";
 import './net.scss';
 import { useDiscussion } from "../../hooks/useDiscussion";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { Discussion } from "../../types";
-import { useNet } from "../../hooks/useNet";
+import { Discussion, Topic } from "../../types";
+import ZoomManager from './zoomManager';
+import { kMeansClusteringOptimized, getClusterPosition } from "../../utils/clusteringUtils";
+import { getUniquePosition } from "../../utils/positionsUtils";
 
 export default function Net() {
+    const user = useSelector((state: RootState) => state.user);
+    const { discussionsState, fetchDiscussions } = useDiscussion();
+    const discussions = discussionsState.discussions;
+    const [curDis, setCurDis] = useState<Discussion>();
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [zoom, setZoom] = useState(1); 
 
-    const user = useSelector((state: RootState) => state.user)
-    const {discussionsState, fetchDiscussions} = useDiscussion()
-    const { calculatePosition } = useNet()
-    const discussions = discussionsState.discussions
-    const [curDis, setCurDis] = useState<Discussion>()
-    const [nodes, setNodes] = useState<any>()
-    const [edges, setEdges] = useState<any>()
-    
     useEffect(() => {
         if (user && user.user != null) {
-            if (!discussionsState.discussions || discussionsState.discussions.length === 0) {
-                fetchDiscussions(user.user.id)
-            }
+        if (!discussionsState.discussions || discussionsState.discussions.length === 0) {
+            fetchDiscussions(user.user.id);
         }
-    }, [user])
+        }
+    }, [user]);
 
     useEffect(() => {
         if (discussions) {
-            setCurDis(discussions[0])
+        setCurDis(discussions[1]);
         }
-    }, [discussions])
-
-    useEffect(() => {
-        if (curDis) {
-            setNodes(() => {
-                const nodes: Node[] = []
-    
-                nodes.push({
-                    id: `discussion-${curDis.id}`,
-                    data: { label: curDis.title },
-                    position: { x: 0, y: 0 },
-                    className: 'discussion_node'
-                  });
-              
-                  curDis.topics.forEach((topic: any, index: number) => {
-                    const position = calculatePosition.defaultTopic(index, curDis.topics.length)
-                    nodes.push({
-                        id: `topic-${topic.id}`,
-                        data: { label: topic.title },
-                        position: { x: position.xposition, y: position.yposition },
-                        className: 'theme_node'
-                    });
-              
-                    topic.tasks.forEach((task: any, taskIndex: number) => {
-                        const taskPosition = calculatePosition.defaultTask(taskIndex, topic.tasks.length, position.xposition, position.yposition)
-                        nodes.push({
-                            id: `task-${task.id}`,
-                            data: { label: task.title },
-                            position: { x: taskPosition.xposition, y: taskPosition.yposition },
-                            className: 'task_node'
-                        });
-                    });
-                });
-              
-                return nodes;
-            })
-
-            setEdges(() => {
-                const edges: Edge[] = []
-
-                curDis.topics.forEach((topic: any) => {
-                    edges.push({
-                      id: `e-discussion-${topic.id}`,
-                      source: `discussion-${curDis.id}`,
-                      target: `topic-${topic.id}`,
-                      animated: true,
-                    });
-              
-                    topic.tasks.forEach((task: any) => {
-                      edges.push({
-                        id: `e-topic-${task.id}`,
-                        source: `topic-${topic.id}`,
-                        target: `task-${task.id}`,
-                        animated: true,
-                      });
-                    });
-                });
-              
-                return edges;
-            })
-        }
-    }, [curDis])
+    }, [discussions]);
 
     console.log(curDis)
 
-    return (
-        <div className="net-content">
-            <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                nodeTypes={{ 
-                    discussionNode: DiscussionNode,
-                    themeNode: ThemeNode,
-                 }}
-            >
-                <Background />
-                <Controls />
-            </ReactFlow>
-        </div>
-    );
+    const generateGraph = useCallback(() => {
+        if (curDis) {
+            const generatedNodes: Node[] = [];
+        const generatedEdges: Edge[] = [];
+    
+        const SCREEN_WIDTH = 1200;
+        const SCREEN_HEIGHT = 800;
+        const k = 2;
+    
+        const clusters = kMeansClusteringOptimized(curDis?.topics || [], k);
+
+        const nodePositions: { [key:string]: {x: number, y: number } } = {}
+    
+        clusters.forEach((cluster, clusterIndex) => {
+            cluster.forEach((topic: Topic, index: number) => {
+                const uniqueTopicId = `topic-${clusterIndex}-${index}`;
+                const size = 150 + topic.tasks.length * 50;
+    
+                const { x, y } = getClusterPosition(clusterIndex, k, SCREEN_WIDTH, SCREEN_HEIGHT);
+                
+                const finalPosition = getUniquePosition(x, y, size, nodePositions, topic.tasks.length)
+    
+                generatedNodes.push({
+                    id: uniqueTopicId,
+                    data: { label: topic.title },
+                    position: finalPosition, 
+                    style: { width: size, height: size, fontSize: size*0.1 },
+                    className: 'theme_node',
+                });
+            });
+        });
+    
+        setNodes(generatedNodes);
+        setEdges(generatedEdges);
+        }
+    }, [curDis]); 
+    
+    useEffect(() => {
+        generateGraph(); 
+    }, [generateGraph]);
+    
+    useEffect(() => {
+        if (zoom > 1) {
+            const updatedNodes = [...nodes];
+            const updatedEdges = [...edges];
+            
+            curDis?.topics.forEach((topic, topicIndex) => {
+                topic.tasks.forEach((task, taskIndex) => {
+                    const taskId = `task-topic-${topicIndex}-${taskIndex}`;
+                    const taskNode = updatedNodes.find(node => node.id === taskId);
+                    
+                    if (!taskNode) {
+                        updatedNodes.push({
+                            id: taskId,
+                            data: { label: task.title },
+                            position: { x: Math.random() * 100, y: Math.random() * 200 },
+                            style: { width: 50, height: 50, borderRadius: '50%' },
+                        });
+                        updatedEdges.push({
+                            id: `edge-topic-${topicIndex}-task-${taskIndex}`,
+                            source: `topic-${topicIndex}`,
+                            target: taskId,
+                        });
+                    }
+                });
+            });
+    
+            setNodes(updatedNodes);
+            setEdges(updatedEdges);
+        } else {
+            const nodesWithoutTasks = nodes.filter(node => !node.id.startsWith("task-"));
+            const edgesWithoutTasks = edges.filter(edge => !edge.id.startsWith("edge-topic-"));
+            
+            setNodes(nodesWithoutTasks);
+            setEdges(edgesWithoutTasks);
+        }
+    }, [zoom, curDis]);
+
+
+  useEffect(() => {
+    generateGraph();
+  }, [generateGraph]);
+
+  return (
+    <ReactFlowProvider>
+      <div className="net-content">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          fitView
+        >
+          <Background />
+          <Controls />
+        </ReactFlow>
+        <ZoomManager onZoomChange={setZoom} />
+      </div>
+    </ReactFlowProvider>
+  );
 }
-
-// Кастомный компонент для узла
-const DiscussionNode = ({ data }: any) => {
-    return (
-        <div className="discussion_node">
-            <div className="node_title">
-                {data.label}
-            </div>
-            <Handle type="target" position={Position.Top} />
-            <Handle type="source" position={Position.Bottom} />
-        </div>
-    );
-};
-
-const ThemeNode = ({ data }: any) => {
-    return (
-        <div className="theme_node">
-            <div className="node_title">
-                {data.label}
-            </div>
-            <Handle type="target" position={Position.Top} />
-            <Handle type="source" position={Position.Bottom} />
-        </div>
-    );
-};
