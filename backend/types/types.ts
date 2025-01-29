@@ -1,4 +1,5 @@
 type TaskPriority = 'High' | 'Medium' | 'Low';
+import { Optional } from "sequelize";
 import { Task, Discussion, Topic } from "../database/models";
 import * as express from 'express'
 
@@ -17,6 +18,7 @@ export interface TaskInterface {
     topicId: number,
     discussionId: number,
     assignees?: number[],
+    connections?: { taskId: number, connectionTaskId: number }[],
 }
 
 export interface TopicInterface {
@@ -36,6 +38,15 @@ export interface Patch {
     discussion?: Partial<Discussion>;
     topics? : Partial<Topic>[];
     tasks?: Partial<Task>[];
+}
+
+export interface PositionInterface {
+    id: number;
+    userId: number,
+    elementId: string,
+    discussionId: number,
+    x: number,
+    y: number
 }
 
 export interface NotificationsInterface  {

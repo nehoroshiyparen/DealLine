@@ -1,3 +1,5 @@
+import { Task, Topic } from "../../types";
+
 export type Position = { x: number, y: number }
 
 export const isCollision = (
@@ -22,15 +24,17 @@ export const getUniquePosition = (
     size: number,
     nodePositions: { [key: string]: Position },
     quantity: number,
+    type: Topic | Task,
     maxIterations: number = 100
 ):Position => {
     let newX = x
     let newY = y
     let iterations = 0
 
-    while (isCollision(newX, newY, size, nodePositions) || iterations > maxIterations) {
-        newX = x + Math.random() * quantity * 200 + 50
-        newY = y + Math.random() * quantity * 200 + 50
+    while (isCollision(newX, newY, size, nodePositions) || iterations < maxIterations) {
+        newX = x + ('tasks' in type ? Math.random() * quantity * 300 + 50 : Math.random() * quantity * 50 + 12.5)
+        newY = y + ('tasks' in type ? Math.random() * quantity * 200 + 50 : Math.random() * quantity * 40 + 12.5)
+        iterations++
     }
 
     nodePositions[`x${newX}_y${newY}`] = { x: newX, y: newY }

@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
-import ReactFlow, { Background, Controls, Node, Edge, useNodesState, useEdgesState, ReactFlowProvider } from "reactflow";
+import { useState, useEffect } from "react";
+import ReactFlow, { Background, Controls, useNodesState, useEdgesState, ReactFlowProvider } from "reactflow";
 import "reactflow/dist/style.css";
 import './net.scss';
 import { useDiscussion } from "../../hooks/useDiscussion";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { Discussion, Topic } from "../../types";
+import { Discussion, Task, Topic } from "../../types";
 import ZoomManager from './zoomManager';
-import { kMeansClusteringOptimized, getClusterPosition } from "../../utils/clusteringUtils";
-import { getUniquePosition } from "../../utils/positionsUtils";
+import { generateGraph } from '../../utils/gridUtils/gridGeneration'
+import { nodeTypes, TaskNode } from "../../components/customNodes/nodes";
 
 export default function Net() {
     const user = useSelector((state: RootState) => state.user);
@@ -21,9 +21,9 @@ export default function Net() {
 
     useEffect(() => {
         if (user && user.user != null) {
-        if (!discussionsState.discussions || discussionsState.discussions.length === 0) {
-            fetchDiscussions(user.user.id);
-        }
+            if (!discussionsState.discussions || discussionsState.discussions.length === 0) {
+                fetchDiscussions(user.user.id);
+            }
         }
     }, [user]);
 
@@ -33,106 +33,51 @@ export default function Net() {
         }
     }, [discussions]);
 
-    console.log(curDis)
+    
 
-    const generateGraph = useCallback(() => {
-        if (curDis) {
-            const generatedNodes: Node[] = [];
-        const generatedEdges: Edge[] = [];
-    
-        const SCREEN_WIDTH = 1200;
-        const SCREEN_HEIGHT = 800;
-        const k = 2;
-    
-        const clusters = kMeansClusteringOptimized(curDis?.topics || [], k);
-
-        const nodePositions: { [key:string]: {x: number, y: number } } = {}
-    
-        clusters.forEach((cluster, clusterIndex) => {
-            cluster.forEach((topic: Topic, index: number) => {
-                const uniqueTopicId = `topic-${clusterIndex}-${index}`;
-                const size = 150 + topic.tasks.length * 50;
-    
-                const { x, y } = getClusterPosition(clusterIndex, k, SCREEN_WIDTH, SCREEN_HEIGHT);
-                
-                const finalPosition = getUniquePosition(x, y, size, nodePositions, topic.tasks.length)
-    
-                generatedNodes.push({
-                    id: uniqueTopicId,
-                    data: { label: topic.title },
-                    position: finalPosition, 
-                    style: { width: size, height: size, fontSize: size*0.1 },
-                    className: 'theme_node',
-                });
-            });
-        });
-    
-        setNodes(generatedNodes);
-        setEdges(generatedEdges);
-        }
-    }, [curDis]); 
-    
-    useEffect(() => {
-        generateGraph(); 
-    }, [generateGraph]);
-    
     useEffect(() => {
         if (zoom > 1) {
-            const updatedNodes = [...nodes];
-            const updatedEdges = [...edges];
-            
-            curDis?.topics.forEach((topic, topicIndex) => {
-                topic.tasks.forEach((task, taskIndex) => {
-                    const taskId = `task-topic-${topicIndex}-${taskIndex}`;
-                    const taskNode = updatedNodes.find(node => node.id === taskId);
-                    
-                    if (!taskNode) {
-                        updatedNodes.push({
-                            id: taskId,
-                            data: { label: task.title },
-                            position: { x: Math.random() * 100, y: Math.random() * 200 },
-                            style: { width: 50, height: 50, borderRadius: '50%' },
-                        });
-                        updatedEdges.push({
-                            id: `edge-topic-${topicIndex}-task-${taskIndex}`,
-                            source: `topic-${topicIndex}`,
-                            target: taskId,
-                        });
-                    }
-                });
-            });
-    
-            setNodes(updatedNodes);
-            setEdges(updatedEdges);
+            document.documentElement.style.setProperty('--theme-node-opacity', (1.5 - zoom*0.5).toString());
+            document.documentElement.style.setProperty('--task-node-opacity', (zoom-1).toString());
+            if (zoom > 1.2) {
+                document.documentElement.style.setProperty('--theme-z-index', '0');
+                document.documentElement.style.setProperty('--task-z-index', '1');
+            }
         } else {
-            const nodesWithoutTasks = nodes.filter(node => !node.id.startsWith("task-"));
-            const edgesWithoutTasks = edges.filter(edge => !edge.id.startsWith("edge-topic-"));
-            
-            setNodes(nodesWithoutTasks);
-            setEdges(edgesWithoutTasks);
+            document.documentElement.style.setProperty('--node-opacity', '1');
+            document.documentElement.style.setProperty('--task-node-opacity', '0');
+            if (zoom < 1.2) {
+                document.documentElement.style.setProperty('--theme-z-index', '1');
+                document.documentElement.style.setProperty('--task-z-index', '0');
+            }
         }
-    }, [zoom, curDis]);
+    }, [zoom])
 
+    useEffect(() => {
+        if (curDis) {
+            const elements = generateGraph(curDis);
+            setNodes(elements.nodes)
+            setEdges(elements.edges)
+        }
+    }, [curDis]);
 
-  useEffect(() => {
-    generateGraph();
-  }, [generateGraph]);
-
-  return (
-    <ReactFlowProvider>
-      <div className="net-content">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          fitView
-        >
-          <Background />
-          <Controls />
-        </ReactFlow>
-        <ZoomManager onZoomChange={setZoom} />
-      </div>
-    </ReactFlowProvider>
-  );
+    return (
+        <ReactFlowProvider>
+        <div className="net-content">
+            <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            minZoom={0.1}
+            nodeTypes={nodeTypes}
+            fitView
+            >
+            <Background />
+            <Controls />
+            </ReactFlow>
+            <ZoomManager onZoomChange={setZoom} />
+        </div>
+        </ReactFlowProvider>
+    );
 }

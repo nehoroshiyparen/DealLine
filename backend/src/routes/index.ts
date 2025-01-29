@@ -5,6 +5,7 @@ import userRouter from './userRouter'
 import notificationRouter from './notificationRouter'
 import uploadRouter from './uploadRouter'
 import topicRouter from './topicRouter'
+import netRouter from './netRouter'
 import authMiddleware from '../middleware/AuthMiddleware'
 
 
@@ -14,6 +15,7 @@ router.use('/discussions', discussionRouter)
 router.use('/tasks', taskRouter)
 router.use('/topics', topicRouter)
 router.use('/users', userRouter)
+router.use('/net', netRouter)
 router.use('/notifications', notificationRouter)
 router.use('/upload', uploadRouter)
 

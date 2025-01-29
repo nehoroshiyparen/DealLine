@@ -1,3 +1,14 @@
+:root {
+    --theme-z-index: 0;
+    --task-z-index: 1;
+    --theme-opacity: 1;
+    --task-opacity: 0;
+}
+
+.react-flow__node-default .react-flow__handle {
+    display: none; 
+}
+
 .net-content {
     width: 80%;
     height: 800px;
@@ -13,4 +24,20 @@
     font-weight: bold;
     padding: 40px;
     visibility: visible !important;
+
+    color: black;
+    background: #E9E9E9;
+
+    z-index: var(--theme-z-index) !important;
+    opacity: var(--theme-node-opacity) !important;
+}
+
+.theme_zoom-in {
+    --theme-node-opacity: 1;
+}
+
+.task_node {
+    visibility: visible !important;
+    z-index: var(--task-z-index) !important;
+    opacity: var(--task-node-opacity) !important;
 }

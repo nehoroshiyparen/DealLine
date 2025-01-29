@@ -162,6 +162,32 @@ Comment.init({
     sequelize, modelName: 'Comment'
 })
 
+class Position extends Model {
+    public userId!: number;
+    public elementId!: string;
+    public discussionId!: number;
+    public x!: number;
+    public y!: number;
+}
+
+Position.init({
+    userId: { type: DataTypes.INTEGER, allowNull: false },
+    elementId: { type: DataTypes.STRING, allowNull: false },
+    discussionId: { type: DataTypes.INTEGER, allowNull: false },
+    x: { type: DataTypes.FLOAT, allowNull: false },
+    y: { type: DataTypes.FLOAT, allowNull: false }
+}, {
+    sequelize, 
+    modelName: 'Position',
+    indexes: [
+        {
+            unique: true,
+            fields: ['userId', 'discussionId', 'elementId'],
+            name: 'unique_user_element'
+        }
+    ]
+})
+
 class Notifications extends Model {
     public id!: number;
     public type!: string;
@@ -223,4 +249,4 @@ Comment.belongsTo(User, { foreignKey: 'userId', as: 'author' });
 Notifications.belongsTo(User, { as: 'Sender', foreignKey: 'senderId' });
 Notifications.belongsTo(User, { as: 'Receiver', foreignKey: 'recieverId' }); 
 
-export { sequelize, User, Discussion, Task, Comment, Notifications, Token, UserFriends, DiscussionParticipants, Topic };
+export { sequelize, User, Discussion, Task, Comment, Notifications, Token, UserFriends, DiscussionParticipants, Topic, Position };
