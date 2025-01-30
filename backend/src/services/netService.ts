@@ -1,4 +1,4 @@
-import { Position, User } from "../../database/models";
+import { Discussion, DiscussionParticipants, Position, User } from "../../database/models";
 import { PositionInterface } from "../../types/types";
 import ApiError from "../exceptions/api-error";
 
@@ -10,6 +10,12 @@ class netService {
             throw ApiError.BadRequest(`Пользователя с id: ${userId} не существует`)
         }
         for (const position of positions) {
+            const discussion = await Discussion.findOne({where: {id: position.discussionId}})
+            if (!discussion) {
+                console.log(`Обсуждения с id: ${position.discussionId} не существует`)
+                continue
+            }
+
             const creation = await Position.create({
                 userId, 
                 elementId: position.elementId,
@@ -19,7 +25,11 @@ class netService {
             })
             response.push(creation)
         }
-        return response
+        if (response.length === positions.length) {
+            return 'Все позиции сохранены'
+        } else {
+            return 'Не все позиции были сохранены'
+        }
     }
 
     async updatePositions(userId: number, positions: PositionInterface[]) {
@@ -47,10 +57,11 @@ class netService {
         if (!user) {
             throw ApiError.BadRequest(`Пользователя с id: ${userId} не существует`)
         }
-        const positions = await Position.findAll({ where: {userId, discussionId} })
-        if (!positions) {
-            return 'Позиций не найдено'
+        const isParticipant = await DiscussionParticipants.findOne({where: {userId, discussionId}})
+        if (!isParticipant) {
+            return 'Пользователь не является участником этого обсуждения'
         }
+        const positions = await Position.findAll({ where: {userId, discussionId} })
         return positions
     }
 }

@@ -11,8 +11,9 @@
 
 .net-content {
     width: 80%;
-    height: 800px;
+    height: calc(100vh - 121px);
     float: left;
+    position: relative;
 }
 
 .theme_node {
@@ -40,4 +41,34 @@
     visibility: visible !important;
     z-index: var(--task-z-index) !important;
     opacity: var(--task-node-opacity) !important;
+}
+
+.save_button {
+    position: absolute;
+    bottom: 15.5px;
+    left: 60px;
+
+    box-sizing: border-box;
+    padding: 5px 10px 5px 10px;
+
+    font-size: 10px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.mix_button {
+    position: absolute;
+    bottom: 45.5px;
+    left: 60px;
+
+    box-sizing: border-box;
+    padding: 5px 10px 5px 10px;
+    background: white;
+    color: black;
+
+    font-size: 10px;
+    font-weight: bold;
+
+    cursor: pointer;
 }

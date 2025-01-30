@@ -1,12 +1,15 @@
 import { Edge, Node } from "reactflow";
-import { Discussion, Topic, Task } from "../../types";
+import { Discussion, Topic, Task, Position } from "../../types";
 import { getUniquePosition } from './positions'
 import { kMeansClusteringElements, getClusterPosition } from "./clustering";
 import { TaskNode } from "../../components/customNodes/nodes";
+import NetService from "../../service/netService";
 
-export const generateGraph = (discussion: Discussion): { nodes: Node[] , edges: Edge[] } => {
+export const generateGraph = async(userId: number, discussion: Discussion): Promise<{ nodes: Node[] , edges: Edge[] , positions: Position[] }> => {
         const generatedNodes: Node[] = [];
         const generatedEdges: Edge[] = [];
+
+        const positions: Position[] = []
     
         const SCREEN_WIDTH = 1200;
         const SCREEN_HEIGHT = 600;
@@ -18,7 +21,7 @@ export const generateGraph = (discussion: Discussion): { nodes: Node[] , edges: 
     
         clusters.forEach((cluster, clusterIndex) => {
             cluster.forEach((topic: Topic, index: number) => {
-                const uniqueTopicId = `topic-${clusterIndex}-${index}`;
+                const uniqueTopicId = `topic-${topic.id}`;
                 const size = 150 + topic.tasks.length * 100;
     
                 const { x, y } = getClusterPosition(clusterIndex, k, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -32,6 +35,8 @@ export const generateGraph = (discussion: Discussion): { nodes: Node[] , edges: 
                     style: { width: size, height: size, fontSize: size * 0.1 },
                     className: 'theme_node',
                 });
+
+                positions.push({ elementId: uniqueTopicId, discussionId: discussion.id, x: finalPosition.x, y: finalPosition.y })
 
                 const taskClusters = kMeansClusteringElements(topic.tasks, 2)
                 taskClusters.forEach((taskCluster) => {
@@ -55,9 +60,11 @@ export const generateGraph = (discussion: Discussion): { nodes: Node[] , edges: 
                                 className: 'task_node',
                             })
                         }
+
+                        positions.push({ elementId: taskId, discussionId: discussion.id, x: finalTaskX, y: finalTaskY })
                     })
                 })
             });
         });
-    return { nodes: generatedNodes, edges: generatedEdges }
+    return { nodes: generatedNodes, edges: generatedEdges, positions }
 };

@@ -41,8 +41,8 @@ export interface Patch {
 }
 
 export interface PositionInterface {
-    id: number;
-    userId: number,
+    id?: number;
+    userId?: number,
     elementId: string,
     discussionId: number,
     x: number,

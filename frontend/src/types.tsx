@@ -56,3 +56,12 @@ export interface Notification {
     date: Date;
     content: string;
 }
+
+export interface Position{
+    id?: number;
+    userId?: number,
+    elementId: string,
+    discussionId: number,
+    x: number,
+    y: number
+}
