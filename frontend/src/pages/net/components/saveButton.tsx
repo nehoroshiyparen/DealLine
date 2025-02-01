@@ -1,9 +1,6 @@
-import { Discussion, Position } from '../../types'
+import { Discussion, Position } from '../../../types'
 import { useReactFlow } from 'reactflow'
-import './net.scss'
-import { useDiscussion } from '../../hooks/useDiscussion'
-import React from 'react'
-import NetService from '../../service/netService'
+import NetService from '../../../service/netService'
 
 interface props {
     userId: number,

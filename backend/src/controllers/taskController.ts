@@ -1,14 +1,35 @@
 import { Task } from "../../database/models";
 import { Response, Request } from 'express'
 import taskService from "../services/taskService";
+import ApiError from "../exceptions/api-error";
 
 export const getAllTasks = async(req: Request, res: Response) => {
     try {
-        const { discussionId } = req.body
-        const tasks = await taskService.getTasks(discussionId)
+        const { discussionId } = req.params
+        const tasks = await taskService.getTasks(Number(discussionId))
         res.json(tasks)
     } catch (error) {
         res.json({message: 'Ошибка при получении всех задач', error})
+    }
+}
+
+export const getOneTask = async(req: Request, res: Response) => {
+    try {
+        const { taskId } = req.params
+        const task = await taskService.getOneTask( Number(taskId))
+        res.json(task)
+    } catch (e) {
+        if (e instanceof ApiError) {
+            res.status(e.status).json({
+                message: e.message,
+                error: e.errors
+            })
+        } else {
+            console.log(e)
+            res.status(500).json({
+                message: 'Ошибка при получении информации о задаче'
+            })
+        }
     }
 }
 

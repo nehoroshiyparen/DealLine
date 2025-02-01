@@ -1,7 +1,7 @@
 import { Node } from "reactflow"
-import { generateGraph } from "../../utils/gridUtils/gridGeneration"
+import { generateGraph } from "../../../utils/gridUtils/gridGeneration"
 import React from "react"
-import { Discussion } from "../../types"
+import { Discussion } from "../../../types"
 
 interface props {
     userId: number,

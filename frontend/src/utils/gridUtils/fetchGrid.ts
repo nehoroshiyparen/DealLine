@@ -8,7 +8,11 @@ export const fetchGrid = async(userId:number, discussion: Discussion) => {
     const nodes: Node[] = []
     const edges: Edge[] = []
 
-    discussion.topics.forEach((topic, index) => {
+    const openMore = () => {
+        console.log('fqeqe')
+    }
+
+    discussion.topics.forEach((topic) => {
         const topicPosition = positions.find(position => position.elementId === `topic-${topic.id}`)
         const size = 150 + topic.tasks.length * 100;
 
@@ -28,7 +32,7 @@ export const fetchGrid = async(userId:number, discussion: Discussion) => {
                     nodes.push({
                         id: taskPosition.elementId,
                         parentId: topicPosition.elementId,
-                        data: { label: task.title, staus: task.status, deadline: task.deadline, priority: task.priority, responsible: task.responsible },
+                        data: { label: task.title, staus: task.status, deadline: task.deadline, priority: task.priority, responsible: task.responsible, onClick: openMore },
                         position: { x: taskPosition.x, y: taskPosition.y },
                         type: 'taskNode',
                         className: 'task_node',

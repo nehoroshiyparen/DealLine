@@ -13,27 +13,18 @@ export interface Comment {
 }
 
 export interface Task {
-    id: number;
-    title: string;
-    description: string;
-    priority: TaskPriority;
-    deadline: string;
-    status: TaskStatus;
-    responsible: MiniUser[];
-    comments: Comment[];
+    id: number,
+    title: string,
+    description: string,
+    priority: string,
+    deadline: Date,
+    status: string,
+    topicId: number,
+    discussionId: number,
+    assignees: MiniUser[],
+    comments: Comment[]
 }
 
-export enum TaskStatus {
-    NotStarted = 'Задача еще не начата',
-    InProgress = 'Задача в процессе',
-    Completed = 'Задача выполнена'
-}
-
-export enum TaskPriority {
-    Low = 'Низкий',
-    Medium = 'Средний',
-    High = 'Высокий'
-}
 export interface Topic {
     id: number;
     title: string;

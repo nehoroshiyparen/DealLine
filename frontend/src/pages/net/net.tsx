@@ -8,11 +8,12 @@ import { RootState } from "../../store/store";
 import { Discussion } from "../../types";
 import ZoomManager from './zoomManager';
 import { generateGraph } from '../../utils/gridUtils/gridGeneration'
-import { nodeTypes } from "../../components/customNodes/nodes";
+import { nodeTypes } from "./customNodes/nodes";
 import NetService from "../../service/netService";
 import { fetchGrid } from "../../utils/gridUtils/fetchGrid";
-import Save from "./saveButton";
-import Mix from "./mixButton";
+import Save from "./components/saveButton";
+import Mix from "./components/mixButton";
+import TaskInformation from "./components/information";
 
 export default function Net() {
 
@@ -87,6 +88,7 @@ export default function Net() {
                 <ZoomManager onZoomChange={setZoom} />
                 <Save userId={Number(user.user.id)} discussion={curDis!} state={hasChanged}/>
                 <Mix setNodes={setNodes} setHasChanged={setHasChanged} userId={user.user.id} discussion={curDis!}/>
+                <TaskInformation taskId={30}/>
             </div>
         </ReactFlowProvider>
     );

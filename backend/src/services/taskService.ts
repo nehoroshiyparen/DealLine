@@ -1,4 +1,4 @@
-import { Discussion, Task, Topic } from "../../database/models"
+import { Comment, Discussion, Task, Topic, User } from "../../database/models"
 import ApiError from "../exceptions/api-error"
 import { TaskInterface } from "../../types/types"
 
@@ -10,6 +10,32 @@ class taskService {
         }
         const tasks = await Task.findAll({where: {discussionId} })
         return tasks
+    }
+
+    async getOneTask(taskId: number) {
+        const task = await Task.findOne({
+            where: {id: taskId},
+            include: [
+                {
+                    model: Comment,
+                    as: 'comments',
+                    include: [
+                        {
+                            model: User,
+                            as: 'author',
+                            attributes: ['username']
+                        }
+                    ]
+                },
+                {
+                    model: User,
+                    as: 'assignees',
+                    attributes: ['username', 'avatar']
+                }
+            ]
+        })
+
+        return task
     }
 
     async createTask(topicId: number, params: TaskInterface) {

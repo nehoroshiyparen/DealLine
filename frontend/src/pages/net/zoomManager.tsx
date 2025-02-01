@@ -1,5 +1,5 @@
 // ZoomManager.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useViewport } from 'reactflow';
 
 interface ZoomManagerProps {

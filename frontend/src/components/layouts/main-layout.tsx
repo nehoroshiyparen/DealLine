@@ -1,6 +1,6 @@
 import React from 'react'
-import Side_Menu from '../side-menu/side-menu';
-import Top_Menu from '../top-menu/top-menu';
+import Side_Menu from '../ui/side-menu/side-menu';
+import Top_Menu from '../ui/top-menu/top-menu';
 import '../../pages/discussions/discussions.scss'
 
 interface MainLayoutProps {

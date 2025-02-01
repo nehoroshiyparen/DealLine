@@ -1,4 +1,4 @@
-import { MiniUser } from '../../types'
+import { MiniUser } from '../../../types'
 import './nodes.scss'
 
 export const TaskNode = ({data}: any) => {
@@ -9,14 +9,14 @@ export const TaskNode = ({data}: any) => {
                     {data.label}
                 </div>
                 <div className='task-node_functions'>
-                    <div className='node-more-function'>
+                    <div className='node-more-function' onClick={data.onClick}>
 
                     </div>
                 </div>
             </div>
             <div className='task-info'>
                 <div className='task-deadline'>
-                    Дедлайн: <span style={{fontWeight: 'bold', textDecoration: 'underline'}}>{data.deadline === null ? `Нет ограничения` : `${data.deadline}`}</span>
+                    Дедлайн: <span style={{fontWeight: 'bold', textDecoration: 'underline'}}>{data.deadline === null ? `Нет ограничений` : `${data.deadline}`}</span>
                 </div>
                 <div className='task-priority'>
                     Приоритет: <span style={{color: `${data.priority === 'low' ? '#1cd500' : data.priority === 'Medium' ? '#ff9900' : '#ff3232'}`, fontWeight: 'bold'}}>{data.priority}</span>

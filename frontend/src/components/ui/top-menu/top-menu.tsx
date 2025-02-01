@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import './top-menu.scss'
 import { useDispatch } from 'react-redux'
-import { AppDispatch, RootState } from '../../store/store'
+import { AppDispatch, RootState } from '../../../store/store'
 import { useSelector } from 'react-redux'
-import { useNotifications } from '../../hooks/useNotification'
-import { useDiscussion } from '../../hooks/useDiscussion'
+import { useNotifications } from '../../../hooks/useNotification'
+import { useDiscussion } from '../../../hooks/useDiscussion'
 
 export default function Top_Menu() {
     const dispatch = useDispatch<AppDispatch>()

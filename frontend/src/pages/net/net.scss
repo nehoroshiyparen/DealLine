@@ -5,6 +5,10 @@
     --task-opacity: 0;
 }
 
+span.bold {
+    font-weight: bold;
+}
+
 .react-flow__node-default .react-flow__handle {
     display: none; 
 }
@@ -71,4 +75,146 @@
     font-weight: bold;
 
     cursor: pointer;
+}
+
+.task_information {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    min-width: 570px;
+    max-width: 700px;
+    background: linear-gradient(145deg, #353535, #2d2d2d);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.resizer {
+    float: left;
+    width: 5px;
+    height: 100%;
+    background: #2d2d2d;
+    cursor: ew-resize;
+}
+
+.resizer:hover {
+    background: #555;
+}
+
+.information_block {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.information_content {
+    box-sizing: border-box;
+    padding: 40px 20px 40px 7%;
+    width: 100%;
+    color: white;
+    font-weight: 500;
+}
+
+.inf-label {
+    text-align: left;
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.task_label--information {
+    text-align: left;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.task_param--information {
+    width: 100%;
+}
+
+.vertical-text {
+    writing-mode: vertical-lr;
+    font-size: 19px;
+    font-weight: 500;
+    float: left;
+    margin-right: 15px;
+    border-right: 2px solid white;
+}
+
+.params-list {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.param-card {
+    background: #454545;
+    padding: 10px;
+    border-radius: 8px;
+    flex: 1;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.param-card:hover {
+    transform: translateY(-5px);
+}
+
+.task_assignees {
+    margin-top: 20px;
+    font-size: 19px;
+    margin-bottom: 20px;
+}
+
+.task_description--information {
+    width: 100%;
+    font-size: 18px;
+    border-top: 1px solid #555;
+    padding-top: 20px;
+    margin-top: 20px;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.6;
+}
+
+.comments-block {
+    flex-grow: 1;
+    box-sizing: border-box;
+    padding: 20px 20px 20px 7%;
+    width: 100%;
+}
+
+.comments-count {
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+
+    margin-bottom: 20px;
+}
+
+.comment {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-user {
+    font-weight: bold;
+}
+
+.comment-time {
+    font-size: 12px;
+    color: #888;
 }

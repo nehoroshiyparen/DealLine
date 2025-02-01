@@ -1,15 +1,17 @@
 import { Edge, Node } from "reactflow";
 import { Discussion, Topic, Task, Position } from "../../types";
-import { getUniquePosition } from './positions'
-import { kMeansClusteringElements, getClusterPosition } from "./clustering";
-import { TaskNode } from "../../components/customNodes/nodes";
-import NetService from "../../service/netService";
+import { getUniquePosition } from './algorithms/positions'
+import { kMeansClusteringElements, getClusterPosition } from "./algorithms/clustering";
 
 export const generateGraph = async(userId: number, discussion: Discussion): Promise<{ nodes: Node[] , edges: Edge[] , positions: Position[] }> => {
         const generatedNodes: Node[] = [];
         const generatedEdges: Edge[] = [];
 
         const positions: Position[] = []
+
+        const openMore = () => {
+            console.log('fqeqe')
+        }
     
         const SCREEN_WIDTH = 1200;
         const SCREEN_HEIGHT = 600;
@@ -54,7 +56,7 @@ export const generateGraph = async(userId: number, discussion: Discussion): Prom
                             generatedNodes.push({
                                 id: taskId,
                                 parentId: uniqueTopicId,
-                                data: { label: task.title, staus: task.status, deadline: task.deadline, priority: task.priority, responsible: task.responsible },
+                                data: { label: task.title, staus: task.status, deadline: task.deadline, priority: task.priority, responsible: task.assignees, onClick: openMore },
                                 position: { x: finalTaskX, y: finalTaskY},
                                 type: 'taskNode',
                                 className: 'task_node',
