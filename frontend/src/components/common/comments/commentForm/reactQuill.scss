@@ -1,0 +1,52 @@
+$tools-color: #59aaff;
+
+.ql-toolbar.ql-snow {
+    border: 1px solid #656565;
+    border-radius: 10px 10px 0 0;
+}
+
+.ql-container.ql-snow {
+    border: 1px solid #656565;
+}
+
+// основной бордер
+
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+    border: 1px solid #656565;
+}
+
+.ql-snow .ql-picker-options {
+    background: #3b3b3b;
+}
+
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+    border: 1px solid #656565;
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+    color: $tools-color;
+}
+
+.ql-snow .ql-picker {
+    color: $tools-color;
+}
+
+// выбор размера текста
+
+.ql-snow .ql-stroke {
+    stroke: $tools-color;
+}
+
+.ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill {
+    fill: $tools-color;
+}
+
+// остальные иконки
+
+.ql-editor.ql-blank::before {
+    color: rgba(255, 255, 255, 0.61)
+}
+
+.ql-editor {
+    font-size: 15px;
+}

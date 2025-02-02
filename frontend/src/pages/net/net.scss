@@ -47,6 +47,8 @@ span.bold {
     opacity: var(--task-node-opacity) !important;
 }
 
+// BUTTONS
+
 .save_button {
     position: absolute;
     bottom: 15.5px;
@@ -77,16 +79,34 @@ span.bold {
     cursor: pointer;
 }
 
+// INFORMATION
+
+.close_information {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    
+    width: 33px;
+    aspect-ratio: 1/1;
+
+    background-image: url('../../../public/images/close.png');
+    background-size: cover;
+    filter: invert(44%) sepia(100%) saturate(1000%) hue-rotate(200deg);
+
+    cursor: pointer;
+}
+
 .task_information {
     position: absolute;
     right: 0;
     top: 0;
     height: 100%;
     min-width: 570px;
-    max-width: 700px;
+    max-width: 100%;
     background: linear-gradient(145deg, #353535, #2d2d2d);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
+    transition: 0.3s;
 }
 
 .resizer {
@@ -95,6 +115,8 @@ span.bold {
     height: 100%;
     background: #2d2d2d;
     cursor: ew-resize;
+
+    position: relative;
 }
 
 .resizer:hover {
@@ -172,8 +194,9 @@ span.bold {
     width: 100%;
     font-size: 18px;
     border-top: 1px solid #555;
-    padding-top: 20px;
-    margin-top: 20px;
+    border-bottom: 1px solid #555;
+    padding: 20px 0 20px 0;
+    margin: 20px 0 0px 0;
     font-family: 'Open Sans', sans-serif;
     line-height: 1.6;
 }
@@ -181,7 +204,7 @@ span.bold {
 .comments-block {
     flex-grow: 1;
     box-sizing: border-box;
-    padding: 20px 20px 20px 7%;
+    padding: 0 20px 20px 7%;
     width: 100%;
 }
 
@@ -191,30 +214,4 @@ span.bold {
     font-weight: bold;
 
     margin-bottom: 20px;
-}
-
-.comment {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.comment-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.comment-content {
-    flex: 1;
-}
-
-.comment-user {
-    font-weight: bold;
-}
-
-.comment-time {
-    font-size: 12px;
-    color: #888;
 }

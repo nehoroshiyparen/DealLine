@@ -1,0 +1,31 @@
+.markdown-placeholder {
+    color: gray;
+    font-style: italic;
+}
+
+.markdown-container {
+    font-size: 16px;
+    line-height: 0.4;
+    color: #ddd;
+    background-color: #222;
+    padding: 16px;
+    border-radius: 8px;
+}
+.markdown-container h1 {
+    color: #fff;
+    line-height: 1;
+}
+
+.markdown-container a {
+    color: #61dafb;
+}
+
+.markdown-container ol, ul {
+    line-height: 1.3;
+}
+
+.markdown-container pre, code {
+    line-height: 1 !important;
+}
+
+

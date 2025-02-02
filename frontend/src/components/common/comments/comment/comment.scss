@@ -1,0 +1,27 @@
+.comment {
+    width: 100%;
+
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.user_info--comment {
+    width: 100%;
+    display: flex;
+}
+
+.author-avatar {
+    width: 60px;
+    aspect-ratio: 1/1;
+
+    border-radius: 50%;
+}
+
+.author-info--2 {
+    margin: 0 0 0 30px;
+}
+
+.author-username {
+    font-size: 22px;
+    font-weight: bold;
+}

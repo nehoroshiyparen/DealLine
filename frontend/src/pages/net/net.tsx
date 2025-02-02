@@ -69,6 +69,8 @@ export default function Net() {
         }
     }, [curDis]);
 
+    if (!curDis) return null
+
     return (
         <ReactFlowProvider>
             <div className="net-content">
@@ -88,7 +90,7 @@ export default function Net() {
                 <ZoomManager onZoomChange={setZoom} />
                 <Save userId={Number(user.user.id)} discussion={curDis!} state={hasChanged}/>
                 <Mix setNodes={setNodes} setHasChanged={setHasChanged} userId={user.user.id} discussion={curDis!}/>
-                <TaskInformation taskId={30}/>
+                <TaskInformation taskId={curDis.topics[0].tasks[0].id}/>
             </div>
         </ReactFlowProvider>
     );

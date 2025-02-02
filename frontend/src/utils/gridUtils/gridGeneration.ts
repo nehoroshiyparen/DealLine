@@ -8,10 +8,6 @@ export const generateGraph = async(userId: number, discussion: Discussion): Prom
         const generatedEdges: Edge[] = [];
 
         const positions: Position[] = []
-
-        const openMore = () => {
-            console.log('fqeqe')
-        }
     
         const SCREEN_WIDTH = 1200;
         const SCREEN_HEIGHT = 600;
@@ -56,7 +52,7 @@ export const generateGraph = async(userId: number, discussion: Discussion): Prom
                             generatedNodes.push({
                                 id: taskId,
                                 parentId: uniqueTopicId,
-                                data: { label: task.title, staus: task.status, deadline: task.deadline, priority: task.priority, responsible: task.assignees, onClick: openMore },
+                                data: { task },
                                 position: { x: finalTaskX, y: finalTaskY},
                                 type: 'taskNode',
                                 className: 'task_node',

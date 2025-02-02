@@ -1,17 +1,16 @@
 .comment-form {
     width: 100%;
 
-    background: #3b3b3b;
+    padding-bottom: 30px;
 
-    border-radius: 8px;
-    border: 1px solid #404040;
+    border-bottom: 1px solid #555;
 }
 
-.toolbar {
+.toolbar, .submit-button {
     margin-bottom: 10px;
 }
 
-.toolbar button {
+.toolbar button, .submit-button {
     margin-right: 10px;
     padding: 5px 10px;
     background: #007bff;
@@ -21,6 +20,10 @@
     cursor: pointer;
 }
 
-.toolbar button:hover {
+.toolbar button:hover, .submit-button:hover {
     background: #0056b3;
+}
+
+.writing-space {
+    margin: 20px 0;
 }

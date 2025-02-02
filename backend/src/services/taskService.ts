@@ -66,6 +66,26 @@ class taskService {
             throw ApiError.BadRequest('При удалении задания произошла ошибка', [error])
         }
     }
+
+    async sendComment(userId: number, taskId: number, content: string) {
+        if (content === null || content === '') {
+            throw ApiError.BadRequest('Нельзя создать пустой комментарий')
+        }
+
+        const user = await User.findOne({where: {id: userId}})
+        if (!user) {
+            throw ApiError.BadRequest(`Пользователя с id: ${userId} не существует`)
+        }
+
+        await Comment.create({
+            userId,
+            taskId,
+            content,
+            createdAt: Date.now()
+        })
+
+        return {message: 'Комментарий отправлен'}
+    }
 }
 
 export default new taskService()

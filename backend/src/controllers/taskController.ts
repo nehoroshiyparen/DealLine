@@ -62,3 +62,13 @@ export const deleteTask = async(req: Request, res: Response) => {
         res.json({message: 'Ошибка при удалении задачи', error})
     }
 }
+
+export const sendComment = async(req: Request, res: Response) => {
+    try {
+        const { userId, taskId, content } = req.body
+        const response = await taskService.sendComment(userId, taskId, content)
+        res.json(response)
+    } catch (e) {
+        console.log(e)
+    }
+}
