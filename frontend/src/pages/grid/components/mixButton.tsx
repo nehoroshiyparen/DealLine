@@ -7,13 +7,14 @@ interface props {
     userId: number,
     discussion: Discussion,
     setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
-    setHasChanged: React.Dispatch<React.SetStateAction<boolean>>
+    setHasChanged: React.Dispatch<React.SetStateAction<boolean>>,
+    onClick: Function
 }
 
-const Mix = ({ setNodes, setHasChanged, userId, discussion }: props) => {
+const Mix = ({ setNodes, setHasChanged, userId, discussion, onClick}: props) => {
 
     const mixGraph = async() => {
-        const elements = await generateGraph(userId, discussion)
+        const elements = await generateGraph(discussion, onClick)
         setNodes(elements.nodes)
         setHasChanged(true)
     }

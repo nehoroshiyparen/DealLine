@@ -4,7 +4,7 @@ import { Friends } from './pages/friends/friends.tsx'
 import LogIn from './pages/registration/login.tsx'
 import Registration from './pages/registration/registration.tsx'
 import { INDEX_ROUTE, REGISTRATION_ROUTE, LOGIN_ROUTE, DISCUSSION_ROUTE, FRIENDS_ROUTE, NET_ROUTE } from './utils/consts'
-import Net from './pages/net/net.tsx'
+import Grid from './pages/grid/grid.tsx'
 
 export const PublicRoutes = [
     {
@@ -30,7 +30,7 @@ export const PrivateRoutes = [
     },
     {
         path: NET_ROUTE,
-        Component: Net,
+        Component: Grid,
         layout: 'main'
     }
 ]

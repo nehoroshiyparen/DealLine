@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ReactFlow, { Background, Controls, useNodesState, useEdgesState, ReactFlowProvider } from "reactflow";
 import "reactflow/dist/style.css";
-import './net.scss';
+import './grid.scss';
 import { useDiscussion } from "../../hooks/useDiscussion";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
@@ -15,7 +15,7 @@ import Save from "./components/saveButton";
 import Mix from "./components/mixButton";
 import TaskInformation from "./components/information";
 
-export default function Net() {
+export default function Grid() {
 
     const user = useSelector((state: RootState) => state.user);
     const { discussionsState, fetchDiscussions } = useDiscussion();
@@ -26,6 +26,8 @@ export default function Net() {
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [zoom, setZoom] = useState(1); 
     const [hasChanged, setHasChanged] = useState(false)
+    const [taskId, setTaskId] = useState(0)
+    const [infoOpen, setInfoOpen] = useState(false)
 
     const onNodeDrag = () => {
         setHasChanged(true)
@@ -53,10 +55,10 @@ export default function Net() {
                     let elements
 
                     if (response.data.length === 0) {
-                        elements = await generateGraph(user.user.id, curDis);
+                        elements = await generateGraph(curDis, openInfo);
                         await NetService.updatePositions(user.user.id, elements.positions)
                     } else {
-                        elements = await fetchGrid(user.user.id, curDis)
+                        elements = await fetchGrid(user.user.id, curDis, openInfo)
                     }
                     setNodes(elements.nodes);
                     setEdges(elements.edges);
@@ -68,6 +70,11 @@ export default function Net() {
             fetchAndGenerateGraph();
         }
     }, [curDis]);
+
+    const openInfo = (taskId: number) => {
+        setTaskId(taskId)
+        setInfoOpen(true)
+    }
 
     if (!curDis) return null
 
@@ -89,8 +96,8 @@ export default function Net() {
                 </ReactFlow>
                 <ZoomManager onZoomChange={setZoom} />
                 <Save userId={Number(user.user.id)} discussion={curDis!} state={hasChanged}/>
-                <Mix setNodes={setNodes} setHasChanged={setHasChanged} userId={user.user.id} discussion={curDis!}/>
-                <TaskInformation taskId={curDis.topics[0].tasks[0].id}/>
+                <Mix setNodes={setNodes} setHasChanged={setHasChanged} userId={user.user.id} discussion={curDis!} onClick={openInfo}/>
+                <TaskInformation taskId={taskId} infoOpen={infoOpen} setInfoOpen={setInfoOpen}/>
             </div>
         </ReactFlowProvider>
     );

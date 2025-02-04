@@ -1,8 +1,14 @@
 import { MiniUser, Task } from '../../../types';
 import './nodes.scss';
 
-export const TaskNode = ({ data }: { data: { task: Task; onClick: () => void } }) => {
+export const TaskNode = ({ data }: { data: { task: Task; onClick: Function} }) => {
     const { task, onClick } = data;
+
+    const handleClick = () => {
+        if (data?.onClick && typeof data.onClick === 'function') {
+            data.onClick(data.task.id); // Передаем ID задачи
+        }
+    };
 
     return (
         <div className='task-node_element'>
@@ -11,13 +17,13 @@ export const TaskNode = ({ data }: { data: { task: Task; onClick: () => void } }
                     {task.title}
                 </div>
                 <div className='task-node_functions'>
-                    <div className='node-more-function' onClick={onClick}>
+                    <div className='node-more-function' onClick={handleClick}>
 
                     </div>
                 </div>
             </div>
-            <div className='task-info'>
-                <div className='task-deadline'>
+            <div className='task-info--node'>
+                <div className='task-deadline--node'>
                     Дедлайн: <span style={{ fontWeight: 'bold', textDecoration: 'underline' }}>
                         {task.deadline === null ? `Нет ограничений` : `${task.deadline}`}
                     </span>

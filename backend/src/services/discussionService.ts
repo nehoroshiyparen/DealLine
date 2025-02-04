@@ -123,7 +123,7 @@ class discussionService {
             if (creatorId != null) {
                 participants = [...(participants || []), creatorId];
             }
-            const discussion = await Discussion.create({creatorId, title, description}, {transaction})
+            const discussion = await Discussion.create({creatorId, title, description, createdAt: Date.now()}, {transaction})
             if (participants && participants.length > 0) {
                 await discussion.setParticipants(participants, { transaction })
             }

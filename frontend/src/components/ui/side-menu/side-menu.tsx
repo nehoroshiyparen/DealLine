@@ -25,7 +25,7 @@ export default function Side_Menu() {
                         <Link to={'/net'}>
                             <div className="main-menu-function" style={{marginTop: '25px'}}>
                                 <image className="function-image"/>
-                                Календарь
+                                Сетки обсуждений
                             </div>
                         </Link>
                         <Link to={'/discussions'}>

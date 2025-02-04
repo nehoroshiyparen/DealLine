@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Task } from '../../../types';
-import '../net.scss'
+import '../grid.scss'
 import CommentsForm from '../../../components/common/comments/commentForm/commentForm';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
@@ -9,9 +9,11 @@ import { TaskService } from '../../../service/ taskService';
 
 interface props {
     taskId: number;
+    infoOpen: boolean;
+    setInfoOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TaskInformation = ({taskId}: props) => {
+const TaskInformation = ({taskId, infoOpen, setInfoOpen}: props) => {
 
     const contentRef = useRef<HTMLDivElement | null>(null)
     const resizerRef = useRef<HTMLDivElement | null>(null)
@@ -19,29 +21,33 @@ const TaskInformation = ({taskId}: props) => {
 
     const user = useSelector((state: RootState) => state.user);
 
-    const [isOpen, setIsOpen] = useState<boolean>(true)
     const [width, setWidth] = useState(0)
     const [task, setTask] = useState<Task>()
+    const [isLoading, setIsLoading] = useState(false)
 
     const userId = user.user.id
 
     useEffect(() => {
+        setIsLoading(true)
+
         const fetchTask = async() => {
             const response = await TaskService.fetchTask(taskId)
             setTask(response.data)
         }
         fetchTask()
+
+        setIsLoading(false)
     }, [taskId])
 
     const close = () => {
-        setIsOpen((prev) => !prev)
+        setInfoOpen((prev) => !prev)
     }
 
     useEffect(() => {
         if (contentRef.current) {
             setWidth(contentRef.current.offsetWidth);
         }
-    }, [isOpen, task]); 
+    }, [infoOpen, task]); 
 
     useEffect(() => {
         const content = contentRef.current;
@@ -75,16 +81,24 @@ const TaskInformation = ({taskId}: props) => {
             document.removeEventListener("mousemove", resize);
             document.removeEventListener("mouseup", stopResize);
         };
-    }, []);
+    }, [task]);
     
 
     if (!task) return null
+
+    if (isLoading) {
+        return (
+            <div>
+                Загрузка...
+            </div>
+        )
+    }
 
     return (
         <div 
             className={`task_information`} 
             style={{
-                transform: isOpen ? 'translateX(0)' : `translateX(${width}px)`, 
+                transform: infoOpen ? 'translateX(0)' : `translateX(${width}px)`, 
                 transition: 'transform 0.3s ease'
             }} 
             ref={contentRef}
@@ -129,7 +143,7 @@ const TaskInformation = ({taskId}: props) => {
                 </div>
                 <CommentsForm userId={userId} taskId={task.id}/>
                 {
-                    task.comments.map(comment => (
+                    task.comments.slice().reverse().map(comment => (
                         <CommentComponent comment={comment}/>
                     ))
                 }

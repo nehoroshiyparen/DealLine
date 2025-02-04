@@ -3,7 +3,7 @@ import { Discussion, Topic, Task, Position } from "../../types";
 import { getUniquePosition } from './algorithms/positions'
 import { kMeansClusteringElements, getClusterPosition } from "./algorithms/clustering";
 
-export const generateGraph = async(userId: number, discussion: Discussion): Promise<{ nodes: Node[] , edges: Edge[] , positions: Position[] }> => {
+export const generateGraph = async( discussion: Discussion, onClick: Function): Promise<{ nodes: Node[] , edges: Edge[] , positions: Position[] }> => {
         const generatedNodes: Node[] = [];
         const generatedEdges: Edge[] = [];
 
@@ -52,7 +52,7 @@ export const generateGraph = async(userId: number, discussion: Discussion): Prom
                             generatedNodes.push({
                                 id: taskId,
                                 parentId: uniqueTopicId,
-                                data: { task },
+                                data: { task, onClick },
                                 position: { x: finalTaskX, y: finalTaskY},
                                 type: 'taskNode',
                                 className: 'task_node',

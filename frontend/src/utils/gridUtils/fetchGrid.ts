@@ -2,7 +2,7 @@ import { Edge, Node } from "reactflow"
 import NetService from "../../service/netService"
 import { Discussion } from "../../types"
 
-export const fetchGrid = async(userId:number, discussion: Discussion) => {
+export const fetchGrid = async(userId:number, discussion: Discussion, onClick: Function) => {
     const response = await NetService.fetchPositions(userId, discussion.id)
     const positions = response.data
     const nodes: Node[] = []
@@ -28,7 +28,7 @@ export const fetchGrid = async(userId:number, discussion: Discussion) => {
                     nodes.push({
                         id: taskPosition.elementId,
                         parentId: topicPosition.elementId,
-                        data: { task },
+                        data: { task, onClick },
                         position: { x: taskPosition.x, y: taskPosition.y },
                         type: 'taskNode',
                         className: 'task_node',
