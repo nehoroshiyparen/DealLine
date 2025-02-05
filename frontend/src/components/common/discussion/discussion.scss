@@ -27,7 +27,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: color 0.3s ease;
+    transition: 0.3s ease;
     padding: 10px 0 10px 0;
 }
 
@@ -41,16 +41,29 @@
     transition: transform 0.3s ease;
 }
 
+.content-container {
+    position: relative;
+    top: 0;
+
+    transition: 0.5s;
+}
+
 .disc-view {
     box-sizing: border-box;
-    padding: 10px 30px 30px;
+    padding: 0 30px; /* Убрал нижний padding, чтобы анимация была плавной */
+    overflow: hidden;
+    transition: height 0.3s ease, padding 0.3s ease; /* Добавил анимацию для height и padding */
 }
+
 
 .discussion-info {
     overflow: hidden;
     box-sizing: border-box;
     padding: 10px 0 0 0;
-    transition: padding 0.3s;
+    transition: opacity 0.3s, all 0.5s;
+
+    position: relative;
+    top: 0px;
 }
 
 .disc-creation_date {
@@ -135,9 +148,12 @@
 
 .topics-container {
     box-sizing: border-box;
-    padding: 20px 0px 40px;
+    padding: 20px 40px 40px 40px;
     font-size: 30px;
     font-weight: 600;
+
+    display: flex;
+    justify-content: space-between;
 }
 
 .topic-component {
@@ -145,10 +161,6 @@
     box-sizing: border-box;
     padding: 10px 40px;
     transition: all 0.3s ease;
-}
-
-.topic-component:hover {
-    background: rgba(255, 255, 255, 0.05);
 }
 
 .topic-header {
@@ -171,10 +183,10 @@
     color: #bcbfff;
 }
 
-.topic-header--show {
+.--show {
     width: 28px;
     aspect-ratio: 1/1;
-    transition: transform 0.3s ease;
+    transition: rotate 0.3s ease;
 }
 
 .task-component {
@@ -182,15 +194,8 @@
     padding: 20px;
     margin-bottom: 15px;
     border-radius: 8px;
-    background: #2a2a2a;
-    border: 1px solid #3c3c3c;
     transition: all 0.3s ease;
     cursor: pointer;
-}
-
-.task-component:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .task-title {

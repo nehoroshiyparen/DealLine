@@ -36,7 +36,7 @@ const TopicComponent = ({topic}: props) => {
                 <div className="topic-title">
                     {topic.title}
                 </div>
-                <div className="topic-header--show" style={{rotate: `${isOpen ? '-90deg' : '0deg'}`}}>
+                <div className="topic-header --show" style={{rotate: `${isOpen ? '-90deg' : '0deg'}`}}>
                     <img src='/images/direction.png' width={'100%'}/>
                 </div>
             </div>
@@ -50,7 +50,7 @@ const TopicComponent = ({topic}: props) => {
                 }}
             >
                 {topic.tasks.map((task, index) => (
-                    <TaskComponent task={task} index={index}/>
+                    <TaskComponent task={task} index={index} key={task.id}/>
                 ))}
             </div>
 

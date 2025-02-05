@@ -1,0 +1,43 @@
+.topics-section {
+    position: relative;
+    top: 0px;
+
+    transition: opacity 0.3s, all 0.5s;
+}
+
+.topics-header--top {
+    box-sizing: border-box;
+    padding: 20px 40px 40px 40px;
+    font-size: 30px;
+    font-weight: 600;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.topic-component {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 40px;
+    transition: all 0.3s ease;
+}
+
+.topic-component:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 10px 0 10px 0;
+    border-bottom: 1px solid #505050;
+}
+
+.--show {
+    width: 28px;
+    aspect-ratio: 1/1;
+    transition: rotate 0.3s ease;
+}

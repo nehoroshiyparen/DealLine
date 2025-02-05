@@ -27,7 +27,7 @@ const MemberList = ({members}: ListProps) => {
     return (
         <div className="member-list">
             {members.map((member, index) => (
-                <MemberAvatar avatar={member.avatar} index={index}/>
+                <MemberAvatar avatar={member.avatar} index={index} key={member.id}/>
             ))}
         </div>
     )
