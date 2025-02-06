@@ -1,21 +1,54 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, createContext, SetStateAction, useContext } from 'react'
 import './discussion.scss'
 import { Discussion as DiscussionType, Task, Topic } from '../../../types'
 import { BackToMain, BackToTopics, ShowTask, ShowTopic, ShowTopics } from '../../../utils/discussionUtils/navigation'
 import TopicList from './components/topicList/topicList'
 import MemberList from './components/MemberList'
+import TopicComponent from './components/topicComponent/topic'
+import MainInfo from './components/mainInfo/mainInfo'
 
 interface DiscussionProps {
     discussion: DiscussionType
 }
 
+// СОЗДАНИЕ КОНТЕКСТА
+
+interface ContextType {
+    isTopicsOpen: boolean,
+    isCurrentTopicOpen: boolean,
+    setIsCurrentTopicOpen: React.Dispatch<SetStateAction<boolean>>,
+    selectedTopic: Topic | null,
+    selectedTask: Task | null,
+    handleShowTopics: () => void,
+    handleChooseTopic: (topic: Topic | null) => void,
+    setSelectedTask: React.Dispatch<SetStateAction<Task | null>>,
+    sizeRef: React.RefObject<HTMLDivElement>,
+    topicsRef: React.RefObject<HTMLDivElement>,
+    topics_header__top: React.RefObject<HTMLDivElement>,
+}
+
+const Context = createContext<ContextType | undefined>(undefined)   
+
+export const useDiscussionContext = () => {
+    const context = useContext(Context)
+
+    if (!context) {
+        console.error("Context is undefined!")
+        return undefined
+    }
+
+    return context
+}
+
+// ОСНОВНОЙ КОМПОНЕНТ
+
 export default function Discussion({ discussion }: DiscussionProps) {
     const sizeRef = useRef<HTMLDivElement | null>(null)
     const discussionRef = useRef<HTMLDivElement | null>(null)
     const topicsRef = useRef<HTMLDivElement | null>(null)
-    const currentTopicRef = useRef<HTMLDivElement | null>(null)
     const taskRef = useRef<HTMLDivElement | null>(null)
     const contentContainerRef = useRef<HTMLDivElement | null>(null)
+    const topics_header__top = useRef<HTMLDivElement | null>(null)
 
     const order: Record<string, number> = {
         'discussion-info': 0,
@@ -26,121 +59,135 @@ export default function Discussion({ discussion }: DiscussionProps) {
 
     const [isOpen, setIsOpen] = useState(false)
     const [isTopicsOpen, setIsTopicsOpen] = useState(false)
+    const [isCurrentTopicOpen, setIsCurrentTopicOpen] = useState(false)
     const [currentView, setCurrentView] = useState(discussionRef)
     const [prevView, setPrevView] = useState(discussionRef)
     const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null)
     const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+
+    // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 
     const handleShowTopics = () => {
         ShowTopics(setCurrentView, topicsRef, setSelectedTopic, setSelectedTask) 
     }
     const handleBackToMain = () => {
         BackToMain(setCurrentView, discussionRef, setSelectedTopic, setSelectedTask)
+        setIsTopicsOpen(false)
     }
 
+    const handleChooseTopic = (topic: Topic | null) => {
+        setSelectedTopic(topic)
+        setSelectedTask(null)
+    }
+
+    // CONTEXT
+
+    const contextValue = { 
+        isTopicsOpen,
+        selectedTopic,
+        selectedTask,
+        isCurrentTopicOpen,
+        setIsCurrentTopicOpen,
+        handleShowTopics,
+        handleChooseTopic,
+        setSelectedTask,
+        sizeRef,
+        topicsRef,
+        topics_header__top
+    }
+
+    // ПЕРЕКЛЮЧАТЕЛЬ ДЛЯ ОСНОВНОГО КОМПОНЕНТА
+    
     const handleOpen = () => {
         if (!isOpen) {
             setIsOpen(true)
         } else if (isOpen && currentView === discussionRef){
             setIsOpen(false)
-        } else {
-            handleBackToMain()
-            setIsTopicsOpen(false)
         }
     }
+
+    // ПЕРЕКЛЮЧАТЕЛЬ ДЛЯ СПИСКА ТЕМ
 
     const handleOpenTopics = () => {
         if (!isTopicsOpen) {
             setIsTopicsOpen(true)
-            handleShowTopics()
         } else {
+            setIsCurrentTopicOpen(false)
             setIsTopicsOpen(false)
         }
+        handleShowTopics()
     }
 
-useEffect(() => {
-    const contentDiv = sizeRef.current;
-    if (!contentDiv) return;
-
-    // Функция для изменения высоты при открытии и закрытии
-    const adjustHeight = () => {
-        if (isOpen || isTopicsOpen) {
-            // При открытии устанавливаем высоту в scrollHeight
-            contentDiv.style.height = '0px'; 
-            requestAnimationFrame(() => {
-                const fullHeight = contentDiv.scrollHeight + 'px';
-                contentDiv.style.height = fullHeight;
-                contentDiv.style.padding = '10px 30px';
-            });
-        } else {
-            // При закрытии явно уменьшаем высоту в 0
-            requestAnimationFrame(() => {
-                contentDiv.style.height = '0px';
-                contentDiv.style.padding = '0px 30px';
-            });
-        }
-    };
-
-    adjustHeight(); // Начальная установка высоты
-
-    // Добавляем слушатель изменений для isTopicsOpen
-    const resizeObserver = new ResizeObserver(() => {
-        if (isOpen && isTopicsOpen) {
-            const fullHeight = contentDiv.scrollHeight + 'px';
-            contentDiv.style.height = fullHeight; // Пересчитываем высоту в случае изменения содержимого
-        }
-    });
-
-    resizeObserver.observe(contentDiv);
-
-    // Очищаем observer при размонтировании компонента
-    return () => {
-        resizeObserver.disconnect();
-    };
-}, [isOpen, isTopicsOpen]); // Зависимости от isOpen и isTopicsOpen
-
+    // ОТКРЫТИЕ ОСНОВНОГО КОМПОНЕНТА
 
     useEffect(() => {
-        const prev = prevView.current
-        const next = currentView.current
-        const contentContainer = contentContainerRef.current
-        const size = sizeRef.current
+        const contentDiv = sizeRef.current
+        if (!contentDiv) return
 
-        if (!prev || !next || !contentContainer || !size || prev === next) return
-
-        console.log(prev, next)
-
-        if (order[prev.className] < order[next.className]) {
-            prev.style.opacity = '0'
-            next.style.opacity = '1'
-            contentContainer.style.top = `-${prev.scrollHeight}px`
-        } else {
-            prev.style.opacity = '0'
-            next.style.opacity = '1'
-            contentContainer.style.top = '0'
-            setTimeout(() => {
-                size.style.height = `${next.scrollHeight+105}px`
+        if (isOpen) {
+            contentDiv.style.height = '0px' 
+            requestAnimationFrame(() => {
+                const fullHeight = contentDiv.scrollHeight + 'px'
+                contentDiv.style.height = fullHeight
+                contentDiv.style.padding = '10px 30px'
             })
+        } else {
+            const fullHeight = contentDiv.scrollHeight + 'px'
+            contentDiv.style.height = fullHeight 
+            requestAnimationFrame(() => {
+                contentDiv.style.height = '0px'
+                contentDiv.style.padding = '0px 30px'
+            })
+        }
+    }, [isOpen])
+
+    // ПЕРЕКЛЮЧЕНИЕ С ИНФОРМАЦИИ ОБ ОБСУЖДЕНИИ НА СПИСОК ТЕМ
+
+    useEffect(() => {
+
+        const v2_to_v1 = (currentView.current === discussionRef.current && (prevView.current === topicsRef.current || prevView.current === discussionRef.current))
+        const v1_to_v2 = currentView.current === topicsRef.current && (prevView.current === discussionRef.current)
+
+        if (v1_to_v2 || v2_to_v1) {
+            const prev = prevView.current
+            const next = currentView.current
+            const contentContainer = contentContainerRef.current
+            const size = sizeRef.current
+
+            if (!prev || !next || !contentContainer || !size || prev === next) return
+
+            if (order[prev.className] < order[next.className]) {
+                prev.style.opacity = '0'
+                next.style.opacity = '1'
+                contentContainer.style.top = `-${prev.scrollHeight}px`
+                size.style.height = `${(discussion.topics.length + 1) * 77.5 + 105}px`
+            } else {
+                prev.style.opacity = '0'
+                next.style.opacity = '1'
+                contentContainer.style.top = '0'
+                size.style.height = `${next.scrollHeight + 105}px`
+            } 
         }
 
         setPrevView(currentView)
     }, [currentView])
 
     return (
+        <Context.Provider value={contextValue}>
         <div className='discussion'>
             <div className='discussion-header'>
                 <div 
                     className='disc-title' 
-                    onClick={handleOpen}
+                    onClick={!isOpen || currentView.current === discussionRef.current ? handleOpen : () => {}}
                     style={{ borderBottom: isOpen ? '1px solid #505050' : '1px solid rgba(255, 255, 255, 0)' }}
                 >
                     <div className='path'>
-                        <span>{discussion.title}</span>
+                        <span onClick={handleBackToMain}>{discussion.title}</span>
                         {currentView !== discussionRef && (
-                            <span style={{ marginLeft: '10px', color: "#bcbfff" }}>
-                                {currentView === topicsRef && '-> Темы'}
-                                {currentView === currentTopicRef && `-> ${selectedTopic?.title}`}
-                                {currentView === taskRef && `-> ${selectedTask?.title}`}
+                            <span style={{ marginLeft: '10px' }}>
+                                <span onClick={handleShowTopics}>{currentView === topicsRef && '/ Темы'}</span>
+                                {selectedTopic && ` / ${selectedTopic?.title}`}
+                                {currentView === taskRef && ` / ${selectedTask?.title}`}
                             </span>
                         )}
                     </div>
@@ -161,50 +208,20 @@ useEffect(() => {
             >
                 <div className='content-container' ref={contentContainerRef}>
                     <div className='discussion-info' ref={discussionRef}>
-                        <div className='disc-users'>
-                            <div className='disc-owner'>
-                                <span>Создатель обсуждения</span>
-                                <div className='disc-owner--info'>
-                                    <img 
-                                        src={discussion.owner?.avatar 
-                                            ? `http://localhost:5665/api/upload/${encodeURIComponent(discussion.owner.avatar)}` 
-                                            : '/images/profile.png'} 
-                                        width={'100%'}
-                                        className='owner-avatar'
-                                    />
-                                    <span style={{ fontSize: '22px', fontWeight: '600', color: '#bcbfff' }}>
-                                        {discussion.owner.username}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className='disc-members'>
-                                <span>Участники обсуждения</span>
-                                <MemberList members={discussion.members}/>
-                            </div>
-                        </div>
-                        <div className='disc-creation_date'>
-                            Дата создания: <span style={{ fontWeight: 'bold' }}>
-                                {discussion.creation_date ? discussion.creation_date : '20.10.2025'}
-                            </span>
-                        </div> 
-                        <div className='disc-description'>
-                            <span>Описание</span>
-                            <div className='disc-description--info'>
-                                {discussion.description ? discussion.description : 'Описания нет'}
-                            </div>
-                        </div>
+                        <MainInfo discussion={discussion}/>
                     </div>
-                    <div className="topics-header--top" onClick={handleOpenTopics}>
+                    <div className="topics-header--top" onClick={handleOpenTopics} ref={topics_header__top}>
                         <span>Темы</span>
                         <div className='topic-header--disc --show' style={{rotate: `${isTopicsOpen ? '-90deg' : '0deg'}`}}>
                             <img src='/images/direction.png' width={'100%'}/>
                         </div>
                     </div>
-                    <div className='topics-section' ref={topicsRef} onClick={handleShowTopics}>
-                        <TopicList topics={discussion.topics} isOpen={isTopicsOpen}/>
+                    <div className='topics-section' ref={topicsRef}>
+                        <TopicList topics={discussion.topics}/>
                     </div>
                 </div>
             </div>
         </div>
+        </Context.Provider>
     )
 }

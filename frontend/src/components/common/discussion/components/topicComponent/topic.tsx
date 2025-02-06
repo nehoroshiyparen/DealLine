@@ -1,19 +1,46 @@
-import { useEffect, useRef, useState } from "react"
-import { Topic } from "../../../../types"
-import TaskComponent from "../components/task"
+import { useContext, useEffect, useRef, useState } from "react"
+import { Topic } from "../../../../../types"
+import TaskComponent from "../task/task"
+import './topic.scss'
+import { useDiscussionContext } from "../../discussion"
 
 interface props {
     topic: Topic
 }
 
 const TopicComponent = ({topic}: props) => {
+    const context = useDiscussionContext()
+    if (!context) return
+
+    const { 
+        handleChooseTopic, 
+        handleShowTopics,
+        isTopicsOpen,
+        selectedTopic
+    } = context
 
     const [isOpen, setIsOpen] = useState(false)
     const topicContentRef = useRef<HTMLDivElement | null>(null)
 
+    // СЛЕЖЕНИЕ ЗА СОСТОЯНИЕМ ОТКРЫТО/НЕ ОТКРЫТО
+
     const handleOpen = () => {
-        setIsOpen((prev) => !prev)
+        if (!isOpen) {
+            setIsOpen(true)
+            handleChooseTopic(topic) // выбирает какой-либо топик
+        } else {
+            setIsOpen(false)
+            handleShowTopics() // при переходе на верхний уровень сбрасывался selectedtopic
+        }
     }
+
+    useEffect(() => {
+        if (!selectedTopic) {
+            setIsOpen(false)
+        }
+    }, [selectedTopic]) // нужно для того, чтобы при переходе к верхним уровням, выбранный топик закрывался
+
+    // ЛОГИКА ОТКРЫТИЯ
 
     useEffect(() => {
         const topicContentDiv = topicContentRef.current
@@ -31,12 +58,12 @@ const TopicComponent = ({topic}: props) => {
     }, [isOpen])
 
     return (
-        <div className="topic-component">
-            <div className="topic-header" onClick={handleOpen}>
+        <div className="topic--element">
+            <div className="topic-header--element" onClick={handleOpen}>
                 <div className="topic-title">
                     {topic.title}
                 </div>
-                <div className="topic-header --show" style={{rotate: `${isOpen ? '-90deg' : '0deg'}`}}>
+                <div className="topic-header--show --show" style={{rotate: `${isOpen ? '-90deg' : '0deg'}`}}>
                     <img src='/images/direction.png' width={'100%'}/>
                 </div>
             </div>
@@ -53,7 +80,6 @@ const TopicComponent = ({topic}: props) => {
                     <TaskComponent task={task} index={index} key={task.id}/>
                 ))}
             </div>
-
         </div>
     )
 }

@@ -1,0 +1,20 @@
+.task-component {
+    box-sizing: border-box;
+}
+
+.task-component--header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+
+    font-size: 24px;
+    font-weight: normal;
+
+    transition: 0.3s;
+}
+
+.task-component--header:hover {
+    background: rgb(45, 45, 45);
+}
+

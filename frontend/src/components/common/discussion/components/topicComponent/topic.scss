@@ -1,0 +1,42 @@
+.topic--element {
+    box-sizing: border-box;
+    padding: 0px 40px;
+
+    transition: 0.3s;
+}
+
+.topic-component {
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.topic-element--inside {
+    border-left: 1px solid #505050;
+}
+
+.topic-header--element {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 20px 40px;
+    //border-bottom: 1px solid #505050;
+
+    transition: 0.3s;
+}
+
+.topic-header--element:hover {
+    background: rgb(45, 45, 45);
+}
+
+.topic-title {
+    font-size: 25px;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.choosen--topic {
+    font-size: 600px;
+}

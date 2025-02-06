@@ -1,0 +1,72 @@
+.disc-users {
+    display: flex;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.disc-owner {
+    font-size: 18px;
+    color: #ffffff;
+    margin: 0 50px 0px 0;
+}
+
+.owner-avatar {
+    width: 40px;
+    margin-right: 10px;
+    border-radius: 50%;
+    border: 2px solid #505050;
+    transition: transform 0.3s ease;
+}
+
+.owner-avatar:hover {
+    transform: scale(1.1);
+}
+
+.disc-owner--info {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+// MEMBER LIST
+
+.disc-members {
+    font-size: 18px;
+}
+
+.member-list {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.member-avatar {
+    width: 40px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    border: 3px solid rgb(53, 53, 53);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.member-avatar:hover {
+    transform: scale(1.1);
+}
+
+// MEMBER LIST END
+
+.disc-description {
+    padding: 20px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    border-bottom: 1px solid #505050;
+}
+
+.disc-description--info {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #cccccc;
+    line-height: 1.6;
+    text-indent: 20px;
+}
