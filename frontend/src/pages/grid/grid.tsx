@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ReactFlow, { Background, Controls, useNodesState, useEdgesState, ReactFlowProvider } from "reactflow";
 import "reactflow/dist/style.css";
 import './grid.scss';
-import { useDiscussion } from "../../hooks/useDiscussion";
+import { useDiscussion } from "../../hooks/store/useDiscussion";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { Discussion } from "../../types";

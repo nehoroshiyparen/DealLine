@@ -2,46 +2,44 @@ import { useContext, useEffect, useRef, useState } from "react"
 import { Topic } from "../../../../../types"
 import TaskComponent from "../task/task"
 import './topic.scss'
-import { useDiscussionContext } from "../../discussion"
+import { useDiscussionContext } from "../../context+provider/discussionContext"
 
 interface props {
-    topic: Topic
+    topic: Topic | null,
 }
 
 const TopicComponent = ({topic}: props) => {
-    const context = useDiscussionContext()
-    if (!context) return
-
-    const { 
-        handleChooseTopic, 
+    
+    const {
+        
+        selectedTopic,
+        setSelectedTopic,
+        handleChooseTopic,
         handleShowTopics,
-        isTopicsOpen,
-        selectedTopic
-    } = context
 
-    const [isOpen, setIsOpen] = useState(false)
+    } = useDiscussionContext()
+
     const topicContentRef = useRef<HTMLDivElement | null>(null)
-
-    // СЛЕЖЕНИЕ ЗА СОСТОЯНИЕМ ОТКРЫТО/НЕ ОТКРЫТО
-
-    const handleOpen = () => {
-        if (!isOpen) {
-            setIsOpen(true)
-            handleChooseTopic(topic) // выбирает какой-либо топик
-        } else {
-            setIsOpen(false)
-            handleShowTopics() // при переходе на верхний уровень сбрасывался selectedtopic
-        }
-    }
+    const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
         if (!selectedTopic) {
             setIsOpen(false)
         }
+        if (topic && selectedTopic && topic.id === selectedTopic.id) {
+            setIsOpen(true)
+        }
     }, [selectedTopic]) // нужно для того, чтобы при переходе к верхним уровням, выбранный топик закрывался
 
-    // ЛОГИКА ОТКРЫТИЯ
-
+    const handleOpen = async(topic: Topic | null) => {  // здесь будет только функция открытия, что правильно. На копии будет функция закрытия
+        if (!isOpen) {
+            setIsOpen(true)
+            setSelectedTopic(topic)
+            await new Promise(resolve => setTimeout(resolve, 500))
+            handleChooseTopic(topic)
+        }
+    }
+    
     useEffect(() => {
         const topicContentDiv = topicContentRef.current
 
@@ -57,28 +55,17 @@ const TopicComponent = ({topic}: props) => {
         }
     }, [isOpen])
 
+    if (!topic) return
+
     return (
         <div className="topic--element">
-            <div className="topic-header--element" onClick={handleOpen}>
-                <div className="topic-title">
+            <div className="topic-header--element" onClick={() => handleOpen(topic)}>
+                <span className="topic-title">
                     {topic.title}
-                </div>
-                <div className="topic-header--show --show" style={{rotate: `${isOpen ? '-90deg' : '0deg'}`}}>
+                </span>
+                <div className="topic-header--show --show">
                     <img src='/images/direction.png' width={'100%'}/>
                 </div>
-            </div>
-            <div 
-                className="topic-content" 
-                ref={topicContentRef}
-                style={{
-                    height: isOpen ? 'auto' : '0',
-                    overflow: 'hidden',
-                    transition: 'height 0.3s',
-                }}
-            >
-                {topic.tasks.map((task, index) => (
-                    <TaskComponent task={task} index={index} key={task.id}/>
-                ))}
             </div>
         </div>
     )

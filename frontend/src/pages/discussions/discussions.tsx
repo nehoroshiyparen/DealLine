@@ -3,7 +3,7 @@ import Discussion from '../../components/common/discussion/discussion'
 import { AppDispatch, RootState } from '../../store/store'
 import './discussions.scss'
 import { useSelector } from 'react-redux'
-import { useDiscussion } from '../../hooks/useDiscussion'
+import { useDiscussion } from '../../hooks/store/useDiscussion'
 import { Discussion as DiscussionType } from '../../types'
 
 export default function Discussions() {

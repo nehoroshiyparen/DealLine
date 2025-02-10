@@ -1,4 +1,5 @@
 import { Discussion } from "../../../../../types"
+import { useDiscussionContext } from "../../context+provider/discussionContext"
 import MemberList from "../MemberList"
 import './mainInfo.scss'
 
@@ -7,6 +8,7 @@ interface props {
 }
 
 const MainInfo = ({discussion}: props) => {
+
     return (
         <div>
             <div className='disc-users'>

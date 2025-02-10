@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { RootState, AppDispatch } from '../store/store'
-import { getNotifications } from '../store/notificationStore'
+import { RootState, AppDispatch } from '../../store/store'
+import { getNotifications } from '../../store/notificationStore'
 
 export const useNotifications = () => {
     const dispatch = useDispatch<AppDispatch>()

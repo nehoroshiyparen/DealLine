@@ -3,11 +3,11 @@ import { Task, Topic } from "../../types";
 
 type SetState<T> = Dispatch<SetStateAction<T>>
 //
-type ViewState = React.RefObject<HTMLDivElement>
+type ViewState = string
 
 export const ShowTopics = (
     setCurrentView: SetState<ViewState>,
-    ref: React.RefObject<HTMLDivElement>,
+    ref: string,
     setSelectedTopic: SetState<Topic | null>,
     setSelectedTask: SetState<Task | null>
     
@@ -19,9 +19,9 @@ export const ShowTopics = (
 
 export const ShowTopic = (
     setCurrentView: SetState<ViewState>,
-    ref: React.RefObject<HTMLDivElement>,
+    ref: string,
     setSelectedTopic: SetState<Topic | null>,
-    topic: Topic,
+    topic: Topic | null,
     setSelectedTask: SetState<Task | null>,
 ) => {
     setCurrentView(ref)
@@ -29,11 +29,21 @@ export const ShowTopic = (
     setSelectedTask(null)
 }
 
+export const BackToTopic = (
+    setCurrentView: SetState<ViewState>,
+    ref: string,
+    setSelectedTask: SetState<Task | null>,
+) => {
+    setCurrentView(ref)
+    setSelectedTask(null)
+}
+
+
 export const ShowTask = (
     setCurrentView: SetState<ViewState>,
-    ref: React.RefObject<HTMLDivElement>,
+    ref: string,
     setSelectedTask: SetState<Task | null>,
-    task: Task
+    task: Task | null
 ) => {
     setCurrentView(ref)
     setSelectedTask(task)
@@ -41,20 +51,11 @@ export const ShowTask = (
 
 export const BackToMain = (
     setCurrentView: SetState<ViewState>,
-    ref: React.RefObject<HTMLDivElement>,
+    ref: string,
     setSelectedTopic: SetState<Topic | null>,
     setSelectedTask: SetState<Task | null>
 ) => {
     setCurrentView(ref)
     setSelectedTopic(null)
     setSelectedTask(null)
-}
-
-export const BackToTopics = (
-    setCurrentView: SetState<ViewState>,
-    ref: React.RefObject<HTMLDivElement>,
-    setSelectedTopic: SetState<Topic | null>,
-) => {
-    setCurrentView(ref)
-    setSelectedTopic(null)
 }

@@ -1,22 +1,32 @@
 import { useEffect, useRef, useState } from "react";
 import { Task, MiniUser } from "../../../../../types";
 import './task.scss'
+import { useDiscussionContext } from "../../context+provider/discussionContext";
 
 interface Props {
-    task: Task;
-    index: number;
+    task: Task | null;
 }
 
-const TaskComponent = ({ task, index }: Props) => {
+const TaskComponent = ({ task }: Props) => {
+
+   const {
+    
+        selectedTask,
+        setIsTaskOpen,
+        handleOpenTask,
+        isTaskOpen,
+
+   } = useDiscussionContext()
 
     const contentRef = useRef<HTMLDivElement | null>(null)
 
-    const [isOpen, setIsOpen] = useState(false)
+    useEffect(() => {
+        if (!selectedTask) {
+            setIsTaskOpen(false)
+        }
+    }, [selectedTask])
 
-    const handleOpen = () => {
-        setIsOpen((prev) => (!prev))
-    }
-
+    /*
     useEffect(() => {
         const content = contentRef.current
 
@@ -31,16 +41,17 @@ const TaskComponent = ({ task, index }: Props) => {
             })
         }
     }, [isOpen])
+    */
 
-    if (!task.priority || index === undefined) {
+    if (!task) {
         return <div>Задача не найдена</div>;
     }
 
     return (
         <div className="task-component">
-            <div className="task-component--header" onClick={handleOpen}>
+            <div className="task-component--header" onClick={() => handleOpenTask(task)}>
                 <span>{task.title}</span>
-                <div className="task-header--show --show" style={{rotate: `${isOpen ? '-90deg' : '0deg'}`}}>
+                <div className="task-header--show --show" style={{rotate: `${isTaskOpen ? '-90deg' : '0deg'}`}}>
                         <img src='/images/direction.png' width={'100%'}/>
                 </div>
             </div>
@@ -48,7 +59,7 @@ const TaskComponent = ({ task, index }: Props) => {
                 className="task-component--info" 
                 ref={contentRef} 
                 style={{
-                    height: isOpen ? 'auto' : '0',
+                    height: isTaskOpen ? 'auto' : '0',
                     overflow: 'hidden',
                     transition: 'height 0.3s'
                 }}
