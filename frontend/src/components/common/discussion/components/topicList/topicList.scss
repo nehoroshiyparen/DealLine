@@ -12,6 +12,7 @@
 .topics-section {
     position: relative;
     top: 0px;
+    overflow: hidden;
 
     transition: opacity 0.3s, all 0.5s;
 }

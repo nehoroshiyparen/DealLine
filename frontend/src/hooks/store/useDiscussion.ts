@@ -1,7 +1,7 @@
 //Логика работы с обсуждениями ( Получение с бд, взаимодействие через redux )
 import { useSelector, useDispatch } from "react-redux"
-import type { RootState, AppDispatch } from "../store/store.ts"
-import { getDiscussions, setSearchQuery } from "../store/DiscussionSlice.ts"
+import type { RootState, AppDispatch } from "../../store/store.ts"
+import { getDiscussions, setSearchQuery } from "../../store/DiscussionSlice.ts"
 
 export const useDiscussion = () => {
     const dispatch = useDispatch<AppDispatch>()

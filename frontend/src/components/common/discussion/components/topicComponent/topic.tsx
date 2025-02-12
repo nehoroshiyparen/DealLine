@@ -2,35 +2,30 @@ import { useContext, useEffect, useRef, useState } from "react"
 import { Topic } from "../../../../../types"
 import TaskComponent from "../task/task"
 import './topic.scss'
-import { useDiscussionContext } from "../../discussion"
+import { useDiscussionContext } from "../../context+provider/discussionContext"
 
 interface props {
     topic: Topic
 }
 
 const TopicComponent = ({topic}: props) => {
-    const context = useDiscussionContext()
-    if (!context) return
 
-    const { 
-        handleChooseTopic, 
-        handleShowTopics,
-        isTopicsOpen,
-        selectedTopic
-    } = context
+    const {
+        NavigateToTopic,
+        NavigateToTopics,
+        selectedTopic,
+    } = useDiscussionContext()
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false) // тут я оставляю свой isOpen потому что если я задам глобальный, то все задачи будут открываться
     const topicContentRef = useRef<HTMLDivElement | null>(null)
-
-    // СЛЕЖЕНИЕ ЗА СОСТОЯНИЕМ ОТКРЫТО/НЕ ОТКРЫТО
 
     const handleOpen = () => {
         if (!isOpen) {
             setIsOpen(true)
-            handleChooseTopic(topic) // выбирает какой-либо топик
+            NavigateToTopic(topic) // выбирает какой-либо топик
         } else {
             setIsOpen(false)
-            handleShowTopics() // при переходе на верхний уровень сбрасывался selectedtopic
+            NavigateToTopics() // при переходе на верхний уровень сбрасывался selectedtopic
         }
     }
 
@@ -38,9 +33,7 @@ const TopicComponent = ({topic}: props) => {
         if (!selectedTopic) {
             setIsOpen(false)
         }
-    }, [selectedTopic]) // нужно для того, чтобы при переходе к верхним уровням, выбранный топик закрывался
-
-    // ЛОГИКА ОТКРЫТИЯ
+    }, [selectedTopic]) 
 
     useEffect(() => {
         const topicContentDiv = topicContentRef.current
@@ -48,18 +41,18 @@ const TopicComponent = ({topic}: props) => {
         if (!topicContentDiv) return
 
         if (isOpen) {
-            topicContentDiv.style.height = '0'
             topicContentDiv.style.height = `${topicContentDiv.scrollHeight}px`
         } else {
+            topicContentDiv.style.height = `${topicContentDiv.scrollHeight}px`
             requestAnimationFrame(() => {
-                topicContentDiv.style.height = '0';
-            });
+                topicContentDiv.style.height = '0px'
+            })
         }
     }, [isOpen])
 
     return (
         <div className="topic--element">
-            <div className="topic-header--element" onClick={handleOpen}>
+            <div className="topic-header--element" id={`topic-header--element-id${topic.id}`} onClick={handleOpen}>
                 <div className="topic-title">
                     {topic.title}
                 </div>
@@ -71,13 +64,14 @@ const TopicComponent = ({topic}: props) => {
                 className="topic-content" 
                 ref={topicContentRef}
                 style={{
-                    height: isOpen ? 'auto' : '0',
                     overflow: 'hidden',
-                    transition: 'height 0.3s',
+                    transition: 'height 0.5s',
                 }}
             >
                 {topic.tasks.map((task, index) => (
-                    <TaskComponent task={task} index={index} key={task.id}/>
+                     <div className="hightest-task" id={`task-id${task.id}`} key={task.id} style={{position: 'relative', top: '0px', transition: '0.5s'}}>
+                        <TaskComponent task={task} index={index} key={task.id}/>
+                    </div>
                 ))}
             </div>
         </div>

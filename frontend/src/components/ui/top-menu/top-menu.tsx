@@ -3,8 +3,8 @@ import './top-menu.scss'
 import { useDispatch } from 'react-redux'
 import { AppDispatch, RootState } from '../../../store/store'
 import { useSelector } from 'react-redux'
-import { useNotifications } from '../../../hooks/useNotification'
-import { useDiscussion } from '../../../hooks/useDiscussion'
+import { useNotifications } from '../../../hooks/store/useNotification'
+import { useDiscussion } from '../../../hooks/store/useDiscussion'
 
 export default function Top_Menu() {
     const dispatch = useDispatch<AppDispatch>()

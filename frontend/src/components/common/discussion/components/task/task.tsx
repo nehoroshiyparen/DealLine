@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Task, MiniUser } from "../../../../../types";
 import './task.scss'
+import { useDiscussionContext } from "../../context+provider/discussionContext";
 
 interface Props {
     task: Task;
@@ -9,22 +10,39 @@ interface Props {
 
 const TaskComponent = ({ task, index }: Props) => {
 
-    const contentRef = useRef<HTMLDivElement | null>(null)
+    const {
+        selectedTask,
+        NavigateToTask,
+        NavigateBackToTopic,
+    } = useDiscussionContext()
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false) // тут я оставляю свой isOpen потому что если я задам глобальный, то все задачи будут открываться
+    const taskContentRef = useRef<HTMLDivElement | null>(null)
 
     const handleOpen = () => {
-        setIsOpen((prev) => (!prev))
+        if (!isOpen) {
+            setIsOpen(true)
+            NavigateToTask(task)
+        } else {
+            setIsOpen(false)
+            NavigateBackToTopic()
+        }
     }
 
     useEffect(() => {
-        const content = contentRef.current
+        if (!selectedTask) {
+            setIsOpen(false)
+        }
+    }, [selectedTask])
+
+    useEffect(() => {
+        const content = taskContentRef.current
 
         if (!content) return
 
         if (isOpen) {
             content.style.height = '0px'
-            content.style.height = `${content.scrollHeight}px`
+            content.style.height = `${window.screen.height*0.8}px`
         } else {
             requestAnimationFrame(() => {
                 content.style.height = '0px'
@@ -46,7 +64,7 @@ const TaskComponent = ({ task, index }: Props) => {
             </div>
             <div 
                 className="task-component--info" 
-                ref={contentRef} 
+                ref={taskContentRef} 
                 style={{
                     height: isOpen ? 'auto' : '0',
                     overflow: 'hidden',
