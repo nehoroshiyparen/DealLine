@@ -1,156 +1,103 @@
-import { Discussion, Topic, Task } from "../../types";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ShowTopic, ShowTopics, BackToMain, BackToTopic, ShowTask } from "../../utils/discussionUtils/navigation";
-import { useDiscussionAnimation } from "./animations/useDiscussionAnimation";
+import { useRef, useState } from "react";
+import { Discussion, Task, Topic } from "../../types";
+import { BackToMain, ShowTopics } from "../../utils/discussionUtils/navigation";
 
 export const useDiscussionState = (discussion: Discussion) => {
 
-    // Ссылки на элементы
-    const hightestContainerRef = useRef<HTMLDivElement | null>(null) // Контейнер, который стоит выше всех в области контента *className='disc-view'*
-    const discussionRef = useRef<HTMLDivElement | null>(null) // Ссылка на компонент отвечающий за основную информацию об обсуждении *className='discussion-info'*
-    const topicsListRef = useRef<HTMLDivElement | null>(null) // ссылка на компонент отвечающий за раздел топиков. В него входят также все задачи *className='topics-section'*
-    const topicRef = useRef<HTMLDivElement | null>(null) 
+    // Ссылки
+
+    const sizeRef = useRef<HTMLDivElement | null>(null) // className='disc-view', самый высокий компонент для контента
+    const contentContainerRef = useRef<HTMLDivElement | null>(null) // className='content-container' бля он кароче отвечает за контент, который отрисовывается
+    const discussionRef = useRef<HTMLDivElement | null>(null) // className='discussion-info'
+    const topicsRef = useRef<HTMLDivElement | null>(null) // className='topics-section'
     const taskRef = useRef<HTMLDivElement | null>(null)
-    const topicListHeaderRef = useRef<HTMLDivElement | null>(null)
-    const topicListContentRef = useRef<HTMLDivElement | null>(null)
+    const topicsHeaderRef = useRef<HTMLDivElement | null>(null) // className="topics-header--top"
 
-    // Состояния
-    const [isOpen, setIsOpen] = useState(false)  // состояние основного компонента (hightestContainer)
-    const [isTopicListOpen, setIsTopicsOpen] = useState(false) // Состояние компонента topicsRef]
-    const [isTopicOpen, setIsTopicOpen] = useState(false) // Открыт ли один из топиков
-    const [isTaskOpen, setIsTaskOpen] = useState(false) // Открыта или закрыта одна из задач
+    const topicListContentRef = useRef<HTMLDivElement | null>(null) // className="topics-list-content" Нужен для того чтобы редачить у него высоту. С ним работать чтобы открывать список топиков
+    const topicContentRef = useRef<HTMLDivElement | null>(null) // className="topic-content"  То же самое что здесь /\ сверху. С ним работать, чтобы открывать список задач топика
+    const taskContentRef = useRef<HTMLDivElement | null>(null) // className="task-component--info" Работаю с ним чтобы открывать и закрывать инфу о задаче
 
-    const [currentView, setCurrentView] = useState('discussion') // Текущее положение (относится только к discussionRef и topicsRef)
-    const [prevView, setPrevView] = useState('discussion') // Предыдущее положение currentRef
-    const [savedPosition, setSavedPosition] = useState<{discussion: number, topicListHeader: number, topicList: number} | null>(null)
+    // Стейты
 
-    const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null) // Выбранный топик
-    const [selectedTask, setSelectedTask] = useState<Task | null>(null) // Выбраная задача
+    const [isOpen, setIsOpen] = useState(false)
+    const [isTopicsOpen, setIsTopicsOpen] = useState(false)
+    const [currentView, setCurrentView] = useState(discussionRef)
+    const [prevView, setPrevView] = useState(discussionRef)
+    const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null)
+    const [selectedTask, setSelectedTask] = useState<Task | null>(null)
 
-    const [originalSize, setOriginalSize] = useState(0)
+    // Навигационные функции
 
-    useLayoutEffect(() => {
-        if (discussionRef.current) {
-            setOriginalSize(discussionRef.current.scrollHeight + 105)
-        }
-    }, [discussion])
-
-    // Вычисление размеров
-    const [topicListSectionSize, setTopicListSectionSize] = useState((discussion.topics.length + 1) * 77.5 + 105) // Размер открытой секции со всеми топиками
-
-    // Функции навигации ( обертки над утилитами )
-
-    const handleShowTopics = () => {
-        ShowTopics(setCurrentView, 'topicList', setSelectedTopic, setSelectedTask) 
+    const NavigateToTopics = () => {
+        ShowTopics(setCurrentView, topicsRef, setSelectedTopic, setSelectedTask) 
     }
-
-    const handleBackToTopics = async() => {
-        setIsTopicOpen(false)
-        setIsTaskOpen(false)
-
-        await new Promise(resolve => setTimeout(resolve, 300))
-        setSelectedTopic(null)
-        setSelectedTask(null)
-        ShowTopics(setCurrentView, 'topicList', setSelectedTopic, setSelectedTask) 
-    }
-
-    const handleBackToMain = () => {
-        BackToMain(setCurrentView, 'discussion', setSelectedTopic, setSelectedTask)
+    const NavigateToMain = () => {
+        BackToMain(setCurrentView, discussionRef, setSelectedTopic, setSelectedTask)
         setIsTopicsOpen(false)
     }
 
-    const handleChooseTopic = (topic: Topic | null) => {
-        ShowTopic(setCurrentView, 'topic', setSelectedTopic, topic, setSelectedTask)
+    const NavigateToTopic = (topic: Topic | null) => {
+        setSelectedTopic(topic)
+        setSelectedTask(null)
     }
 
-    const handleBackToTopic = () => {
-        BackToTopic(setCurrentView, 'topic', setSelectedTask)
+    const NavigateBackToTopic = () => {
+        setSelectedTask(null)
     }
 
-    const handleChooseTask = (task: Task | null) => {
-        ShowTask(setCurrentView, 'task', setSelectedTask, task)
+    const NavigateToTask = (task: Task | null) => {
+        setSelectedTask(task)
     }
 
+    // Функции открытия
 
-
-    // Оброботчики кликов ( открывашки )
-
-    const handleOpen = () => {     // ОТКРЫВАШКА ДЛЯ ОСНОВНОГО КОМПОНЕНТА
+    const OpenMain = () => {
         if (!isOpen) {
-          setIsOpen(true);
-        } else if (isOpen && currentView === 'discussion'){
-          setIsOpen(false);
+            setIsOpen(true)
+        } else if (isOpen && currentView === discussionRef){
+            setIsOpen(false)
         }
-      };
+    }
 
-    const handleOpenTopics = () => {    // ОТКРЫВАШКА ДЛЯ СПИСКА ТЕМ
-        if (!isTopicListOpen) {
+    // ПЕРЕКЛЮЧАТЕЛЬ ДЛЯ СПИСКА ТЕМ
+
+    const OpenTopics = () => {
+        if (!isTopicsOpen) {
+            NavigateToTopics()
             setIsTopicsOpen(true)
-            handleShowTopics()
         } else {
+            NavigateToMain()
             setIsTopicsOpen(false)
-            handleBackToMain()
         }
-    }
-
-    const handleOpenTask = (task: Task | null) => {     // ОТКРЫВАШКА ДЛЯ ЗАДАЧИ
-        if (!isTaskOpen) {
-            setIsTaskOpen(true)
-            handleChooseTask(task)
-        } else {
-            setIsTaskOpen(false)
-            handleBackToTopic()
-        }
-    }
-
-    const handleCloseTopic = async() => {      // она в самом компоненте topic.tsx
-        setIsTopicOpen(false)
-        setIsTaskOpen(false)
-        await new Promise(resolve => setTimeout(resolve, 500))
-        handleShowTopics()
     }
 
     return {
-        // Ссылки
-        hightestContainerRef,
+        //Ссылки
+        sizeRef,
+        contentContainerRef,
         discussionRef,
-        topicsListRef,
-        topicRef,
+        topicsRef,
         taskRef,
-        topicListHeaderRef,
+        topicsHeaderRef,
+
         topicListContentRef,
-        // Состояния
-        isOpen,
-        isTopicListOpen,
-        isTopicOpen,
-        isTaskOpen,
-        currentView,
-        prevView,
-        selectedTopic,
-        selectedTask,
-        originalSize,
-        topicListSectionSize,
-        savedPosition,
-        // Функции навигации
-        handleShowTopics,
-        handleBackToMain,
-        handleChooseTopic,
-        handleBackToTopic,
-        handleChooseTask,
-        handleBackToTopics,
-        // Обработчики кликов
-        handleOpen,
-        handleOpenTopics,
-        handleCloseTopic,
-        handleOpenTask,
-        // Сеттеры
-        setSelectedTopic,
-        setSelectedTask,
-        setIsOpen,
-        setIsTopicOpen,
-        setIsTaskOpen,
-        setCurrentView,
-        setPrevView,
-        setSavedPosition,
+        topicContentRef,
+        taskContentRef,
+        //Стейты
+        isOpen, setIsOpen,
+        isTopicsOpen, setIsTopicsOpen,
+        currentView, setCurrentView,
+        prevView, setPrevView,
+        selectedTopic, setSelectedTopic,
+        selectedTask, setSelectedTask,
+        //Функции
+        NavigateToTopics,
+        NavigateToMain,
+        NavigateToTopic,
+        NavigateBackToTopic,
+        NavigateToTask,
+
+        OpenMain,
+        OpenTopics,
     }
 }

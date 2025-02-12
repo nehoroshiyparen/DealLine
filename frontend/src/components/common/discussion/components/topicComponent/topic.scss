@@ -1,3 +1,8 @@
+.hightest-topic {
+    box-sizing: border-box;
+    padding: 0px 40px;
+}
+
 .topic-component {
     width: 100%;
     box-sizing: border-box;
@@ -21,16 +26,16 @@
     transition: 0.3s;
 }
 
+.hightest-topic.choosen--topic .topic-header--element {
+    margin-bottom: 20px;
+}
+
 .hightest-topic:not(.choosen--topic) .topic-header--element:hover {
     background: rgb(45, 45, 45);
 }
 
-.hightest-topic.choosen-topic .topic-header--element:hover {
+.hightest-topic.choosen--topic .topic-header--element:hover {
     background: none;
-}
-
-.hightest-topic.choosen-topic .topic-header--element {
-    border-bottom: 1px solid #505050;
 }
 
 .topic-title {
@@ -39,6 +44,9 @@
     transition: color 0.3s ease;
 }
 
-.choosen--topic {
-    font-size: 600px;
+.topic-content {
+    position: relative;
+    top: 0px;
+
+    transition: 0.5s;
 }

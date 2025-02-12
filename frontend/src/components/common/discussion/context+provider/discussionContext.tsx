@@ -1,55 +1,40 @@
+import { createContext, SetStateAction, useContext } from "react";
 import { Task, Topic } from "../../../../types";
-import React, { createContext, SetStateAction, useContext } from "react";
 
 export interface DiscussionContextType {
     // Ссылки
+    sizeRef: React.RefObject<HTMLDivElement>;
+    contentContainerRef: React.RefObject<HTMLDivElement>;
+    discussionRef: React.RefObject<HTMLDivElement>;
+    topicsRef: React.RefObject<HTMLDivElement>;
+    taskRef: React.RefObject<HTMLDivElement>;
+    topicsHeaderRef: React.RefObject<HTMLDivElement>;
 
-    hightestContainerRef: React.RefObject<HTMLDivElement>,
-    topicsListRef: React.RefObject<HTMLDivElement>,
-    discussionRef: React.RefObject<HTMLDivElement>,
-    topicRef: React.RefObject<HTMLDivElement>,
-    taskRef: React.RefObject<HTMLDivElement>,
-    topicListHeaderRef: React.RefObject<HTMLDivElement>,
-    topicListContentRef: React.RefObject<HTMLDivElement>,
-
-    // Состояния
-
-    isTopicListOpen: boolean,
-    isTopicOpen: boolean,
-    isTaskOpen: boolean,
-
-     // Выбранные элементы
-
+    topicListContentRef: React.RefObject<HTMLDivElement>;
+    topicContentRef: React.RefObject<HTMLDivElement>;
+    taskContentRef: React.RefObject<HTMLDivElement>;
+    // Стейты
+    isOpen: boolean;
+    setIsOpen: React.Dispatch<SetStateAction<boolean>>;
+    isTopicsOpen: boolean;
+    setIsTopicsOpen: React.Dispatch<SetStateAction<boolean>>;
+    currentView: React.RefObject<HTMLDivElement | null>;
+    setCurrentView: React.Dispatch<SetStateAction<React.RefObject<HTMLDivElement | null>>>;
+    prevView: React.RefObject<HTMLDivElement | null>;
+    setPrevView: React.Dispatch<SetStateAction<React.RefObject<HTMLDivElement | null>>>;
     selectedTopic: Topic | null;
+    setSelectedTopic: React.Dispatch<SetStateAction<Topic| null>>;
     selectedTask: Task | null;
-    
-    // Навигация
+    setSelectedTask: React.Dispatch<SetStateAction<Task| null>>;
+    // Функции
+    NavigateToMain: () => void;
+    NavigateToTopics: () => void;
+    NavigateToTopic: (topic: Topic) => void;
+    NavigateBackToTopic: () => void;
+    NavigateToTask: (task: Task) => void;
 
-    currentView: string;
-    prevView: string;
-
-    // Функции навигации
-
-    handleOpenTopics: () => void,
-    handleShowTopics: () => void,
-    handleBackToTopic: () => void,
-    handleOpenTask: (task: Task | null) => void,
-    handleChooseTopic: (topic: Topic | null) => void,
-    handleBackToTopics: () => void,
-
-    // Сеттеры
-
-    setSelectedTopic: React.Dispatch<SetStateAction<Topic | null>>,
-    setSelectedTask: React.Dispatch<SetStateAction<Task | null>>,
-
-    setIsTopicOpen: React.Dispatch<SetStateAction<boolean>>,
-    setIsTaskOpen: React.Dispatch<SetStateAction<boolean>>,
-    setSavedPosition: React.Dispatch<SetStateAction<{discussion: number, topicListHeader: number, topicList: number} | null>>,
-
-    // Доп. значения
-
-    topicListSectionSize: number,
-    savedPosition: {discussion: number, topicListHeader: number, topicList: number} | null
+    OpenMain: () => void;
+    OpenTopics: () => void;
 }
 
 export const DiscussionContext = createContext<DiscussionContextType | undefined>(undefined)

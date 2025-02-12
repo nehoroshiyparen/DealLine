@@ -9,39 +9,24 @@ interface Props {
 
 const TaskComponent = ({ task }: Props) => {
 
-   const {
-    
+    const {
         selectedTask,
-        setIsTaskOpen,
-        handleOpenTask,
-        isTaskOpen,
+        NavigateToTask,
+        NavigateBackToTopic,
+    } = useDiscussionContext()
 
-   } = useDiscussionContext()
+    const [isOpen, setIsOpen] = useState(false) // тут я оставляю свой isOpen потому что если я задам глобальный, то все задачи будут открываться
+    const taskContentRef = useRef<HTMLDivElement | null>(null)
 
-    const contentRef = useRef<HTMLDivElement | null>(null)
-
-    useEffect(() => {
-        if (!selectedTask) {
-            setIsTaskOpen(false)
-        }
-    }, [selectedTask])
-
-    /*
-    useEffect(() => {
-        const content = contentRef.current
-
-        if (!content) return
-
-        if (isOpen) {
-            content.style.height = '0px'
-            content.style.height = `${content.scrollHeight}px`
+    const handleOpen = () => {
+        if (!isOpen) {
+            setIsOpen(true)
+            NavigateToTask(task)
         } else {
-            requestAnimationFrame(() => {
-                content.style.height = '0px'
-            })
+            setIsOpen(false)
+            NavigateBackToTopic()
         }
-    }, [isOpen])
-    */
+    }
 
     if (!task) {
         return <div>Задача не найдена</div>;
@@ -57,7 +42,7 @@ const TaskComponent = ({ task }: Props) => {
             </div>
             <div 
                 className="task-component--info" 
-                ref={contentRef} 
+                ref={taskContentRef} 
                 style={{
                     height: isTaskOpen ? 'auto' : '0',
                     overflow: 'hidden',

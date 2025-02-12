@@ -1,96 +1,87 @@
 import './discussion.scss'
 import { Discussion as DiscussionType } from '../../../types'
 import TopicList from './components/topicList/topicList'
-import TopicComponent from './components/topicComponent/topic'
 import MainInfo from './components/mainInfo/mainInfo'
-import TaskComponent from './components/task/task'
 import { useDiscussionState } from '../../../hooks/discussionComponent/useDiscussionState'
-import { useDiscussionAnimation } from '../../../hooks/discussionComponent/animations/useDiscussionAnimation'
 import { DiscussionProvider } from './context+provider/discussionProvider'
-import TopicListHeader from './components/topicListHeader'
-import TopicCopy from './components/topicComponent/topicCopy'
+import { useDiscussionAnimation } from '../../../hooks/discussionComponent/useDiscussionAnimations'
 
 interface DiscussionProps {
     discussion: DiscussionType
 }
 
 export default function Discussion({ discussion }: DiscussionProps) {
-    
+
     const state = useDiscussionState(discussion)
 
-    useDiscussionAnimation({
-        hightestContainerRef: state.hightestContainerRef,
-        isOpen: state.isOpen,
-        currentView: state.currentView,
-        originalSize: state.originalSize,
-        selectedTopic: state.selectedTopic,
-        selectedTask: state.selectedTask,
+    const ContextValue = {
+        //Ссылки
+        sizeRef: state.sizeRef,
+        contentContainerRef: state.contentContainerRef,
         discussionRef: state.discussionRef,
-        topicsListRef: state.topicsListRef,
-        topicRef: state.topicRef,
+        topicsRef: state.topicsRef,
         taskRef: state.taskRef,
-        topicListHeaderRef: state.topicListHeaderRef,
-        topicListContentRef: state.topicListContentRef,
-        savedPosition: state.savedPosition,
-        setSavedPosition: state.setSavedPosition,
-        discussion
-    })
+        topicsHeaderRef: state.topicsHeaderRef,
 
-    const contextValue = {
-        hightestContainerRef: state.hightestContainerRef,
-        discussionRef: state.discussionRef,
-        topicsListRef: state.topicsListRef,
-        topicRef: state.topicRef,
-        taskRef: state.taskRef,
-        topicListHeaderRef: state.topicListHeaderRef,
         topicListContentRef: state.topicListContentRef,
-        isTopicListOpen: state.isTopicListOpen,
-        isTopicOpen: state.isTopicOpen,
-        isTaskOpen: state.isTaskOpen,
-        selectedTopic: state.selectedTopic,
-        selectedTask: state.selectedTask,
-        savedPosition: state.savedPosition,
-        currentView: state.currentView,
-        prevView: state.prevView,
-        handleOpenTopics: state.handleOpenTopics,
-        handleShowTopics: state.handleShowTopics,
-        handleBackToTopic: state.handleBackToTopic,
-        handleOpenTask: state.handleOpenTask,
-        handleChooseTopic: state.handleChooseTopic,
-        handleBackToTopics: state.handleBackToTopics,
-        setSelectedTopic: state.setSelectedTopic,
-        setSelectedTask: state.setSelectedTask,
-        setIsTopicOpen: state.setIsTopicOpen,
-        setIsTaskOpen: state.setIsTaskOpen,
-        setSavedPosition: state.setSavedPosition,
-        topicListSectionSize: state.topicListSectionSize,
+        topicContentRef: state.topicContentRef,
+        taskContentRef: state.taskContentRef,
+        //Стейты
+        isOpen: state.isOpen, setIsOpen: state.setIsOpen,
+        isTopicsOpen: state.isTopicsOpen, setIsTopicsOpen: state.setIsTopicsOpen,
+        currentView: state.currentView, setCurrentView: state.setCurrentView,
+        prevView: state.prevView, setPrevView: state.setPrevView,
+        selectedTopic: state.selectedTopic, setSelectedTopic: state.setSelectedTopic,
+        selectedTask: state.selectedTask, setSelectedTask: state.setSelectedTask,
+        //Функции
+        NavigateToTopics: state.NavigateToTopics,
+        NavigateToMain: state.NavigateToMain,
+        NavigateToTopic: state.NavigateToTopic,
+        NavigateBackToTopic: state.NavigateBackToTopic,
+        NavigateToTask: state.NavigateToTask,
+
+        OpenMain: state.OpenMain,
+        OpenTopics: state.OpenTopics,
     }
 
+    useDiscussionAnimation({
+        sizeRef: state.sizeRef,
+        contentContainerRef: state.contentContainerRef,
+        discussionRef: state.discussionRef,
+        topicsRef: state.topicsRef,
+        taskRef: state.taskRef,
+        topicsHeaderRef: state.topicsHeaderRef,
+
+        topicListContentRef: state.topicListContentRef,
+        topicContentRef: state.topicContentRef,
+        taskContentRef: state.taskContentRef,
+
+        isOpen: state.isOpen, setIsOpen: state.setIsOpen,
+        isTopicsOpen: state.isTopicsOpen, setIsTopicsOpen: state.setIsTopicsOpen,
+        currentView: state.currentView, setCurrentView: state.setCurrentView,
+        prevView: state.prevView, setPrevView: state.setPrevView,
+        selectedTopic: state.selectedTopic, setSelectedTopic: state.setSelectedTopic,
+        selectedTask: state.selectedTask, setSelectedTask: state.setSelectedTask,
+
+        discussion: discussion,
+    })
+
     return (
-        <DiscussionProvider value={contextValue}>
+        <DiscussionProvider value={ContextValue}>
         <div className='discussion'>
             <div className='discussion-header'>
                 <div 
                     className='disc-title' 
-                    onClick={!state.isOpen || state.currentView === 'discussion' ? state.handleOpen : () => {}}
+                    onClick={!state.isOpen || state.currentView.current === state.discussionRef.current ? state.OpenMain : () => {}}
                     style={{ borderBottom: state.isOpen ? '1px solid #505050' : '1px solid rgba(255, 255, 255, 0)' }}
                 >
                     <div className='path'>
-                        <span onClick={state.handleBackToMain}>{discussion.title}</span>
-                        {state.currentView !== 'discussion' && (
+                        <span onClick={state.NavigateToMain}>{discussion.title}</span>
+                        {state.currentView !== state.discussionRef && (
                             <span style={{ marginLeft: '10px' }}>
-                                <span 
-                                    onClick={state.handleBackToTopics}>{
-                                        (state.currentView === 'topicList' || 
-                                        state.currentView === 'topic' || 
-                                        state.currentView === 'task')  && 
-                                        '/ Темы'
-                                        }
-                                </span>
-                                <span onClick={state.handleBackToTopic}>
-                                    {state.selectedTopic  && ` / ${state.selectedTopic?.title}`}
-                                </span>
-                                {state.selectedTask && ` / ${state.selectedTask?.title}`}
+                                <span onClick={state.NavigateToTopics}>{state.currentView === state.topicsRef && '/ Темы'}</span>
+                                {state.selectedTopic && ` / ${state.selectedTopic?.title}`}
+                                {state.currentView === state.taskRef && ` / ${state.selectedTask?.title}`}
                             </span>
                         )}
                     </div>
@@ -101,7 +92,7 @@ export default function Discussion({ discussion }: DiscussionProps) {
             </div>
             <div 
                 className='disc-view' 
-                ref={state.hightestContainerRef} 
+                ref={state.sizeRef} 
                 style={{ 
                     transition: 'height 0.5s, padding 0.3s',
                     overflow: 'hidden',
@@ -109,45 +100,19 @@ export default function Discussion({ discussion }: DiscussionProps) {
                     padding: '0px 30px'
                 }}
             >
-                <div className='content-container'>
-                    {(state.currentView === 'discussion' || state.currentView === 'topicList') && (
-                        <div>
-                            <div className='discussion-info' 
-                                style={{transition: 'opacity 0.3s, all 0.5s', top: '0px', position: 'relative'}}
-                                ref={state.discussionRef}
-                            >
-                                <MainInfo discussion={discussion}/>
-                            </div>
-                            <div className='topicListheaderRef'
-                                style={{transition: 'opacity 0.3s, all 0.5s', top: '0px', position: 'relative'}}
-                                ref={state.topicListHeaderRef}
-                            >
-                                <TopicListHeader/>
-                            </div>
-                            <div className='topics-section' 
-                                style={{transition: 'opacity 0.3s, all 0.5s', top: '0px', position: 'relative'}}
-                                ref={state.topicsListRef}
-                            >
-                                <TopicList topics={discussion.topics}/>
-                            </div>
+                <div className='content-container' ref={state.contentContainerRef}>
+                    <div className='discussion-info' ref={state.discussionRef}>
+                        <MainInfo discussion={discussion}/>
+                    </div>
+                    <div className="topics-header--top" onClick={state.OpenTopics} ref={state.topicsHeaderRef}>
+                        <span>Темы</span>
+                        <div className='topic-header--disc --show' style={{rotate: `${state.isTopicsOpen ? '-90deg' : '0deg'}`}}>
+                            <img src='/images/direction.png' width={'100%'}/>
                         </div>
-                    )}
-                    {state.currentView === 'topic' && (
-                        <div className='topic-component' 
-                            ref={state.topicRef}
-                            style={{transition: 'opacity 0.3s, all 0.5s', top: '0px', position: 'relative'}}
-                        >
-                            <TopicCopy topic={state.selectedTopic}/>
-                        </div>
-                    )}
-                    {state.currentView === 'task' && (
-                        <div className='task-component' 
-                            style={{transition: 'opacity 0.3s, all 0.5s', top: '0px', position: 'relative'}}
-                            ref={state.taskRef}
-                        >
-                            <TaskComponent task={state.selectedTask}/>
-                        </div>
-                    )}
+                    </div>
+                    <div className='topics-section' ref={state.topicsRef}>
+                        <TopicList topics={discussion.topics}/>
+                    </div>
                 </div>
             </div>
         </div>
