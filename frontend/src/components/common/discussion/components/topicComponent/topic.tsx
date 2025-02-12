@@ -5,7 +5,7 @@ import './topic.scss'
 import { useDiscussionContext } from "../../context+provider/discussionContext"
 
 interface props {
-    topic: Topic
+    topic: Topic | null,
 }
 
 const TopicComponent = ({topic}: props) => {
@@ -28,7 +28,6 @@ const TopicComponent = ({topic}: props) => {
             NavigateToTopics() // при переходе на верхний уровень сбрасывался selectedtopic
         }
     }
-
     useEffect(() => {
         if (!selectedTopic) {
             setIsOpen(false)
@@ -50,13 +49,15 @@ const TopicComponent = ({topic}: props) => {
         }
     }, [isOpen])
 
+    if (!topic) return
+
     return (
         <div className="topic--element">
             <div className="topic-header--element" id={`topic-header--element-id${topic.id}`} onClick={handleOpen}>
                 <div className="topic-title">
                     {topic.title}
-                </div>
-                <div className="topic-header--show --show" style={{rotate: `${isOpen ? '-90deg' : '0deg'}`}}>
+                </span>
+                <div className="topic-header--show --show">
                     <img src='/images/direction.png' width={'100%'}/>
                 </div>
             </div>

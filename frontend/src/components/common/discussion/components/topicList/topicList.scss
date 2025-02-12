@@ -17,14 +17,9 @@
     transition: opacity 0.3s, all 0.5s;
 }
 
-.topic-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
+.hightest-topic {
     box-sizing: border-box;
-    padding: 10px 0 10px 0;
-    border-bottom: 1px solid #505050;
+    padding: 0px 40px;
 }
 
 .--show {

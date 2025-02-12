@@ -4,11 +4,10 @@ import './task.scss'
 import { useDiscussionContext } from "../../context+provider/discussionContext";
 
 interface Props {
-    task: Task;
-    index: number;
+    task: Task | null;
 }
 
-const TaskComponent = ({ task, index }: Props) => {
+const TaskComponent = ({ task }: Props) => {
 
     const {
         selectedTask,
@@ -29,36 +28,15 @@ const TaskComponent = ({ task, index }: Props) => {
         }
     }
 
-    useEffect(() => {
-        if (!selectedTask) {
-            setIsOpen(false)
-        }
-    }, [selectedTask])
-
-    useEffect(() => {
-        const content = taskContentRef.current
-
-        if (!content) return
-
-        if (isOpen) {
-            content.style.height = '0px'
-            content.style.height = `${window.screen.height*0.8}px`
-        } else {
-            requestAnimationFrame(() => {
-                content.style.height = '0px'
-            })
-        }
-    }, [isOpen])
-
-    if (!task.priority || index === undefined) {
+    if (!task) {
         return <div>Задача не найдена</div>;
     }
 
     return (
         <div className="task-component">
-            <div className="task-component--header" onClick={handleOpen}>
+            <div className="task-component--header" onClick={() => handleOpenTask(task)}>
                 <span>{task.title}</span>
-                <div className="task-header--show --show" style={{rotate: `${isOpen ? '-90deg' : '0deg'}`}}>
+                <div className="task-header--show --show" style={{rotate: `${isTaskOpen ? '-90deg' : '0deg'}`}}>
                         <img src='/images/direction.png' width={'100%'}/>
                 </div>
             </div>
@@ -66,7 +44,7 @@ const TaskComponent = ({ task, index }: Props) => {
                 className="task-component--info" 
                 ref={taskContentRef} 
                 style={{
-                    height: isOpen ? 'auto' : '0',
+                    height: isTaskOpen ? 'auto' : '0',
                     overflow: 'hidden',
                     transition: 'height 0.3s'
                 }}
