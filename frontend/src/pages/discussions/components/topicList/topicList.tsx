@@ -1,8 +1,7 @@
-import { useContext, useEffect, useRef } from "react"
-import { Topic } from "../../../../../types"
+import { Topic } from "../../../../types"
 import TopicComponent from "../topicComponent/topic"
 import './topicList.scss'
-import { useDiscussionContext } from "../../context+provider/discussionContext" 
+import { useDiscussionContext } from "../context+provider/discussionContext" 
 
 interface Props {
     topics: Topic[],

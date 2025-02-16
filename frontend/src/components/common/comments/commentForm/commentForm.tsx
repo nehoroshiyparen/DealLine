@@ -9,15 +9,19 @@ import './reactQuill.scss';
 import { htmlToMarkdown } from "../../../../utils/MarkdownUtils/htmlToMarkdown";
 import './reactMarkdown.scss';
 import { TaskService } from "../../../../service/ taskService";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 interface props {
-    userId: number,
     taskId: number
 }
 
-const CommentsForm = ({userId, taskId}: props) => {
+const CommentsForm = ({taskId}: props) => {
   const [comment, setComment] = useState('');
   const [preview, setPreview] = useState(false);
+
+  const user = useSelector((state: RootState) => state.user);
+  const userId = user.user.id
 
   const handleSubmit = async(event: React.FormEvent) => {
     event.preventDefault();

@@ -15,7 +15,7 @@ router.post('/logOut', log_out)
 router.get('/activate/:link', activate)
 router.get('/refresh', refresh)
 router.get('/getUsersByUsername', getUsersByUsername)
-router.get('/', authMiddleware, getUserInfo)
+router.get('/:username', getUserInfo)
 router.post('/deleteFriend', deleteFriend)
 router.post('/deleteAccount', deleteAccount)
 

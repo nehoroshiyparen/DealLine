@@ -34,25 +34,6 @@
     font-size: 18px;
 }
 
-.member-list {
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.member-avatar {
-    width: 40px;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-    border: 3px solid rgb(53, 53, 53);
-    position: relative;
-    transition: transform 0.3s ease;
-}
-
-.member-avatar:hover {
-    transform: scale(1.1);
-}
-
 // MEMBER LIST END
 
 .disc-description {

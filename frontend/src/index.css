@@ -39,7 +39,9 @@ body {
 .container {
   width: 100vw;
   height: 100vh;
-  min-height: 800px;
+  min-height: 900px;
+  min-width: 1440px;
+  max-width: 2240px;
   background: rgb(39, 39, 39);
 }
 

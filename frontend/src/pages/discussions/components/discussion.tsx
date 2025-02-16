@@ -1,7 +1,7 @@
 import './discussion.scss'
 import { Discussion as DiscussionType } from '../../../types'
-import TopicList from './components/topicList/topicList'
-import MainInfo from './components/mainInfo/mainInfo'
+import TopicList from './topicList/topicList'
+import MainInfo from './mainInfo/mainInfo'
 import { useDiscussionState } from '../../../hooks/discussionComponent/useDiscussionState'
 import { DiscussionProvider } from './context+provider/discussionProvider'
 import { useDiscussionAnimation } from '../../../hooks/discussionComponent/useDiscussionAnimations'
@@ -66,6 +66,8 @@ export default function Discussion({ discussion }: DiscussionProps) {
         discussion: discussion,
     })
 
+    console.log(state.selectedTask, ' - selectedTask. ', state.selectedTopic, ' - selectedTopic')
+
     return (
         <DiscussionProvider value={ContextValue}>
         <div className='discussion'>
@@ -73,7 +75,7 @@ export default function Discussion({ discussion }: DiscussionProps) {
                 <div 
                     className='disc-title' 
                     onClick={!state.isOpen || state.currentView.current === state.discussionRef.current ? state.OpenMain : () => {}}
-                    style={{ borderBottom: state.isOpen ? '1px solid #505050' : '1px solid rgba(255, 255, 255, 0)' }}
+                    style={{ borderBottom: state.isOpen ? '1px solid #505050' : '1px solid hsla(0, 0.00%, 100.00%, 0.00)' }}
                 >
                     <div className='path'>
                         <span onClick={state.NavigateToMain}>{discussion.title}</span>

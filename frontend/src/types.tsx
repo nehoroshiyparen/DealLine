@@ -5,6 +5,23 @@ export interface MiniUser {
     avatar: string;
 }
 
+export interface AdvancedUser {
+    id: number;
+    username: string;
+    email: string;
+    avatar: string;
+    description: string;
+    contacts: {
+        social_media: string;
+        link: string;
+    }[]
+    friends: MiniUser[];
+    discussions: {
+        id: number;
+        title: string;
+    }[];
+}
+
 export interface Comment {
     id: number;
     content: string;

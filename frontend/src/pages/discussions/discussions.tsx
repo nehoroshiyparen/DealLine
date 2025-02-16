@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Discussion from '../../components/common/discussion/discussion'
+import Discussion from './components/discussion'
 import { AppDispatch, RootState } from '../../store/store'
 import './discussions.scss'
 import { useSelector } from 'react-redux'

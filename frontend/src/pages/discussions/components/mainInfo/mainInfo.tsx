@@ -1,6 +1,7 @@
-import { Discussion } from "../../../../../types"
-import { useDiscussionContext } from "../../context+provider/discussionContext"
-import MemberList from "../MemberList"
+import { Link } from "react-router-dom"
+import { Discussion } from "../../../../types"
+import { MemberAvatar } from "../../../../components/common/memberList/MemberAvatar"
+import MemberList from "../../../../components/common/memberList/MemberList"
 import './mainInfo.scss'
 
 interface props {
@@ -14,18 +15,14 @@ const MainInfo = ({discussion}: props) => {
             <div className='disc-users'>
                 <div className='disc-owner'>
                     <span>Создатель обсуждения</span>
-                    <div className='disc-owner--info'>
-                        <img 
-                            src={discussion.owner?.avatar 
-                                ? `http://localhost:5665/api/upload/${encodeURIComponent(discussion.owner.avatar)}`
-                                : '/images/profile.png'} 
-                            width={'100%'}
-                            className='owner-avatar'
-                        />
-                        <span style={{ fontSize: '22px', fontWeight: '600', color: '#bcbfff' }}>
-                            {discussion.owner.username}
-                        </span>
-                    </div>
+                    <Link to={'./'}>
+                        <div className='disc-owner--info'>
+                            <MemberAvatar avatar={discussion.owner.avatar} index={0}/>
+                            <span style={{ fontSize: '22px', fontWeight: '600', color: '#6598ff', marginLeft: '10px' }}>
+                                {discussion.owner.username}
+                            </span>
+                        </div>
+                    </Link>
                 </div>
                 <div className='disc-members'>
                     <span>Участники обсуждения</span>

@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { Topic } from "../../../../../types"
+import { Topic } from "../../../../types"
 import TaskComponent from "../task/task"
 import './topic.scss'
-import { useDiscussionContext } from "../../context+provider/discussionContext"
+import { useDiscussionContext } from "../context+provider/discussionContext"
 
 interface props {
     topic: Topic | null,
@@ -54,11 +54,11 @@ const TopicComponent = ({topic}: props) => {
     return (
         <div className="topic--element">
             <div className="topic-header--element" id={`topic-header--element-id${topic.id}`} onClick={handleOpen}>
-                <div className="topic-title">
+                <span className="topic-title">
                     {topic.title}
                 </span>
                 <div className="topic-header--show --show">
-                    <img src='/images/direction.png' width={'100%'}/>
+                    <img src='/images/direction.png' width={'100%'} style={{ rotate: isOpen ? '-90deg' : '0deg' }}/>
                 </div>
             </div>
             <div 
@@ -66,12 +66,12 @@ const TopicComponent = ({topic}: props) => {
                 ref={topicContentRef}
                 style={{
                     overflow: 'hidden',
-                    transition: 'height 0.5s',
+                    transition: 'height 0.5s, all 0.5s',
                 }}
             >
                 {topic.tasks.map((task, index) => (
                      <div className="hightest-task" id={`task-id${task.id}`} key={task.id} style={{position: 'relative', top: '0px', transition: '0.5s'}}>
-                        <TaskComponent task={task} index={index} key={task.id}/>
+                        <TaskComponent task={task} key={task.id}/>
                     </div>
                 ))}
             </div>

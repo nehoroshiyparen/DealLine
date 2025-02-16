@@ -3,6 +3,7 @@ import { User } from "../../database/models";
 import userService from "../services/userService";
 import { validationResult } from "express-validator";
 import ApiError from "../exceptions/api-error";
+import { error } from "console";
 
 export const registration = async(req: Request, res: Response, next: NextFunction) => {
     try {
@@ -84,13 +85,21 @@ export const getUsersByUsername = async(req: Request, res: Response) => {
     }
 }
 
-export const getUserInfo = async(req: Request, res: Response, next: NextFunction) => {
+export const getUserInfo = async(req: Request, res: Response) => {
     try {
-        const {id} = req.body
-        const user = await userService.getOneUser(id)
+        const {username} = req.params
+        const user = await userService.getOneUser(String(username))
         res.json(user)
-    } catch (error) {
-        next(error)
+    } catch (e) {
+        if (e instanceof ApiError) {
+            res.status(e.status).json({
+                message: e.message,
+                error: e.errors,
+            })
+        } else {
+            console.log(e)
+            res.status(500).json('Непредвиденная ошибка при получении информации о пользователе')
+        }
     }
 }
 

@@ -165,6 +165,7 @@ export const useDiscussionAnimation = ({
     
             discussion.topics.forEach((topic) => {
                 const elem = document.querySelector(`#topic-id${topic.id}`) as HTMLElement
+                //const header = elem.querySelector('.topic-header--element') as HTMLElement
                 elem.classList.remove('choosen--topic')
                 elem.style.fontWeight = 'normal'
                 elem.style.opacity = '1'
@@ -215,17 +216,20 @@ export const useDiscussionAnimation = ({
                         elem.style.top = `-${offset_for_elem}px`
                         topicContent_div.style.top = `-${offset_for_list}px`
     
-                        topicContent_div.style.height = `${window.screen.height*0.8}px`
-                        size_div.style.height = `${window.screen.height*0.8}px`
-                        topics_div.style.height = `${window.screen.height*0.8}px`
-                        topicListContent_div.style.height = `${window.screen.height*0.8}px`
+                        topicContent_div.style.height = `${975}px`
+                        size_div.style.height = `${975}px`
+                        topics_div.style.height = `${975}px`
+                        topicListContent_div.style.height = `${975}px`
                     }
                 } else {
+                    elem.classList.remove('choosen--task')
+
                     elem.style.opacity = '1'
                     elem.style.fontWeight = 'normal'
                     elem.style.padding = '0px 40px'
 
                     topicHeaderElement.style.opacity = '1'
+                    console.log('gg')
 
                     elem.style.top = '0px'
                     topicContent_div.style.top = '0px'

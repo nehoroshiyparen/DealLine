@@ -18,10 +18,15 @@
 }
 
 .author-info--2 {
-    margin: 0 0 0 30px;
+    margin: 0 0 0 15px;
 }
 
 .author-username {
     font-size: 22px;
     font-weight: bold;
+}
+
+
+.author-username:hover {
+    text-decoration: underline;
 }

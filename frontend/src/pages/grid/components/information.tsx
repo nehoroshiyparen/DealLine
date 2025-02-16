@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Task } from '../../../types';
 import '../grid.scss'
 import CommentsForm from '../../../components/common/comments/commentForm/commentForm';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
 import CommentComponent from '../../../components/common/comments/comment/comment';
 import { TaskService } from '../../../service/ taskService';
 
@@ -19,13 +17,9 @@ const TaskInformation = ({taskId, infoOpen, setInfoOpen}: props) => {
     const resizerRef = useRef<HTMLDivElement | null>(null)
     const closeRef = useRef<HTMLDivElement | null>(null)
 
-    const user = useSelector((state: RootState) => state.user);
-
     const [width, setWidth] = useState(0)
     const [task, setTask] = useState<Task>()
     const [isLoading, setIsLoading] = useState(false)
-
-    const userId = user.user.id
 
     useEffect(() => {
         setIsLoading(true)
@@ -82,9 +76,6 @@ const TaskInformation = ({taskId, infoOpen, setInfoOpen}: props) => {
             document.removeEventListener("mouseup", stopResize);
         };
     }, [task]);
-    
-
-    if (!task) return null
 
     if (isLoading) {
         return (
@@ -94,12 +85,17 @@ const TaskInformation = ({taskId, infoOpen, setInfoOpen}: props) => {
         )
     }
 
+    if (!task) {
+        return null
+    }
+
+    console.log(width)
+
     return (
         <div 
             className={`task_information`} 
             style={{
-                transform: infoOpen ? 'translateX(0)' : `translateX(${width}px)`, 
-                transition: 'transform 0.3s ease'
+                right: infoOpen ? '0px' : `-${width}px`,
             }} 
             ref={contentRef}
         >
@@ -141,10 +137,10 @@ const TaskInformation = ({taskId, infoOpen, setInfoOpen}: props) => {
                 <div className='comments-count'>
                     Обсуждение {task?.comments.length}
                 </div>
-                <CommentsForm userId={userId} taskId={task.id}/>
+                <CommentsForm taskId={task.id} key={task.id}/>
                 {
                     task.comments.slice().reverse().map(comment => (
-                        <CommentComponent comment={comment}/>
+                        <CommentComponent comment={comment} key={comment.id}/>
                     ))
                 }
             </div>

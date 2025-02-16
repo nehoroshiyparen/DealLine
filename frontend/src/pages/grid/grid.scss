@@ -98,15 +98,15 @@ span.bold {
 
 .task_information {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 0px;
+    top: 0px;
     height: 100%;
     min-width: 570px;
     max-width: 100%;
     background: linear-gradient(145deg, #353535, #2d2d2d);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-    transition: 0.3s;
+    transition: right 0.3s ease, width 0s;
 }
 
 .resizer {

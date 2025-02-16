@@ -1,5 +1,5 @@
 import { error } from "console";
-import { Comment, Token, User, UserFriends } from "../../database/models";
+import { Comment, Discussion, Token, User, UserFriends } from "../../database/models";
 import bcrypt from 'bcrypt'
 import { v4 as uuid} from 'uuid'
 import mailService from "./mailService";
@@ -119,9 +119,32 @@ class UserService {
         }
     }
 
-    async getOneUser(id: number) {
-        const user = await User.findOne({where: {id}})
-        return user
+    async getOneUser(username: string) {
+        try {
+            const user = await User.findOne({
+                where: {
+                    username
+                }, 
+                include: [
+                    {
+                        model: User,
+                        as: 'friends',
+                        attributes: ['id', 'username', 'email', 'avatar']
+                    },
+                    {
+                        model: Discussion,
+                        as: 'discussions',
+                        attributes: ['id', 'title']
+                    }
+                ]
+            })
+            if (!user) {
+                return { message: `Пользователя с username: ${username} не найдено`}
+            }
+            return { user }
+        } catch (e) {
+            throw ApiError.BadRequest(`Ошибка //на стадии обработки// при получении данных о пользователе: ${e}`)
+        }
     }
 
     async deleteFriend(firstId: number, secondId: number) {

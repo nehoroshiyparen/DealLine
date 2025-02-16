@@ -6,7 +6,7 @@ class User extends Model {
     public email!: string;
     public username!: string;
     public description!: string;
-    public contacts!: object[];
+    public contacts!: object[]; // Что такое contacts ? А блять это ссылки на пользователя в других соц сетях
     public avatar!: string;
     public password!: string;
     public isActivated!: boolean;
@@ -85,7 +85,7 @@ DiscussionParticipants.init({
     sequelize,
     modelName: 'DiscussionParticipants',
     tableName: 'DiscussionParticipants',
-    timestamps: true,  // если хотите использовать createdAt и updatedAt
+    timestamps: true, 
 });
 
 class Topic extends Model {
@@ -224,7 +224,7 @@ Token.init({
     sequelize, modelName: 'Token'
 })
 
-Discussion.belongsToMany(User, { through: 'DiscussionParticipants', foreignKey: 'discussionId', as: 'participants' });
+Discussion.belongsToMany(User, { through: DiscussionParticipants, foreignKey: 'discussionId', as: 'participants' });
 Discussion.belongsTo(User, { foreignKey: 'creatorId', as: 'owner'})
 Discussion.hasMany(Topic, { foreignKey: 'discussionId', as: 'topics' });
 Discussion.hasMany(Task, { foreignKey: 'discussionId', as: 'tasks' });
@@ -239,7 +239,7 @@ Task.belongsTo(Discussion, { foreignKey: 'discussionId' });
 
 User.hasMany(Discussion, { foreignKey: 'creatorId', as: 'ownedDiscussions' })
 User.belongsToMany(Task, { through: 'TaskAssignees', foreignKey: 'userId', as: 'assignees' });
-User.belongsToMany(Discussion, { through: 'DiscussionParticipants', foreignKey: 'userId', as: 'discussions'});
+User.belongsToMany(Discussion, { through: DiscussionParticipants, foreignKey: 'userId', as: 'discussions'});
 User.belongsToMany(User, {through: UserFriends, as: 'friends', foreignKey: 'userId'})
 User.belongsToMany(User, {through: UserFriends, as: 'friendOf', foreignKey: 'friendId'})
 

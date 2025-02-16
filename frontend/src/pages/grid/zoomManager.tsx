@@ -14,6 +14,13 @@ const ZoomManager: React.FC<ZoomManagerProps> = ({ onZoomChange }) => {
   }, [zoom, onZoomChange]);
 
   useEffect(() => {
+    return () => {
+      document.documentElement.style.setProperty('--theme-node-opacity', '1');
+      document.documentElement.style.setProperty('--task-node-opacity', '0');
+    }
+  }, [])
+
+  useEffect(() => {
     if (zoom > 1) {
         document.documentElement.style.setProperty('--theme-node-opacity', (1.5 - zoom*0.5).toString());
         document.documentElement.style.setProperty('--task-node-opacity', (zoom-1).toString());
@@ -22,7 +29,7 @@ const ZoomManager: React.FC<ZoomManagerProps> = ({ onZoomChange }) => {
             document.documentElement.style.setProperty('--task-z-index', '1');
         }
     } else {
-        document.documentElement.style.setProperty('--node-opacity', '1');
+        document.documentElement.style.setProperty('--theme-node-opacity', '1');
         document.documentElement.style.setProperty('--task-node-opacity', '0');
         if (zoom < 1.2) {
             document.documentElement.style.setProperty('--theme-z-index', '1');

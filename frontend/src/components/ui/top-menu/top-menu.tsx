@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import './top-menu.scss'
-import { useDispatch } from 'react-redux'
-import { AppDispatch, RootState } from '../../../store/store'
+import { RootState } from '../../../store/store'
 import { useSelector } from 'react-redux'
 import { useNotifications } from '../../../hooks/store/useNotification'
 import { useDiscussion } from '../../../hooks/store/useDiscussion'
+import { Link } from 'react-router-dom'
 
 export default function Top_Menu() {
-    const dispatch = useDispatch<AppDispatch>()
-
     const user = useSelector((state: RootState) => state.user.user)
     const { notificationsState, fetchNotifications } = useNotifications()
     const { updateSearchQuery, searchQuery } = useDiscussion()
@@ -49,12 +47,14 @@ export default function Top_Menu() {
                 </div>
                 <div className='profile'>
                     <div className='user' >
-                        <div className='user-pic'
-                            style={{
-                                backgroundImage: `url(${user?.avatar ? `http://localhost:5665/api/upload/${encodeURIComponent(user.avatar)}` : '/images/profile.png'})`,
-                                backgroundSize: '100%'
-                            }}>
-                        </div>
+                        <Link to={`../user/${user?.username}`}>
+                            <div className='user-pic'
+                                style={{
+                                    backgroundImage: `url(${user?.avatar ? `http://localhost:5665/api/upload/${encodeURIComponent(user.avatar)}` : '/images/profile.png'})`,
+                                    backgroundSize: '100%'
+                                }}>
+                            </div>
+                        </Link>
                     </div>
                     <div className='user-more'>
                         <div className='more-image'>

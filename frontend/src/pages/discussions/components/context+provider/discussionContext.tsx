@@ -29,9 +29,9 @@ export interface DiscussionContextType {
     // Функции
     NavigateToMain: () => void;
     NavigateToTopics: () => void;
-    NavigateToTopic: (topic: Topic) => void;
+    NavigateToTopic: (topic: Topic | null) => void;
     NavigateBackToTopic: () => void;
-    NavigateToTask: (task: Task) => void;
+    NavigateToTask: (task: Task | null) => void;
 
     OpenMain: () => void;
     OpenTopics: () => void;

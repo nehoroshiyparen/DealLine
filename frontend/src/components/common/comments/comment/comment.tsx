@@ -4,6 +4,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import './comment.scss'
 import '../commentForm/reactMarkdown.scss'
+import { Link } from 'react-router-dom';
 
 interface props {
     comment: Comment
@@ -22,9 +23,11 @@ const CommentComponent = ({comment}: props) => {
                     backgroundSize: '100%'
                 }}/>
                 <div className='author-info--2'>
-                    <div className='author-username'>
-                        {author.username}
-                    </div> 
+                    <Link to={'./'}>
+                        <div className='author-username'>
+                            {author.username}
+                        </div> 
+                    </Link>
                     <div className='comment-createdAt'>
                         {date}
                     </div>

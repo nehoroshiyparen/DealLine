@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { User } from '../types'
+import { MiniUser } from '../types'
 import AuthService from '../service/authService'
 import axios from 'axios'
 import { AuthResponse } from '../models/response/authResponse'
@@ -7,7 +7,7 @@ import { API_URL } from '../http'
 
 interface UserState {
     isAuthentcated: boolean;
-    user: User | null;
+    user: MiniUser | null;
     loading: boolean;
     error: string | null;
 }
