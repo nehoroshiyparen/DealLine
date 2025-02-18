@@ -23,7 +23,7 @@ const CommentComponent = ({comment}: props) => {
                     backgroundSize: '100%'
                 }}/>
                 <div className='author-info--2'>
-                    <Link to={'./'}>
+                    <Link to={`../user/${author.username}`}>
                         <div className='author-username'>
                             {author.username}
                         </div> 

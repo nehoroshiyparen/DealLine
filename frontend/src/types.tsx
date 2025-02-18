@@ -19,6 +19,7 @@ export interface AdvancedUser {
     discussions: {
         id: number;
         title: string;
+        description: string;
     }[];
 }
 

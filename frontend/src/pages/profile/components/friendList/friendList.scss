@@ -1,0 +1,44 @@
+.friend-list--container {
+    width: 100%;
+
+    box-sizing: border-box;
+    padding: 10px 0;
+}
+
+.friend-list--inside {
+    width: 100%;
+    height: 100%;
+}
+
+.friend-mini-profile {
+    width: 100%;
+    padding: 5px 0;
+
+    display: flex;
+}
+
+.friend_avatar {
+    width: 60px;
+    aspect-ratio: 1/1;
+
+    margin-right: 10px;
+}
+
+.friend-info--wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    flex-grow: 1;
+}
+
+.friend_username,  .friend_email {
+    font-size: 15px;
+    font-weight: bold;
+
+    width: 180px;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

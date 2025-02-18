@@ -134,7 +134,7 @@ class UserService {
                     {
                         model: Discussion,
                         as: 'discussions',
-                        attributes: ['id', 'title']
+                        attributes: ['id', 'title', 'description']
                     }
                 ]
             })

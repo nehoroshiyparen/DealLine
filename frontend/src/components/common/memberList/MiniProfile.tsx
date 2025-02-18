@@ -8,7 +8,7 @@ interface MiniProfileProps {
 
 const MiniProfile = ({user}: MiniProfileProps) => {
     return (
-        <Link to={'./'}>
+        <Link to={`../user/${user.username}`}>
             <div className="mini-profile--user">
                 <div className="mini-profile--avatar">
                     <div
