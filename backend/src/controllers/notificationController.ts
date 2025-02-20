@@ -17,7 +17,6 @@ export const getAllNotifications = async(req: Request, res: Response) => {
 export const sendNotification = async(req: Request, res: Response) => {
     try {
         const { patch } = req.body
-        console.log(patch)
         const notificationCreateRequest = await notificationService.createNotification(patch)
         res.json(notificationCreateRequest)
     } catch (error) {

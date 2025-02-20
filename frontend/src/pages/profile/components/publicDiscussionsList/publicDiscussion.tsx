@@ -12,7 +12,7 @@ const PublicDiscussion = ({title, description}: PublicDiscusionProps) => {
                 <div className="pub-disc--header-wrapper">
                     <div
                         style={{
-                            backgroundImage: `url('/images/project.png')`,
+                            backgroundImage: `url('/images/project--_white.png')`,
                             backgroundSize: 'cover',
                         }} 
                         className="discussion_picture"

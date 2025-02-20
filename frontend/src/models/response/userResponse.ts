@@ -7,3 +7,8 @@ export interface MiniUserListResponse {
 export interface AdvancedUserResponse {
     user: AdvancedUser;
 }
+
+export interface NotificationResponse {
+    message: string;
+    errors: [];
+}

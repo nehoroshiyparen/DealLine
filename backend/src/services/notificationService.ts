@@ -6,7 +6,14 @@ import { Op } from "sequelize";
 class notificationService {
     async getNotifications(recieverId: number) {
         try {
-            const notifications = await Notifications.findAll({ where: {recieverId} })
+            const notifications = await Notifications.findAll({
+                    where: {recieverId},
+                    include: [{
+                        model: User,
+                        as: 'Sender',
+                        attributes: ['username']
+                    }]
+                })
             if (notifications.length === 0) {
                 throw ApiError.BadRequest(`У пользователя с айди ${recieverId} нет уведомлений`);
             }

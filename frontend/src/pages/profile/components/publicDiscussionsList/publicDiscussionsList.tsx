@@ -10,8 +10,8 @@ interface publicDiscussionsListProps {
 const PublicDiscussionsList = ({publicDiscussions}: publicDiscussionsListProps) => {
     return (
         <div className="public-discussions--list">
-            {publicDiscussions.map((discussion) => (
-                <PublicDiscussion title={discussion.title} description={discussion.description}/>
+            {publicDiscussions.map((discussion, index) => (
+                <PublicDiscussion title={discussion.title} description={discussion.description} key={index}/>
             ))}
         </div>
     )

@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './top-menu.scss'
 import { RootState } from '../../../store/store'
 import { useSelector } from 'react-redux'
 import { useNotifications } from '../../../hooks/store/useNotification'
 import { useDiscussion } from '../../../hooks/store/useDiscussion'
 import { Link } from 'react-router-dom'
+import NotificationList from './components/notificationList'
 
 export default function Top_Menu() {
     const user = useSelector((state: RootState) => state.user.user)
     const { notificationsState, fetchNotifications } = useNotifications()
+    const notifications = notificationsState.notifications
     const { updateSearchQuery, searchQuery } = useDiscussion()
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false)
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateSearchQuery(event.target.value)
@@ -21,8 +24,12 @@ export default function Top_Menu() {
         }
     }, [user])
 
-    if (notificationsState.notifications) {
-        console.log(notificationsState)        
+    const toggleNotifications = () => {
+        setIsNotificationsOpen((prev) => !prev)
+    }
+
+    if (notifications) {
+        console.log(notifications)        
     }
 
     return (
@@ -41,8 +48,23 @@ export default function Top_Menu() {
             </div>
             <div className='right-menu-user'>
                 <div className='notifications'>
-                    <div className='notifications-image'>
+                    <div className='notification-bell' onClick={toggleNotifications}>
+                        <div className='notifications-image'>
 
+                        </div>
+                        <div className='notifications_count' style={{display: `${notifications ? 'block' : 'none'}`}}>
+                            {notifications ? 
+                                notifications.length > 9 ?
+                                    '9+'
+                                    :
+                                    notifications.length
+                                : 
+                                ''
+                            }
+                        </div>
+                    </div>
+                    <div className={`notifications-advanced ${isNotificationsOpen ? 'not-ad--open' : ''}`}>
+                        <NotificationList notifications={notifications}/>
                     </div>
                 </div>
                 <div className='profile'>

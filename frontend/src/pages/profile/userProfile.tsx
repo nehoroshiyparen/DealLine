@@ -8,35 +8,17 @@ import FriendList from "./components/friendList/friendList"
 import PublicDiscussionsList from "./components/publicDiscussionsList/publicDiscussionsList"
 import { RootState } from "../../store/store"
 import { useSelector } from "react-redux"
+import useProfileState from "../../hooks/profileComponent/useProfileState"
 
 const UserProfile = () => {
 
-    const { username } = useParams()
-    const [owner, setOwner] = useState<AdvancedUser | null>(null)
-    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const state = useProfileState()
 
-    const user = useSelector((state: RootState) => state.user.user)
-
-    const fetchUser = async() => {
-        try {
-            const response = await UserService.fetchOneUser(username!)
-            if (response.data) {
-                setOwner(response.data.user)
-            }
-        } catch (e) {
-            console.log('Пользователя с таким useraname не найдено')
-        } finally {
-            setIsLoading(false)
-        }
+    const addFriend = () => {
+        state.addFriend()
     }
 
-    useEffect(() => {
-        if (username) {
-            fetchUser()
-        }
-    }, [username])
-
-    if (isLoading) {
+    if (state.isLoading) {
         return (
             <div>
                 Загрузка пользователя...
@@ -44,13 +26,15 @@ const UserProfile = () => {
         )
     }
 
-    if (!owner) {
+    if (!state.owner) {
         return (
             <div>
                 Такого пользователя не существует
             </div>
         )
     }
+
+    // !!! сделать стейт. В нем типо все значения. Щас так думаю, будто с ним будет проще. Можно сделать все функции и все такое и тралялля 
 
     return (
         <div className="user-profile">
@@ -59,33 +43,33 @@ const UserProfile = () => {
                     <div className="profile-header">
                         <div className="profile_avatar">
                             <div className="avatar-background">
-                                <DefaultAvatar avatar={owner.avatar}/>
+                                <DefaultAvatar avatar={state.owner.avatar}/>
                             </div>
                         </div>
                         <div className="profile_wrapper">
                             <div className="profile-header_main">
                                 <div className="header-left--block">
                                     <div className="user_username">
-                                        {owner.username}
+                                        {state.owner.username}
                                     </div>
                                     <div className="edit-under--information">
                                         Укажите информацию о себе
                                     </div>
                                 </div>
                                 <div className="header-right--block">
-                                    {user ? 
-                                        user.id === owner.id ? 
+                                    {state.user ? 
+                                        state.user.id === state.owner.id ? 
                                             <div className="edit-profile--button header-profile--button">
                                                 Редактировать
                                             </div>
                                         : 
-                                            <div className="edit-profile--button header-profile--button">
+                                            <div className="edit-profile--button header-profile--button" onClick={addFriend}>
                                                 Добавить в друзья
                                             </div>
-                                        : 
-                                            <div className="edit-profile--button header-profile--button">
-                                                Добавить в друзья
-                                            </div>
+                                    : 
+                                        <div className="edit-profile--button header-profile--button">
+                                            Добавить в друзья
+                                        </div>
                                     }
                                     <div className="more-profile--button header-profile--button">
                                         Еще ⬇
@@ -101,15 +85,15 @@ const UserProfile = () => {
                             <div className="wrapper-head--title_discussions">
                                 Публичные проекты
                             </div>
-                            <PublicDiscussionsList publicDiscussions={owner.discussions}/>
+                            <PublicDiscussionsList publicDiscussions={state.owner.discussions}/>
                         </div>
                     </div>
                     <div className="right-content--wrapper content-layout--wrapper">
                         <div className="wrapper--inside">
                             <div className="wrapper-head--title_friends">
-                                Друзья  <span style={{color: '#797979'}}>{owner.friends.length}</span>
+                                Друзья  <span style={{color: '#797979'}}>{state.owner.friends.length}</span>
                             </div>
-                            <FriendList friends={owner.friends}/>
+                            <FriendList friends={state.owner.friends}/>
                         </div>
                     </div>
                 </div>

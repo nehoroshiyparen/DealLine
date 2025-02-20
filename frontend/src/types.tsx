@@ -60,10 +60,15 @@ export interface Discussion {
 }
 
 export interface Notification {
+    id: number;
     type: string;
     senderId: number;
     date: Date;
-    content: string;
+    message: string;
+    Sender: {
+        username: string;
+    },
+    discussionId: number;
 }
 
 export interface Position{
