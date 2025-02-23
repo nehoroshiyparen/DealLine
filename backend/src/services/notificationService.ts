@@ -15,7 +15,7 @@ class notificationService {
                     }]
                 })
             if (notifications.length === 0) {
-                throw ApiError.BadRequest(`У пользователя с айди ${recieverId} нет уведомлений`);
+                return {message: `У пользователя с айди ${recieverId} нет уведомлений`}
             }
             return { notifications }
         } catch (error) {

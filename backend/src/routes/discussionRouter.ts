@@ -3,7 +3,7 @@ import { deleteDiscussion, changeDiscussionStatus, invitePeesonToDiscussion, cre
 
 const router = Router()
 
-router.get('/:user_id', getAllDiscussions) // with userId
+router.get('/', getAllDiscussions) // with userId or discussionId
 router.post('/', createDiscussion)
 router.post('/update', editDiscussion)
 router.post('/addPeson/:id', invitePeesonToDiscussion)

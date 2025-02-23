@@ -29,6 +29,11 @@ const MainInfo = ({discussion}: props) => {
                     <MemberList members={discussion.members}/>
                 </div>
             </div>
+            <Link to={`../discussions/discussion_editing/${discussion.id}`}>
+                <div className="edit_discussion">
+                        
+                </div>
+            </Link>
             <div className='disc-creation_date'>
                 Дата создания: <span style={{ fontWeight: 'bold' }}>
                     {discussion.creation_date ? discussion.creation_date : '20.10.2025'}

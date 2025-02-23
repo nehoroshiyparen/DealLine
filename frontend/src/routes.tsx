@@ -3,9 +3,10 @@ import Discussion from './pages/discussions/discussions.tsx'
 import { Friends } from './pages/friends/friends.tsx'
 import LogIn from './pages/registration/login.tsx'
 import Registration from './pages/registration/registration.tsx'
-import { REGISTRATION_ROUTE, LOGIN_ROUTE, DISCUSSION_ROUTE, FRIENDS_ROUTE, NET_ROUTE, USER_PROFILE_ROUTE } from './utils/consts'
+import { REGISTRATION_ROUTE, LOGIN_ROUTE, DISCUSSION_ROUTE, FRIENDS_ROUTE, NET_ROUTE, USER_PROFILE_ROUTE, EDIT_DISCUSSION } from './utils/consts'
 import Grid from './pages/grid/grid.tsx'
 import UserProfile from './pages/profile/userProfile.tsx'
+import DiscussionEditing from './pages/DiscussionEditing/DiscussionEditing.tsx'
 
 export const PublicRoutes = [
     {
@@ -37,6 +38,11 @@ export const PrivateRoutes = [
     {
         path: USER_PROFILE_ROUTE + '/:username',
         Component: UserProfile,
+        layout: 'main'
+    },
+    {
+        path: EDIT_DISCUSSION + '/:id',
+        Component: DiscussionEditing,
         layout: 'main'
     }
 ]

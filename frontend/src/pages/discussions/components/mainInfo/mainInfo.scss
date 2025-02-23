@@ -2,6 +2,8 @@
     display: flex;
     margin-bottom: 12px;
     color: #ffffff;
+
+    width: 100%;
 }
 
 .disc-owner {
@@ -50,4 +52,22 @@
     color: #cccccc;
     line-height: 1.6;
     text-indent: 20px;
+}
+
+
+.edit_discussion {
+    position: absolute;
+    
+    width: 30px;
+    height: 30px;
+
+    background-image: url('/images/edit.png');
+    background-size: cover;
+
+    filter: invert(100%) sepia(0%) saturate(500%) hue-rotate(0deg);
+
+    right: 4%;
+    top: 0px;
+
+    cursor: pointer;
 }

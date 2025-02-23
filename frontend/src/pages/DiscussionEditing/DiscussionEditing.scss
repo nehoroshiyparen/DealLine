@@ -1,0 +1,24 @@
+.DiscussionEditing {
+    width: 80%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    padding: 40px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.edit-wrapper {
+    width: 1000px;
+    height: 1500px;
+
+    box-sizing: border-box;
+    padding: 30px 60px;
+
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+    background: #242424;
+}

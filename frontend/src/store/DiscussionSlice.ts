@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { User, Discussion, Task } from '../types'
+import { Discussion, Task } from '../types'
 import axios from 'axios'
 import { API_URL } from '../http'
 import DiscussionService from '../service/discussionService'
@@ -21,7 +21,7 @@ const initialState: discussionState = {
 export const getDiscussions = createAsyncThunk(
     'discussion/fetchUsersDsc',
     async (discussionData: {userId: number}) => {
-        const response = await DiscussionService.fetchUsersDsc(discussionData.userId)
+        const response = await DiscussionService.fetchDiscussions(discussionData.userId)
         return response.data
     }
 )

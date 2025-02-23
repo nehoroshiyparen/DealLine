@@ -25,15 +25,25 @@ secondary color: #535bf2;
   display: grid;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 a {
   font-weight: 500;
   color: white;
   text-decoration: none;
 }
 
-body {
-  margin: 0;
+input {
+  box-sizing: border-box;
   padding: 0;
+  margin: 0;
+  outline: none;
+
+  border: 1px solid rgb(119, 119, 119);
+  border-radius: 0px;
 }
 
 .container {

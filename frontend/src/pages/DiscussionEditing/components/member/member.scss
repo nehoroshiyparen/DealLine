@@ -1,0 +1,106 @@
+.member-list--editeble {
+    border-radius: 6px;
+    background: #343434;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.mini-profile--member {
+    margin-bottom: 5px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.mini-profile--user:hover {
+    background: #424242;
+}
+
+.mini-profile--avatar {
+
+}
+
+.mini-profile--contacts {
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+    padding: 0 0 0 10px;
+}
+
+.m-p-contacts--username, .m-p-contacts--email {
+    font-size: 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    overflow: hidden;
+    width: 245px;
+}
+
+.m-p-contacts--username {
+    color: #6598ff;
+    font-weight: bold;
+}
+
+.m-p-contacts--email {
+    color: rgb(187, 187, 187);
+}
+
+.delete-member {
+    width: 35px;
+    aspect-ratio: 1/1;
+
+    background-image: url('/images/close.png');
+    background-size: cover;
+    filter: invert(100%);
+
+    margin-left: 40px;
+
+    cursor: pointer;
+}
+
+.edit-member--element {
+    position: relative;
+    box-sizing: border-box;
+    padding: 0 8px;
+}
+
+.edit-member {
+    width: 21px;
+    aspect-ratio: 1/1;
+
+    background-image: url('/images/dots.png');
+    background-size: cover;
+    filter: invert(100%);
+}
+
+.edit-member--functions {
+    position: absolute;
+    left: 100%;
+    top: -5px;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-wrap: nowrap;
+
+    padding: 7px 10px;
+    box-sizing: border-box;
+
+    background: rgb(45, 45, 45);
+    color: white;
+
+    cursor: pointer;
+
+    display: none;
+}
+
+.edit-member--element:hover .edit-member--functions {
+    display: block;
+}
+

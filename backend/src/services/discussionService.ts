@@ -4,18 +4,23 @@ import ApiError from "../exceptions/api-error"
 import { Patch, TaskInterface, TopicInterface } from "../../types/types"
 
 class discussionService {
-    async getAllUsersDiscussions(id: number) {
+    async getDiscussions(userId?: number, discussionId?: number) {
         interface UserWithDiscussions extends User {
             discussions: Discussion[];
         }
     
         try {
+            // Условия для поиска
+            const whereCondition: any = {};
+            if (userId) whereCondition.id = userId;
+    
             const user = await User.findOne({
-                where: { id },
+                where: whereCondition,
                 include: [
                     {
                         model: Discussion,
                         as: 'discussions',
+                        where: discussionId ? { id: discussionId } : undefined, 
                         include: [
                             {
                                 model: User,
@@ -60,7 +65,7 @@ class discussionService {
             });
     
             if (!user) {
-                throw ApiError.BadRequest(`Пользователь с ID ${id} не найден`);
+                throw ApiError.BadRequest(`Пользователь с ID ${userId} не найден`);
             }
     
             const discussions = (user as UserWithDiscussions).discussions.map((discussion: any) => ({
@@ -110,12 +115,12 @@ class discussionService {
                 })),
             }));
     
-            return { discussions };
+            return discussionId ? discussions[0] : { discussions };
         } catch (e) {
             console.error(e);
             throw ApiError.BadRequest(`Ошибка при получении данных об обсуждениях: ${e}`);
         }
-    }    
+    }
 
     async createDiscussion(title: string,  topics?: TopicInterface[], description?: string, participants?: number[], creatorId?: number) {
         const transaction = await sequelize.transaction()

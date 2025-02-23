@@ -11,13 +11,22 @@ export default class UserService {
         return await $api.get<AdvancedUserResponse>(`/users/${username}`)
     }
 
-    static async addFriend(senderId: number, resieverId: number, message: string): Promise<AxiosResponse<NotificationResponse>> {
-        return await $api.post('notifications/send_notificationrs', {
-            type: 'friend_request',
-            senderId,
-            resieverId,
-            message,
-            discussionId: null
+    static async addFriend(senderId: number, recieverId: number, message: string): Promise<AxiosResponse<NotificationResponse>> {
+        return await $api.post('notifications/send_notification', {
+            patch: {
+                type: 'friend_request',
+                senderId,
+                recieverId,
+                message,
+                discussionId: null
+            }
+        })
+    }
+
+    static async deleteFriend(senderId: number, recieverId: number): Promise<AxiosResponse<NotificationResponse>> {
+        return await $api.post('users/deleteFriend', {
+            firstId: senderId,
+            secondId: recieverId,
         })
     }
 }

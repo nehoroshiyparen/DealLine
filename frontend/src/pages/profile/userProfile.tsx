@@ -18,6 +18,10 @@ const UserProfile = () => {
         state.addFriend()
     }
 
+    const deleteFriend = () => {
+        state.deleteFriend()
+    }
+
     if (state.isLoading) {
         return (
             <div>
@@ -33,8 +37,6 @@ const UserProfile = () => {
             </div>
         )
     }
-
-    // !!! сделать стейт. В нем типо все значения. Щас так думаю, будто с ним будет проще. Можно сделать все функции и все такое и тралялля 
 
     return (
         <div className="user-profile">
@@ -63,9 +65,14 @@ const UserProfile = () => {
                                                 Редактировать
                                             </div>
                                         : 
-                                            <div className="edit-profile--button header-profile--button" onClick={addFriend}>
-                                                Добавить в друзья
-                                            </div>
+                                            state.owner.friends.some((friend) => friend.id === state.user?.id) ? 
+                                                <div className="edit-profile--button header-profile--button" onClick={deleteFriend}>
+                                                    Удалить из друзей
+                                                </div>
+                                                :
+                                                <div className="edit-profile--button header-profile--button" onClick={addFriend}>
+                                                    Добавить в друзья
+                                                </div>
                                     : 
                                         <div className="edit-profile--button header-profile--button">
                                             Добавить в друзья

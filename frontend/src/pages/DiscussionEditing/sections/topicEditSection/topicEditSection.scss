@@ -1,0 +1,18 @@
+
+.topics-editing {
+    width: 100%;
+
+    box-sizing: border-box;
+    padding: 15px 30px;
+
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 30px;
+
+    position: relative;
+}
+
+.selectedTopicTitle {
+    font-size: 30px;
+}

@@ -21,7 +21,7 @@ export const sendNotification = async(req: Request, res: Response) => {
         res.json(notificationCreateRequest)
     } catch (error) {
         if (error instanceof ApiError) {
-            res.status(error.status).json({
+            res.status(200).json({
                 message: error.message,
                 error: error.errors || []
             })

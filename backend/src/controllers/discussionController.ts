@@ -7,8 +7,10 @@ import { DiscussionInterface } from "../../types/types";
 
 export const getAllDiscussions = async(req: Request, res: Response) => {
     try {
-        const { user_id } = req.params
-        const discussions = await discussionService.getAllUsersDiscussions(Number(user_id))
+        const userId = Number(req.query.user_id);
+        const discussionId = req.query.discussion_id ? Number(req.query.discussion_id) : undefined;
+
+        const discussions = await discussionService.getDiscussions(Number(userId), Number(discussionId))
         res.json(discussions) 
     } catch (error) {
         res.json({message :'Ошибка получения обсуждений: ', error})

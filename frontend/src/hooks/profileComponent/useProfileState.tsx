@@ -36,10 +36,21 @@ const useProfileState = () => {
         try {
             if (user && owner) {
                 const response = await UserService.addFriend(user.id, owner.id, message)   
-                console.log(response.data.message)
+                return response.data.message
             }
         } catch (e) {
             console.log('Произошла ошибка , епть: ', e)
+        }
+    }
+
+    const deleteFriend = async() => {
+        try {
+            if (user && owner) {
+                const response = await UserService.deleteFriend(user.id, owner.id)
+                return response.data.message
+            }
+        } catch (e) {
+            console.log('Ошибка при удалении из друзей', e)
         }
     }
 
@@ -50,6 +61,7 @@ const useProfileState = () => {
         user,
 
         addFriend,
+        deleteFriend,
     }
 }
 

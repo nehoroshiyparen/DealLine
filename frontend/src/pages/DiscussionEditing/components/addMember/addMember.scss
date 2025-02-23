@@ -1,0 +1,65 @@
+.add-member {
+    width: 100%;
+
+    box-sizing: border-box;
+    padding: 0;
+
+    position: relative;
+}
+
+.example {
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+.text-_send_invitation_ {
+    margin-left: 10px;
+
+    color: rgb(116, 169, 255);
+}
+
+.invitation-list--open {
+    width: 25px;
+    aspect-ratio: 1/1;
+
+    background-image: url('/images/direction.png');
+    background-size: cover;
+
+    margin-left: 70px;
+
+    transition: 0.3s;
+}
+
+.invitation-list {
+    position: absolute;
+    width: 100%;
+
+    background: #343434;    
+
+    transition: 0.3s;
+
+    border-radius: 0 0 10px 10px;
+
+    overflow: hidden;
+}
+
+.invitation-list--inside {
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.search-person--input {
+    width: 100%;
+
+    border-radius: 0px;
+    border: none;
+    border-bottom: 2px solid #656565;
+    
+    background: none;
+
+    font-size: 17px;
+
+    padding: 7px 15px;
+}
