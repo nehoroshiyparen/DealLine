@@ -3,10 +3,18 @@ import { useDiscussionEditContext } from '../../context+provider/discussionEditC
 import './discussionEditSection.scss'
 import Member from '../../components/member/member'
 import AddMember from '../../components/addMember/addMember'
+import TextareaEditor from '../../components/editors/TextareaEditor'
+import InputEditor from '../../components/editors/InputEditor'
+import { MiniUser } from '../../../../types'
+import { useEffect, useState } from 'react'
+import UserService from '../../../../service/userService'
 
 const DiscussionEditSection = () => {
 
+    const [friends, setFriends] = useState<MiniUser[]>()
+
     const { 
+        user,
         discussion,
         title,
         setTitle,
@@ -19,6 +27,20 @@ const DiscussionEditSection = () => {
 
     } = useDiscussionEditContext()
 
+    useEffect(() => {
+        if (user) {
+            const fetchUserFriends = async() => {
+                const response = await UserService.getUserFriends(user.id)
+                const data = response.data
+                setFriends(data.friends)
+            }
+
+            fetchUserFriends()
+        }
+    }, [])
+
+    if (!discussion) return null
+
     return (
         <div className='discussion-edit--section'>
             <div className='discussion__title--editing'>
@@ -29,28 +51,24 @@ const DiscussionEditSection = () => {
                         <div className="param-title _title">
                             Название:
                         </div>
-                        <input 
-                            className='edit-box title'
-                            style={{}}
-                            value={title || ''}
-                            onChange={(e) => setTitle(e.target.value)}
-                            >
-
-                        </input>
+                        <InputEditor 
+                            state={title} 
+                            setState={setTitle} 
+                            entity='discussion' 
+                            id={discussion.id}
+                        />
                     </div>
                     <div className="editeble-param">
                         <div className="param-title _description">
                             Описание:
                         </div>
-                        <textarea 
-                            className='edit-box title'
-                            style={{height: '180px'}}
-                            placeholder='Опишите свой проект'
-                            onChange={(e) => setDescription(e.target.value)}
-                            value={description || ''}
-                            >
-
-                        </textarea>
+                        <TextareaEditor 
+                            state={description} 
+                            setState={setDescription} 
+                            placeholder='Опишите проект'
+                            entity='discussion'
+                            id={discussion.id}
+                        />
                     </div>
                     <div className="editeble-param">
                         <div className="param-title _owner">
@@ -66,10 +84,12 @@ const DiscussionEditSection = () => {
                         </div>
                         <div className='regular-box'>
                             <div className='member-list--editeble'>
-                                {members?.map((member) => (
-                                    <Member member={member} owner={owner!} key={member.id}/>
-                                )).reverse()}
-                                <AddMember/>
+                                <div className='member-list--scroll'>
+                                    {members?.map((member) => (
+                                        <Member member={member} owner={owner!} key={member.id}/>
+                                    )).reverse()}
+                                </div>
+                                <AddMember users={friends} type='friends'/>
                             </div>
                         </div>
                     </div>

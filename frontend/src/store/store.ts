@@ -1,7 +1,7 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import discussionsReducer from './DiscussionSlice'
 import userReducer from './userSlice'
-import notificationReducer from './notificationStore'
+import notificationReducer from './notificationSlice'
 
 const store = configureStore({
     reducer: {

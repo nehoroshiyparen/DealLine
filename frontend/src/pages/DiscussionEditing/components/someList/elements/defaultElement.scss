@@ -8,7 +8,9 @@
 
     margin-bottom: 8px;
 
-    border-bottom: 1px solid #989898;
-
     cursor: pointer;
+}
+
+.default-list-element:hover {
+    background: rgb(90, 90, 90);
 }

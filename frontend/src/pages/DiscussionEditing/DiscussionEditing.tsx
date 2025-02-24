@@ -8,13 +8,17 @@ import { DiscussionEditProvider } from './context+provider/discussionEditProvide
 import DiscussionEditSection from './sections/discussionEditSection/discussionEditSection'
 import TopicEditSection from './sections/topicEditSection/topicEditSection'
 import TaskEditSection from './sections/taskEditSection/taskEditSection'
+import SaveSection from './sections/saveSection/saveSection'
 
 const DiscussionEditing = () => {
 
     const state = useDiscussionEditingState()
 
     const ContextValue = {
+        user: state.user,
         discussion: state.discussion,
+        updatedDiscussion: state.updatedDiscussion,
+        updateField: state.updateField,
         title: state.title,
         setTitle: state.setTitle,
         description: state.description,
@@ -32,7 +36,17 @@ const DiscussionEditing = () => {
         selectedTask: state.selectedTask,
         setSelectedTask: state.setSelectedTask,
         selectedTaskTitle: state.selecetedTaskTitle,
-        setSelectedTaskTitle: state.setSelectedTaskTitle
+        setSelectedTaskTitle: state.setSelectedTaskTitle,
+        selectedTaskDescription: state.selectedTaskDescription,
+        setSelectedTaskDescription: state.setSelectedTaskDescription,
+        selectedTaskAssignees: state.selectedTaskAssignees,
+        setSelectedTaskAssignees: state.setSelectedTaskAssignees,
+        selectedTaskDeadline: state.selectedTaskDeadline,
+        setSelectedTaskDeadline: state.setSelectedTaskDeadline,
+        selectedTaskPriority: state.selectedTaskPriority,
+        setSelectedTaskPriority: state.setSelectedTaskPriority,
+        selectedTaskStatus: state.selectedTaskStatus,
+        setSelectedTaskStatus: state.setSelectedTaskStatus,
     }
 
     return (
@@ -40,10 +54,12 @@ const DiscussionEditing = () => {
             <div className="edit-wrapper">
                 <DiscussionEditProvider value={ContextValue}>
                     <DiscussionEditSection/>
-                        <DefaultSeparation/>
+                    <DefaultSeparation/>
                     <TopicEditSection/>
-                        <DefaultSeparation/>
+                    <DefaultSeparation/>
                     <TaskEditSection/>
+                    <DefaultSeparation/>
+                    <SaveSection/>
                 </DiscussionEditProvider>
             </div>
         </div>

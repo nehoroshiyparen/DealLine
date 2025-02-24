@@ -4,11 +4,10 @@ export interface MiniUserListResponse {
     users: MiniUser[];
 }
 
-export interface AdvancedUserResponse {
-    user: AdvancedUser;
+export interface FriendListResponse {
+    friends: MiniUser[];
 }
 
-export interface NotificationResponse {
-    message: string;
-    errors: [];
+export interface AdvancedUserResponse {
+    user: AdvancedUser;
 }

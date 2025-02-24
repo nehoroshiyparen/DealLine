@@ -1,7 +1,7 @@
 import { Comment, Discussion, sequelize, Task, Topic, User } from "../../database/models"
 import { Op } from 'sequelize'
 import ApiError from "../exceptions/api-error"
-import { Patch, TaskInterface, TopicInterface } from "../../types/types"
+import { DiscussionUpdatingPatch, TaskInterface, TopicInterface } from "../../types/types"
 
 class discussionService {
     async getDiscussions(userId?: number, discussionId?: number) {
@@ -95,7 +95,7 @@ class discussionService {
                         deadline: task.deadline,
                         priority: task.priority,
                         status: task.status,
-                        responsible: task.assignees.map((assignee: any) => ({
+                        assignees: task.assignees.map((assignee: any) => ({
                             id: assignee.id,
                             username: assignee.username,
                             email: assignee.email,
@@ -177,7 +177,7 @@ class discussionService {
         }
     }
 
-    async updateDiscussion(id: number, patch: Patch) {
+    async updateDiscussion(id: number, patch: DiscussionUpdatingPatch) {
         const transaction = await sequelize.transaction()
         try {
             let updatedDiscussion = null;
@@ -233,11 +233,7 @@ class discussionService {
             }
     
             await transaction.commit();
-            return {
-                discussion: updatedDiscussion,
-                tasks: updatedTasks,
-                topics: updatedTopics
-            };
+            return 'Все успешно обновлено'
         } catch (error) {
             await transaction.rollback();
             console.log(error);
@@ -251,12 +247,12 @@ class discussionService {
         try {
             await Task.destroy({ where: {discussionId: id}, transaction })
             const affectedRow = await Discussion.destroy({where: { id }, transaction })
-            if (affectedRow === 0 ) {
+            if (affectedRow === 0) {
                 throw ApiError.BadRequest('Такого обсуждения не было найдено')
             }
             await transaction.commit()
 
-            return { message: 'Обсуждение и привязанные к нему задания были удалены' }
+            return { message: 'Обсуждение и привязанные к нему темы и задания были удалены' }
         } catch (error: unknown) {
             await transaction.rollback()
             console.log('Ошибка при удалении обсуждения: ', error)

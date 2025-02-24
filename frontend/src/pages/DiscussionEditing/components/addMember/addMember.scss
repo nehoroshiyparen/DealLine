@@ -2,9 +2,11 @@
     width: 100%;
 
     box-sizing: border-box;
-    padding: 0;
+    padding: 4px 0 0 0;
 
     position: relative;
+
+    border-top: 2px solid #545454;
 }
 
 .example {
@@ -34,9 +36,12 @@
 
 .invitation-list {
     position: absolute;
+    z-index: 2;
+    
     width: 100%;
 
-    background: #343434;    
+    background: rgb(71,71,71);
+    background: linear-gradient(0deg, rgba(71,71,71,1) 0%, rgba(52,52,52,1) 100%);   
 
     transition: 0.3s;
 
@@ -62,4 +67,23 @@
     font-size: 17px;
 
     padding: 7px 15px;
+}
+
+.searching-list {
+    box-sizing: border-box;
+    padding: 5px 20px;
+}
+
+.available-user {
+    box-sizing: border-box;
+    padding: 5px 10px;
+
+    font-size: 19px;
+    color: white;
+
+    cursor: pointer;
+}
+
+.available-user:hover {
+    background: rgb(109, 109, 109);
 }

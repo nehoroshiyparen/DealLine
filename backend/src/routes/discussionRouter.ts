@@ -8,6 +8,6 @@ router.post('/', createDiscussion)
 router.post('/update', editDiscussion)
 router.post('/addPeson/:id', invitePeesonToDiscussion)
 router.post('/status/:id', changeDiscussionStatus)
-router.delete('/:id', deleteDiscussion)
+router.post('/delete/:id', deleteDiscussion)
 
 export default router

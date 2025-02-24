@@ -2,12 +2,11 @@ import { Link } from "react-router-dom";
 import { MiniUser } from "../../../../types";
 import './member.scss'
 
-interface MemberProps {
+interface AssigneeProps {
     member: MiniUser;
-    owner: MiniUser;
 }
 
-const Member = ({member, owner}: MemberProps) => {
+const Assignee = ({member}: AssigneeProps) => {
     return (
         <div className="mini-profile--member">
             <div className="mini-profile--avatar">
@@ -23,7 +22,6 @@ const Member = ({member, owner}: MemberProps) => {
                 <Link 
                     to={`../../user/${member.username}`} 
                     className="profile--link"
-                    style={{color: `${ member.id === owner.id ? '#ff9092' : '' }`}}
                 >
                     {member.username}
                 </Link>
@@ -38,16 +36,9 @@ const Member = ({member, owner}: MemberProps) => {
                 <div className="edit-member">
 
                 </div>
-                    <div className="edit-member--functions">
-                        <div className="transfer-rights">
-                            {member.id === owner.id 
-                            ? <span>Глава обсуждения</span>
-                            : <span>Сделать главным</span>}
-                        </div>
-                    </div>
-                </div>
+            </div>
         </div>
     )
 }
 
-export default Member
+export default Assignee

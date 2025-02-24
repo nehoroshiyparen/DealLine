@@ -61,9 +61,9 @@ export const changeDiscussionStatus = async(req: Request, res: Response) => {
 
 export const deleteDiscussion = async(req: Request, res: Response) => {
     try {
-        const { id } = req.params
+        const { id } = req.body
         const removeDiscussion = await discussionService.deleteDiscussion(Number(id))
-        res.json(removeDiscussion)
+        res.json('Обсуждение удалено')
     } catch (error) {
         res.json({message :'Ошибка при удалении обсуждения: ', error})    
     }

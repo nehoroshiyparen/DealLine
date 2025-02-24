@@ -1,7 +1,7 @@
 //Логика работы с обсуждениями ( Получение с бд, взаимодействие через redux )
 import { useSelector, useDispatch } from "react-redux"
 import type { RootState, AppDispatch } from "../../store/store.ts"
-import { getDiscussions, setSearchQuery } from "../../store/DiscussionSlice.ts"
+import { deleteDiscussion, getDiscussions, setSearchQuery } from "../../store/DiscussionSlice.ts"
 
 export const useDiscussion = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -13,9 +13,13 @@ export const useDiscussion = () => {
         dispatch(fetchedDiscussions)
     }
 
-    const updateSearchQuery = async( string: string ) => {
+    const updateSearchQuery = ( string: string ) => {
         dispatch(setSearchQuery(string))
     }
 
-    return { discussionsState, fetchDiscussions, searchQuery, updateSearchQuery }
+    const handleDeleteDiscussion = (discussion_id: number) => { // не нужно по итогу чтоли ???? Пзида...
+        dispatch(deleteDiscussion(discussion_id))
+    }
+
+    return { discussionsState, fetchDiscussions, searchQuery, updateSearchQuery, handleDeleteDiscussion }
 }

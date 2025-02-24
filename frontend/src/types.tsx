@@ -79,3 +79,9 @@ export interface Position{
     x: number,
     y: number
 }
+ 
+export interface DiscussionUpdatingPatch {
+    discussion?: Partial<Discussion>;
+    topics?: Partial<Topic>[];
+    tasks?: Partial<Task>[];
+}

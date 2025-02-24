@@ -1,5 +1,9 @@
 import { Discussion } from "../../types";
 
+export interface DiscussionListResponse {
+    discussions: Discussion[];
+}
+
 export interface DiscussionResponse {
-    discussions: Discussion[] | Discussion;
+    discussion: Discussion;
 }

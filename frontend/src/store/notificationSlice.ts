@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
-import { User, Notification } from "../types"
+import { MiniUser, Notification } from "../types"
 import NotificationService from "../service/notificationService";
 
 interface notificationState {

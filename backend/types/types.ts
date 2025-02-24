@@ -34,7 +34,7 @@ export interface DiscussionInterface {
     topics?: TopicInterface[]
 }
 
-export interface Patch {
+export interface DiscussionUpdatingPatch {
     discussion?: Partial<Discussion>;
     topics? : Partial<Topic>[];
     tasks?: Partial<Task>[];

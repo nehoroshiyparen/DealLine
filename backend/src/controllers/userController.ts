@@ -103,6 +103,12 @@ export const getUserInfo = async(req: Request, res: Response) => {
     }
 }
 
+export const getUserFriends = async(req: Request, res: Response) => {
+    const { id } = req.params
+    const friends = await userService.getUserFriends(Number(id))
+    res.json(friends)
+}
+
 export const deleteFriend = async(req: Request, res: Response) => {
     try {
         const {  firstId, secondId } = req.body

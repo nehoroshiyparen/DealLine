@@ -49,9 +49,7 @@ const DefaultList = ({ list, state, setState }: DefaultListProps) => {
         setFilteredElements(renderedList);
     }, [searchQuery, list]); 
 
-    if (!list) return 'Пизда';
-
-    console.log(list)
+    if (!list) return null;
 
     return (
         <div className='element-choosing--editing'>

@@ -145,6 +145,31 @@ class UserService {
         }
     }
 
+    async getUserFriends(userId: number) {
+        try {
+            const user = await User.findOne({where: {id: userId}})
+            if (!user) {
+                throw ApiError.BadRequest(`Пользователя с id: ${userId} не существует`)
+            }
+
+            const friends = await User.findOne({
+                where: {id: userId},
+                attributes: [],
+                include: [
+                    {
+                        model: User,
+                        as: 'friends',
+                        attributes: ['id', 'username', 'email', 'avatar'],
+                    }
+                ]
+            })
+
+            return friends
+        } catch (e) {
+            throw ApiError.BadRequest(`Непредвиденная ошибка при получении информации о друзьях ${e}`)
+        }
+    }
+
     async deleteFriend(firstId: number, secondId: number) {
         try {
             const userExist = await User.findAll({

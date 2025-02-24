@@ -43,7 +43,7 @@ export default function Grid() {
 
     useEffect(() => {
         if (discussions) {
-            setCurDis(discussions[1]);
+            setCurDis(discussions[0]);
         }
     }, [discussions]);
 
@@ -51,14 +51,14 @@ export default function Grid() {
         if (curDis) {
             const fetchAndGenerateGraph = async () => {
                 try {
-                    const response = await NetService.fetchPositions(user.user.id, curDis.id);
+                    const response = await NetService.fetchPositions(user.user!.id, curDis.id); /// !!!
                     let elements
 
                     if (response.data.length === 0) {
                         elements = await generateGraph(curDis, openInfo);
-                        await NetService.updatePositions(user.user.id, elements.positions)
+                        await NetService.updatePositions(user.user!.id, elements.positions) /// !!!
                     } else {
-                        elements = await fetchGrid(user.user.id, curDis, openInfo)
+                        elements = await fetchGrid(user.user!.id, curDis, openInfo) /// !!!
                     }
                     setNodes(elements.nodes);
                     setEdges(elements.edges);
@@ -95,8 +95,8 @@ export default function Grid() {
                     <Controls />
                 </ReactFlow>
                 <ZoomManager onZoomChange={setZoom} />
-                <Save userId={Number(user.user.id)} discussion={curDis!} state={hasChanged}/>
-                <Mix setNodes={setNodes} setHasChanged={setHasChanged} userId={user.user.id} discussion={curDis!} onClick={openInfo}/>
+                <Save userId={Number(user.user!.id)} discussion={curDis!} state={hasChanged}/> 
+                <Mix setNodes={setNodes} setHasChanged={setHasChanged} userId={user.user!.id} discussion={curDis!} onClick={openInfo}/>
                 <TaskInformation taskId={taskId} infoOpen={infoOpen} setInfoOpen={setInfoOpen}/>
             </div>
         </ReactFlowProvider>

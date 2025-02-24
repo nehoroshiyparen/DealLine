@@ -1,10 +1,28 @@
 import { useEffect, useRef, useState } from 'react'
 import './addMember.scss'
+import { MiniUser } from '../../../../types'
+import AvailableUser from './member';
+import DiscussionService from '../../../../service/discussionService';
+import { useDiscussionEditContext } from '../../context+provider/discussionEditContext';
 
-const AddMember = () => {
+interface AddMemberProps {
+    users: MiniUser[] | undefined;
+    type: 'friends' | 'assignees';
+}
+
+const AddMember = ({users, type}: AddMemberProps) => {
 
     const [isListOpen, setIsListOpen] = useState<boolean>(false)
     const listRef = useRef<HTMLDivElement | null>(null)
+
+    const {
+        user,
+        discussion,
+        selectedTask,
+        updateField,
+        selectedTaskAssignees,
+        setSelectedTaskAssignees,
+    } = useDiscussionEditContext()
 
     const openList = () => {
         setIsListOpen((prev) => !prev)
@@ -22,6 +40,32 @@ const AddMember = () => {
         }
     }, [isListOpen])
 
+    const addFriend = (reciever_id: number) => {
+        try {
+            if (user && discussion) {
+                const response = DiscussionService.sendInvitation(user?.id, reciever_id, discussion.id)
+                console.log(response)
+            }
+        } catch (e) {
+            console.log('Не получилось отправить приглашение в обсуждение', e)
+        }
+    }
+
+    const addAssignee = (user: MiniUser) => {
+
+        if ((selectedTaskAssignees || []).some(assignee => assignee.id === user.id)) {
+            return selectedTaskAssignees; 
+        }
+
+        updateField(
+            "assignees",
+            (prevAssignees: MiniUser[]) => [...prevAssignees, user], // Добавляем нового пользователя
+            selectedTask!.id,
+            "task"
+        );
+        setSelectedTaskAssignees(prev => [...(prev || []), user]);
+    };
+
     return (
         <div className="add-member">
             <div className='example' onClick={openList}>
@@ -35,7 +79,7 @@ const AddMember = () => {
                         className="member-avatar"/>
                 </div>
                 <div className='text-_send_invitation_'>
-                    Пригласите нового участника
+                    {type === 'friends' ? 'Пригласите нового участника' : 'Добавьте ответственных'}
                 </div>
                 <div className={`invitation-list--open`} style={{rotate: `${isListOpen ? '-90deg' : '0deg'}`}}>
 
@@ -47,6 +91,14 @@ const AddMember = () => {
                         className='search-person--input'
                         placeholder='Найти человека'
                         />
+                </div>
+                <div className='searching-list'>
+                    {users?.map((user) => (
+                        <AvailableUser user={user} key={user.id} func={type === 'friends' ? 
+                            () => addFriend(user.id) : 
+                            () => addAssignee(user)}
+                        />
+                    ))}
                 </div>
             </div>
         </div>

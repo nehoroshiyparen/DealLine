@@ -32,6 +32,11 @@ const discussionSlice = createSlice({
     reducers: {
         setSearchQuery: (state, action) => {
             state.searchQuery = action.payload
+        },
+        deleteDiscussion: (state, action: PayloadAction<number>) => {
+            state.discussions = state.discussions!.filter(
+                (discussion) => discussion.id !== action.payload
+            )
         }
     },
     extraReducers: (builder) => {
@@ -49,6 +54,6 @@ const discussionSlice = createSlice({
     }
 })
 
-export const { setSearchQuery } = discussionSlice.actions
+export const { setSearchQuery, deleteDiscussion } = discussionSlice.actions
 
 export default discussionSlice.reducer

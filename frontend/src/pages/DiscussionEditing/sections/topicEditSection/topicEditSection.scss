@@ -16,3 +16,48 @@
 .selectedTopicTitle {
     font-size: 30px;
 }
+
+.edit-functions--block {
+    display: flex;
+    gap: 20px;
+}
+
+.edit-function {
+    box-sizing: border-box;
+    padding: 5px 12px;
+
+    font-weight: 500;
+
+    border-radius: 4px;
+
+    transition: 0.2s;
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.add-element {
+    background: rgb(49, 162, 0);
+}
+
+.add-element:hover {
+    background: rgb(52, 174, 0);
+}
+
+.delete-element {
+    background: #3b3b3b85;
+    color: rgb(103, 103, 103);
+
+    cursor: default;
+}
+
+.delete-element.selected {
+    background: #4d4d4d;
+    color: white;
+    
+    cursor: pointer;
+}
+
+.delete-element.selected:hover {
+    background: #535353;
+}

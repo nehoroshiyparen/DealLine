@@ -9,6 +9,19 @@
     padding: 15px;
 }
 
+.member-list--scroll {
+    max-height: 161.5px;
+
+    overflow-y: scroll;
+    overflow-x: auto;
+
+    scrollbar-width: none;
+}
+
+.member-list--scroll::-webkit-scrollbar {
+    display: none;
+}
+
 .mini-profile--member {
     margin-bottom: 5px;
 

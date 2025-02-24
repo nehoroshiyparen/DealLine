@@ -1,0 +1,43 @@
+.save-section {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+    box-sizing: border-box;
+    padding: 30px;
+
+    margin-bottom: 20px;
+}
+
+.save-section-button {
+    border-radius: 10px;
+
+    box-sizing: border-box;
+    padding: 10px 30px;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+    min-width: 265px;
+
+    text-align: center;
+}
+
+.save-func {
+    background: #31a200;
+}
+
+.save-func:hover {
+    background: #34ae00;
+}
+
+.delete-func {
+    background: #4d4d4d;
+}
+
+.delete-func:hover {
+    background: #545454;
+}

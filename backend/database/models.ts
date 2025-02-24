@@ -125,7 +125,7 @@ Task.init({
     description: { type: DataTypes.TEXT, allowNull: true },
     priority: { type: DataTypes.STRING, allowNull: true, validate: {isIn: [['Высокий' , 'Средний' , 'Низкий']]} },
     deadline: { type: DataTypes.DATE, allowNull: true },
-    status: {type: DataTypes.STRING, allowNull: false, defaultValue: 'В процессе выполнения', validate: { isIn: [['В процессе выполнения', 'Выполенено']],} },
+    status: {type: DataTypes.STRING, allowNull: false, defaultValue: 'В процессе', validate: { isIn: [['В процессе', 'Выполенено']],} },
     topicId: { type: DataTypes.INTEGER, references: { model: Topic, key: 'id' } },
     discussionId: { type: DataTypes.INTEGER, allowNull: false, references: { model: Discussion, key: 'id' } },
 }, {

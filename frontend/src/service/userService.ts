@@ -1,6 +1,7 @@
 import $api from "../http";
 import { AxiosResponse } from "axios";
-import { AdvancedUserResponse, MiniUserListResponse, NotificationResponse } from "../models/response/userResponse";
+import { AdvancedUserResponse, FriendListResponse, MiniUserListResponse } from "../models/response/userResponse";
+import { DefaultNotificationResponse } from "../models/response/notificationResponse";
 
 export default class UserService {
     static async fetchUsers(username: string, page: number): Promise<AxiosResponse<MiniUserListResponse>> {
@@ -11,7 +12,11 @@ export default class UserService {
         return await $api.get<AdvancedUserResponse>(`/users/${username}`)
     }
 
-    static async addFriend(senderId: number, recieverId: number, message: string): Promise<AxiosResponse<NotificationResponse>> {
+    static async getUserFriends(id: number): Promise<AxiosResponse<FriendListResponse>> {
+        return await $api.get<FriendListResponse>(`users/getUserFriends/${id}`)
+    }
+
+    static async addFriend(senderId: number, recieverId: number, message: string): Promise<AxiosResponse<DefaultNotificationResponse>> {
         return await $api.post('notifications/send_notification', {
             patch: {
                 type: 'friend_request',
@@ -23,7 +28,7 @@ export default class UserService {
         })
     }
 
-    static async deleteFriend(senderId: number, recieverId: number): Promise<AxiosResponse<NotificationResponse>> {
+    static async deleteFriend(senderId: number, recieverId: number): Promise<AxiosResponse<DefaultNotificationResponse>> {
         return await $api.post('users/deleteFriend', {
             firstId: senderId,
             secondId: recieverId,
