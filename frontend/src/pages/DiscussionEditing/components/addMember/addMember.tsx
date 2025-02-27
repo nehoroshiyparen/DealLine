@@ -22,6 +22,7 @@ const AddMember = ({users, type}: AddMemberProps) => {
         updateField,
         selectedTaskAssignees,
         setSelectedTaskAssignees,
+        isNewDiscussion,
     } = useDiscussionEditContext()
 
     const openList = () => {
@@ -40,10 +41,10 @@ const AddMember = ({users, type}: AddMemberProps) => {
         }
     }, [isListOpen])
 
-    const addFriend = (reciever_id: number) => {
+    const addFriend = (reciever: MiniUser) => {
         try {
             if (user && discussion) {
-                const response = DiscussionService.sendInvitation(user?.id, reciever_id, discussion.id)
+                const response = DiscussionService.sendInvitation(user?.id, reciever.id, discussion.id!)
                 console.log(response)
             }
         } catch (e) {
@@ -52,19 +53,32 @@ const AddMember = ({users, type}: AddMemberProps) => {
     }
 
     const addAssignee = (user: MiniUser) => {
-
+        console.log("Добавляем пользователя:", user);
+        console.log("Текущие исполнители:", selectedTaskAssignees);
+    
         if ((selectedTaskAssignees || []).some(assignee => assignee.id === user.id)) {
+            console.log("Пользователь уже в списке!");
             return selectedTaskAssignees; 
         }
-
-        updateField(
-            "assignees",
-            (prevAssignees: MiniUser[]) => [...prevAssignees, user], // Добавляем нового пользователя
-            selectedTask!.id,
-            "task"
-        );
-        setSelectedTaskAssignees(prev => [...(prev || []), user]);
+    
+        setSelectedTaskAssignees(prev => {
+            console.log("Обновляем локальный стейт:", prev);
+            return [...(prev || []), user];
+        });
     };
+
+    useEffect(() => {
+        if (selectedTaskAssignees) {
+            updateField(
+                "assignees",
+                selectedTaskAssignees,
+                selectedTask!.id,
+                "task"
+            );
+        }
+    }, [selectedTaskAssignees])
+
+    if (isNewDiscussion && type === 'friends') return null
 
     return (
         <div className="add-member">
@@ -95,8 +109,8 @@ const AddMember = ({users, type}: AddMemberProps) => {
                 <div className='searching-list'>
                     {users?.map((user) => (
                         <AvailableUser user={user} key={user.id} func={type === 'friends' ? 
-                            () => addFriend(user.id) : 
-                            () => addAssignee(user)}
+                            addFriend : 
+                            addAssignee}
                         />
                     ))}
                 </div>

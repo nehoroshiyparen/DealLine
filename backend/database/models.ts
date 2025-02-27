@@ -111,12 +111,11 @@ class Task extends Model {
     public status!: string;
     public topicId!: number;
     public discussionId!: number;
-    public assignees!: number[];
 
     public addUser!: BelongsToManyAddAssociationMixin<User, number>;
-    public getUsers!: BelongsToManyGetAssociationsMixin<User>; 
+    public getAssignees!: BelongsToManyGetAssociationsMixin<User>; 
     public removeUsers!: BelongsToManyRemoveAssociationMixin<User, number>
-    public setUsers!: BelongsToManySetAssociationsMixin<User, number>
+    public setAssignees!: BelongsToManySetAssociationsMixin<User, number>
 }
 
 Task.init({
@@ -125,7 +124,7 @@ Task.init({
     description: { type: DataTypes.TEXT, allowNull: true },
     priority: { type: DataTypes.STRING, allowNull: true, validate: {isIn: [['Высокий' , 'Средний' , 'Низкий']]} },
     deadline: { type: DataTypes.DATE, allowNull: true },
-    status: {type: DataTypes.STRING, allowNull: false, defaultValue: 'В процессе', validate: { isIn: [['В процессе', 'Выполенено']],} },
+    status: {type: DataTypes.STRING, allowNull: false, defaultValue: 'В процессе', validate: { isIn: [['В процессе', 'Завершено']],} },
     topicId: { type: DataTypes.INTEGER, references: { model: Topic, key: 'id' } },
     discussionId: { type: DataTypes.INTEGER, allowNull: false, references: { model: Discussion, key: 'id' } },
 }, {
@@ -139,7 +138,7 @@ class TaskAssignees extends Model {
 
 TaskAssignees.init({
     taskId: { type: DataTypes.INTEGER, references: { model: 'Tasks', key: 'id' } },
-    userId: { type: DataTypes.ARRAY(DataTypes.INTEGER) }, 
+    userId: { type: DataTypes.INTEGER, references: { model: 'Users', key: 'id' } },
 }, {
     sequelize, modelName: 'TaskAssignees'
 });
@@ -238,7 +237,7 @@ Task.hasMany(Comment, { foreignKey: 'taskId', as: 'comments' });
 Task.belongsTo(Discussion, { foreignKey: 'discussionId' });
 
 User.hasMany(Discussion, { foreignKey: 'creatorId', as: 'ownedDiscussions' })
-User.belongsToMany(Task, { through: 'TaskAssignees', foreignKey: 'userId', as: 'assignees' });
+User.belongsToMany(Task, { through: 'TaskAssignees', foreignKey: 'userId', as: 'tasks' });
 User.belongsToMany(Discussion, { through: DiscussionParticipants, foreignKey: 'userId', as: 'discussions'});
 User.belongsToMany(User, {through: UserFriends, as: 'friends', foreignKey: 'userId'})
 User.belongsToMany(User, {through: UserFriends, as: 'friendOf', foreignKey: 'friendId'})

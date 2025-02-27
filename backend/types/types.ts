@@ -8,20 +8,27 @@ enum TaskStatus {
     Completed = 'Задача выполнена'
 }
 
+export interface UserInterface {
+    id: number,
+    username: string,
+    email: string,
+}
+
 export interface TaskInterface {
     id: number,
-    title: string,
+    title?: string,
     description?: string,
     priority: string,
     deadline: Date,
     status: string,
     topicId: number,
     discussionId: number,
-    assignees?: number[],
+    assignees?: UserInterface[],
     connections?: { taskId: number, connectionTaskId: number }[],
 }
 
 export interface TopicInterface {
+    id: number,
     title: string,
     tasks: TaskInterface[]
 }
@@ -29,15 +36,15 @@ export interface TopicInterface {
 export interface DiscussionInterface {
     title: string,
     description?: string,
-    creatorId?: number,
+    creatorId: number,
     participants?: number[],
     topics?: TopicInterface[]
 }
 
 export interface DiscussionUpdatingPatch {
-    discussion?: Partial<Discussion>;
-    topics? : Partial<Topic>[];
-    tasks?: Partial<Task>[];
+    discussion?: Partial<DiscussionInterface>;
+    topics? : Partial<TopicInterface>[];
+    tasks?: Partial<TaskInterface>[];
 }
 
 export interface PositionInterface {

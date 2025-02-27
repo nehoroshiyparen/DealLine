@@ -23,7 +23,8 @@ const DiscussionEditSection = () => {
         owner,
         setOwner,
         members,
-        setMembers
+        setMembers,
+        isNewDiscussion
 
     } = useDiscussionEditContext()
 
@@ -39,13 +40,19 @@ const DiscussionEditSection = () => {
         }
     }, [])
 
-    if (!discussion) return null
+    if (!discussion || !discussion.id) return null
 
     return (
         <div className='discussion-edit--section'>
-            <div className='discussion__title--editing'>
-                    {discussion?.title}
-                </div>
+                {isNewDiscussion ? (
+                    <div className='discussion__title--editing'>
+                        Создание нового обсуждения
+                    </div>
+                ) : (
+                    <div className='discussion__title--editing'>
+                        {discussion?.title}
+                    </div>
+                )}
                 <div className='edit-params---container'>
                     <div className="editeble-param">
                         <div className="param-title _title">

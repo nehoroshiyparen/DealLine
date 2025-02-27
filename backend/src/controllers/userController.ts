@@ -113,7 +113,7 @@ export const deleteFriend = async(req: Request, res: Response) => {
     try {
         const {  firstId, secondId } = req.body
         const response = await userService.deleteFriend(firstId, secondId)
-        res.json(response)
+        res.status(200).json(response)
     } catch (error) {
         if (error instanceof ApiError) {
             res.status(error.status).json({

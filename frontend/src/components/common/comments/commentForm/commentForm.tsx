@@ -21,7 +21,7 @@ const CommentsForm = ({taskId}: props) => {
   const [preview, setPreview] = useState(false);
 
   const user = useSelector((state: RootState) => state.user);
-  const userId = user.user.id
+  const userId = user.user!.id
 
   const handleSubmit = async(event: React.FormEvent) => {
     event.preventDefault();

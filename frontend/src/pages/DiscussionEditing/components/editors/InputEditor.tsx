@@ -1,11 +1,11 @@
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useEffect } from "react";
 import { Discussion, Task, Topic } from "../../../../types";
 import { useDiscussionEditContext } from "../../context+provider/discussionEditContext";
 
 interface InputEditorProps {
     state: string;
     setState: React.Dispatch<SetStateAction<string>>;
-    entity: string;
+    entity: "discussion" | "topic" | "task"
     id: number;
 }
 

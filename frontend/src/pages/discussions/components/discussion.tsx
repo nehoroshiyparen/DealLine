@@ -66,8 +66,6 @@ export default function Discussion({ discussion }: DiscussionProps) {
         discussion: discussion,
     })
 
-    console.log(state.selectedTask, ' - selectedTask. ', state.selectedTopic, ' - selectedTopic')
-
     return (
         <DiscussionProvider value={ContextValue}>
         <div className='discussion'>

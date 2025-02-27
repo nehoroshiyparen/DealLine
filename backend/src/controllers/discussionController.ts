@@ -21,7 +21,7 @@ export const createDiscussion = async(req: Request, res: Response) => {
     try {
         const { creatorId, participants, title, description, topics }: DiscussionInterface = req.body
         console.log(title, req.body)
-        const createdDiscussion = await discussionService.createDiscussion(title, topics, description, participants, creatorId)
+        const createdDiscussion = await discussionService.createDiscussion(title, creatorId,  topics, description, participants)
         if (!createdDiscussion) {
             res.json('При создании обсуждения произошла ошибка. Некорректные данные')
         } 
@@ -31,13 +31,29 @@ export const createDiscussion = async(req: Request, res: Response) => {
     }
 }
 
+export const createEmptyDiscussion = async(req: Request, res: Response) => {
+    const { creatorId } = req.body;
+
+    if (!creatorId) {
+        res.status(400).json({ message: 'ID создателя обязательно!' });
+    }
+
+    try {
+        const discussion = await discussionService.createEmptyDiscussion(creatorId);
+        res.status(201).json({discussion});
+    } catch (error) {
+        console.error('Ошибка при создании обсуждения: ', error);
+        res.status(500).json({ message: 'Ошибка при создании обсуждения' });
+    }
+}
+
 export const editDiscussion = async(req: Request, res: Response) => {
     try {
         const { id, patch } = req.body
         const updatedDiscussionData = await discussionService.updateDiscussion(id, patch)
         res.json(updatedDiscussionData)
     } catch (error) {
-        res.json({message :'Ошибка при обновлении обсуждения: ', error})    
+        res.json({message :'Ошибка при обновлении обсуждения: ', error: error})    
     }
 }
 

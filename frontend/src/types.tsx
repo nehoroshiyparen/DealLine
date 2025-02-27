@@ -35,7 +35,7 @@ export interface Task {
     title: string,
     description: string,
     priority: string,
-    deadline: Date,
+    deadline: Date | null,
     status: string,
     topicId: number,
     discussionId: number,
@@ -43,10 +43,22 @@ export interface Task {
     comments: Comment[]
 }
 
+export const emptyTask: Partial<Task> = {
+    title: '',
+    description: '',
+    deadline: null,
+    assignees: [],
+}
+
 export interface Topic {
     id: number;
     title: string;
     tasks: Task[];
+}
+
+export const emptyTopic: Partial<Topic> = {
+    title: '',
+    tasks: [],
 }
 
 export interface Discussion {
@@ -57,6 +69,14 @@ export interface Discussion {
     owner: MiniUser;
     members: MiniUser[];
     topics: Topic[];
+}
+
+export const emptyDiscussion: Partial<Discussion> = {
+    id: -1,
+    title: '',
+    description: '',
+    creation_date: (new Date).toDateString(),
+    topics: []
 }
 
 export interface Notification {

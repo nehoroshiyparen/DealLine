@@ -1,8 +1,5 @@
-import { Link } from 'react-router-dom'
 import './DiscussionEditing.scss'
 import useDiscussionEditingState from '../../hooks/DiscussionEditing/useDiscussionEditing'
-import Member from './components/member/member'
-import AddMember from './components/addMember/addMember'
 import DefaultSeparation from './components/separation/default-separation'
 import { DiscussionEditProvider } from './context+provider/discussionEditProvider'
 import DiscussionEditSection from './sections/discussionEditSection/discussionEditSection'
@@ -18,7 +15,15 @@ const DiscussionEditing = () => {
         user: state.user,
         discussion: state.discussion,
         updatedDiscussion: state.updatedDiscussion,
+        isNewDiscussion: state.isNewDiscussion,
         updateField: state.updateField,
+        addTopic: state.addTopic,
+        deleteTopic: state.deleteTopic,
+        addTaskToTopic: state.addTaskToTopic,
+        deleteTask: state.deleteTask,
+        createNewDiscussion: state.createNewDiscussion,
+        saveChanges: state.saveChanges,
+        deleteDiscussion: state.deleteDiscussion,
         title: state.title,
         setTitle: state.setTitle,
         description: state.description,

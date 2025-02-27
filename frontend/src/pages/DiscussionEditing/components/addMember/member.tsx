@@ -7,7 +7,13 @@ interface AvailableUserProps {
 
 const AvailableUser = ({user, func}: AvailableUserProps) => {
     return (
-        <div className="available-user" onClick={() => func(user)}>
+        <div 
+            className="available-user" 
+            onClick={() => {
+                console.log(`Нажатие на ${user.username}`);
+                func(user);
+            }}
+        >
             {user.username}
         </div>
     )

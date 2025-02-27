@@ -1,7 +1,7 @@
 import { Comment, Discussion, sequelize, Task, Topic, User } from "../../database/models"
 import { Op } from 'sequelize'
 import ApiError from "../exceptions/api-error"
-import { DiscussionUpdatingPatch, TaskInterface, TopicInterface } from "../../types/types"
+import { DiscussionUpdatingPatch, TaskInterface, TopicInterface, UserInterface } from "../../types/types"
 
 class discussionService {
     async getDiscussions(userId?: number, discussionId?: number) {
@@ -122,7 +122,7 @@ class discussionService {
         }
     }
 
-    async createDiscussion(title: string,  topics?: TopicInterface[], description?: string, participants?: number[], creatorId?: number) {
+    async createDiscussion(title: string, creatorId: number,  topics?: TopicInterface[], description?: string, participants?: number[]) {
         const transaction = await sequelize.transaction()
         try {
             if (creatorId != null) {
@@ -153,7 +153,8 @@ class discussionService {
                                     }, { transaction })
 
                                     if (task.assignees) {
-                                        await createdTask.setUsers(task.assignees)
+                                        const userIds = task.assignees.map((user: UserInterface) => user.id)
+                                        await createdTask.setAssignees(userIds)
                                     }
 
                                     return createdTask
@@ -175,6 +176,18 @@ class discussionService {
             console.log(error)
             throw ApiError.BadRequest(`Ошибка при создании обсуждения: ${error}`);
         }
+    }
+
+    async createEmptyDiscussion(creatorId: number) {
+        const discussion = await Discussion.create({
+            title: '',
+            creatorId,
+            createdAt: new Date(),
+        });
+
+        await discussion.setParticipants([creatorId])
+    
+        return discussion;
     }
 
     async updateDiscussion(id: number, patch: DiscussionUpdatingPatch) {
@@ -204,15 +217,9 @@ class discussionService {
             }
             
             if (patch.tasks) {
-                const taskIds = patch.tasks.map(task => task.id);
-                const existingTasks = await Task.findAll({ where: { id: taskIds, discussionId: id }, transaction });
-    
-                if (existingTasks.length !== taskIds.length) {
-                    throw ApiError.BadRequest('Некоторые задачи не принадлежат обсуждению или не существуют');
-                }
-    
                 updatedTasks = await Promise.all(
                     patch.tasks.map(async (task) => {
+                        console.log(task.id)
                         const [affectedCount, tasks] = await Task.update(
                             { ...task },
                             { where: { id: task.id }, transaction, returning: true }
@@ -224,7 +231,8 @@ class discussionService {
                         const updatedTask = tasks[0];
     
                         if (task.assignees) {
-                            await updatedTask.setUsers(task.assignees, { transaction });
+                            const userIds = task.assignees.map((user: UserInterface) => user.id)
+                            await updatedTask.setAssignees(userIds, { transaction });
                         }
     
                         return updatedTask;

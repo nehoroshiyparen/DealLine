@@ -7,14 +7,14 @@ import { API_URL } from '../http'
 
 interface UserState {
     isAuthentcated: boolean;
-    user: MiniUser | null;
+    user: MiniUser;
     loading: boolean;
     error: string | null;
 }
 
 const initialState: UserState = {
         isAuthentcated: false,
-        user: null,
+        user: {} as MiniUser,
         loading: false,
         error: null
 }
@@ -103,7 +103,7 @@ const userSlice = createSlice({
         builder.addCase(logout.fulfilled, (state) => {
             state.loading = false
             state.isAuthentcated = false
-            state.user = null
+            state.user = {} as MiniUser
         })
         builder.addCase(logout.rejected, (state, action) => {
             state.loading = false
@@ -128,7 +128,7 @@ const userSlice = createSlice({
         builder.addCase(checkAuth.rejected, (state, action) => {
             state.loading = false;
             state.isAuthentcated = false;
-            state.user = null;
+            state.user = {} as MiniUser;
             state.error = action.payload as string || 'Refresh error';
         })
     }

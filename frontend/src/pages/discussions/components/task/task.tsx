@@ -64,7 +64,7 @@ const TaskComponent = ({ task }: Props) => {
                     <div className="task-params">
                         <div className="task-parameter">
                             <span>Дедлайн: </span> 
-                            <div className="underlined-text">{task.deadline ? task.deadline.toDateString() : ' 20.02.2025'}</div>
+                            <div className="underlined-text">{task.deadline ? (new Date(task.deadline)).toLocaleDateString() : ' 20.02.2025'}</div>
                         </div>
                         <div className="task-parameter">
                             <span>Приоритет: </span> 
@@ -99,16 +99,5 @@ const TaskComponent = ({ task }: Props) => {
         </div>
     );
 };
-
-/* 
-
-assignees 
-deadline
-priority
-status
-description
-comments
-
-*/
 
 export default TaskComponent;

@@ -1,0 +1,61 @@
+.grid-list {
+    width: 80%;
+    height: 100vh;
+    padding: 20px 80px 80px 80px;
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    
+    position: relative;
+}
+
+.grid-list--header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+    padding: 0;
+
+    font-size: 35px;
+    font-weight: 600;
+}
+
+.available-grids {
+    box-sizing: border-box;
+    padding: 30px;
+}
+
+.grids--container {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-around;
+    gap: 30px;
+
+    width: 100%;
+}
+
+.no-grids {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    height: 600px;
+
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.grid-advice {
+    font-size: 20px;
+    text-decoration: none;
+    color: white;
+
+    transition: 0.2s;
+}
+
+.grid-advice:hover {
+    text-decoration: underline;
+    color: #6598ff;
+}

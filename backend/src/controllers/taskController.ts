@@ -36,10 +36,11 @@ export const getOneTask = async(req: Request, res: Response) => {
 export const createTask = async(req: Request, res: Response) => {
     try {
         const { topicId, params } = req.body
+        console.log(topicId, params)
         const task = await taskService.createTask(topicId, params)
         res.json(task)
     } catch (error) {
-        res.json({message: 'Ошибка при получении всех задач', error})
+        res.json({message: 'Ошибка при создании задачи', error})
     }
 }
 

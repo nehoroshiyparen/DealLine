@@ -18,10 +18,10 @@ export const sendNotification = async(req: Request, res: Response) => {
     try {
         const { patch } = req.body
         const notificationCreateRequest = await notificationService.createNotification(patch)
-        res.json(notificationCreateRequest)
+        res.status(200).json(notificationCreateRequest)
     } catch (error) {
         if (error instanceof ApiError) {
-            res.status(200).json({
+            res.status(401).json({
                 message: error.message,
                 error: error.errors || []
             })

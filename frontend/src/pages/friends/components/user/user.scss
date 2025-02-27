@@ -1,0 +1,44 @@
+.user--search {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 40px;
+
+    font-size: 30px;
+
+    border-radius: 10px;
+
+    background: rgb(36, 36, 36);
+    transition: 0.3s;
+
+    display: flex;
+
+    justify-content: space-between;
+}
+
+.user--search:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.user_username--search {
+    font-size: 30px;
+}
+
+.user--search-functions {
+    height: 45px;
+}
+
+.search-function {
+    height: 100%;
+    aspect-ratio: 1/1;
+
+    background-size: cover;
+}
+
+.add-friend-- {
+    background-image: url('/images/add-friend.png');
+}
+
+.delete-friend-- {
+    background-image: url('/images/close.png');
+    filter: invert(100%);
+}

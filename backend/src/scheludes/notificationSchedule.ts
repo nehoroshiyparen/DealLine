@@ -21,7 +21,9 @@ async function checkAndSendReminders() {
 
         const message = `Напоминаем, что задача ${task.title} должна быть завершена через ${daysRemaining} ${daysRemaining === 1 ? 'день' : 'дня'} (дедлайн: ${task.deadline.toLocaleString()})`
 
-        for (const user of task.assignees) {
+        const assignees = await task.getAssignees()
+
+        for (const user of assignees) {
             await Notifications.create({
                 type: 'reminder',
                 senderId: discussion.creatorId,

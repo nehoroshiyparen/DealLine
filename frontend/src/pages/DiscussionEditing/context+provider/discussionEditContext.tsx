@@ -3,9 +3,17 @@ import { Discussion, MiniUser, Task, Topic } from "../../../types";
 
 export interface DiscussionEditContextType {
     user: MiniUser | null;
-    discussion?: Discussion;
+    discussion?: Partial<Discussion>;
     updatedDiscussion?: Partial<Discussion> & { id?: number };
-    updateField: Function;
+    isNewDiscussion: boolean;
+    updateField: (field: string, value: any, id: number, entityType: 'discussion' | 'topic' | 'task') => void;
+    addTopic: () => void;
+    deleteTopic: (topicId: number) => void;
+    addTaskToTopic: (topicId: number) => void;
+    deleteTask: (taskId: number) => void;
+    createNewDiscussion: () => void;
+    saveChanges: () => void;
+    deleteDiscussion: () => void;
     title: string;
     setTitle: React.Dispatch<SetStateAction<string>>;
     description: string;

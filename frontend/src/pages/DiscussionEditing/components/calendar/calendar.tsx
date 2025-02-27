@@ -1,7 +1,7 @@
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
 import './calendar.scss'
-import { useState } from "react";
+import { format } from 'date-fns'
 import { useDiscussionEditContext } from "../../context+provider/discussionEditContext";
 
 const Calendar = () => {
@@ -15,8 +15,9 @@ const Calendar = () => {
 
     const handleDateChange = (date: Date | null) => {
         if (date instanceof Date && !isNaN(date.getTime())) {
+            const formattedDate = format(date, 'yyyy-MM-dd HH:mm:ssxxx');
             setSelectedTaskDeadline(date);
-            updateField('deadline', selectedTaskDeadline, selectedTask?.id, 'task')
+            updateField('deadline', formattedDate, selectedTask?.id!, 'task');
         } else {
             console.error("Выбрана невалидная дата!");
         }
@@ -25,7 +26,7 @@ const Calendar = () => {
     return (
         <div className="calendar">
             <DatePicker
-                selected={selectedTaskDeadline}
+                selected={selectedTaskDeadline ? selectedTaskDeadline : null}
                 dateFormat='dd/MM/yyyy'
                 onChange={(date) => handleDateChange(date as Date | null)} 
         />

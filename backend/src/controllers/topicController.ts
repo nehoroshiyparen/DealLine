@@ -6,7 +6,7 @@ export const createTopic = async(req: Request, res: Response) => {
     try {
         const { title, discussionId } = req.body
         const topic = await topicService.createTopic(title, discussionId)
-        res.json({topic})
+        res.json(topic)
     } catch (e) {
         if (e instanceof ApiError) {
             res.status(e.status).json({
@@ -24,7 +24,7 @@ export const createTopic = async(req: Request, res: Response) => {
 
 export const deleteTopic = async(req: Request, res: Response) => {
     try {
-        const { id } = req.params
+        const { id } = req.body
         const response = await topicService.deleteTopic(Number(id))
         res.json({response}) 
     } catch (e) {

@@ -7,11 +7,22 @@ const TopicEditSection = () => {
 
     const {
         discussion,
+        updatedDiscussion,
+        addTopic,
+        deleteTopic,
         selectedTopic,
         setSelectedTopic,
         selectedTopicTitle,
         setSelectedTopicTitle,
     } = useDiscussionEditContext()
+
+    const createTopic = () => {
+        addTopic()
+    }
+
+    const removeTopic = () => {
+        deleteTopic(selectedTopic?.id!)
+    }
 
     return (
         <div className='topic-edit--section'>
@@ -19,11 +30,11 @@ const TopicEditSection = () => {
                 <div className='selectedTopicTitle'>
                     Тема: 
                         {selectedTopic
-                            ? <span> {selectedTopic.title}</span>
+                            ? <span> {selectedTopicTitle}</span>
                             : ' Тема не выбрана'
                         }
                 </div>
-                <DefaultList list={discussion} state={selectedTopic} setState={setSelectedTopic}/>
+                <DefaultList list={updatedDiscussion} state={selectedTopic} setState={setSelectedTopic} type='topics'/>
             </div>
             {selectedTopic 
                 ? 
@@ -43,11 +54,15 @@ const TopicEditSection = () => {
                 null
             }
             <div className='edit-functions--block'>
-                <div className='add-element edit-function'>
+                <div 
+                    className='add-element edit-function' 
+                    onClick={createTopic}
+                >
                     Добавить тему
                 </div>
                 <div 
                     className={`delete-element edit-function ${selectedTopic ? 'selected' : ''}`}
+                    onClick={removeTopic}
                 >
                     Удалить тему
                 </div>

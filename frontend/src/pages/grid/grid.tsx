@@ -14,12 +14,16 @@ import { fetchGrid } from "../../utils/gridUtils/fetchGrid";
 import Save from "./components/saveButton";
 import Mix from "./components/mixButton";
 import TaskInformation from "./components/information";
+import { useParams } from "react-router-dom";
+import DiscussionService from "../../service/discussionService";
 
 export default function Grid() {
 
-    const user = useSelector((state: RootState) => state.user);
-    const { discussionsState, fetchDiscussions } = useDiscussion();
+    const user = useSelector((state: RootState) => state.user.user);
+    const { discussionsState } = useDiscussion();
     const discussions = discussionsState.discussions;
+
+    const { discussionId } = useParams()
 
     const [curDis, setCurDis] = useState<Discussion>();
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -34,31 +38,30 @@ export default function Grid() {
     }
 
     useEffect(() => {
-        if (user && user.user != null) {
-            if (!discussionsState.discussions || discussionsState.discussions.length === 0) {
-                fetchDiscussions(user.user.id);
+        if (user) {
+            const fetchOneDiscussion = async() => {
+                const response = await DiscussionService.fetchOneDiscussion(user.id, Number(discussionId))
+                setCurDis(response.data)
+                console.log(response)
             }
+            fetchOneDiscussion()
         }
     }, [user]);
 
-    useEffect(() => {
-        if (discussions) {
-            setCurDis(discussions[0]);
-        }
-    }, [discussions]);
+    console.log(curDis)
 
     useEffect(() => {
         if (curDis) {
             const fetchAndGenerateGraph = async () => {
                 try {
-                    const response = await NetService.fetchPositions(user.user!.id, curDis.id); /// !!!
+                    const response = await NetService.fetchPositions(user!.id, curDis.id); /// !!!
                     let elements
 
                     if (response.data.length === 0) {
                         elements = await generateGraph(curDis, openInfo);
-                        await NetService.updatePositions(user.user!.id, elements.positions) /// !!!
+                        await NetService.updatePositions(user!.id, elements.positions) /// !!!
                     } else {
-                        elements = await fetchGrid(user.user!.id, curDis, openInfo) /// !!!
+                        elements = await fetchGrid(user!.id, curDis, openInfo) /// !!!
                     }
                     setNodes(elements.nodes);
                     setEdges(elements.edges);
@@ -95,8 +98,8 @@ export default function Grid() {
                     <Controls />
                 </ReactFlow>
                 <ZoomManager onZoomChange={setZoom} />
-                <Save userId={Number(user.user!.id)} discussion={curDis!} state={hasChanged}/> 
-                <Mix setNodes={setNodes} setHasChanged={setHasChanged} userId={user.user!.id} discussion={curDis!} onClick={openInfo}/>
+                <Save userId={Number(user!.id)} discussion={curDis!} state={hasChanged}/> 
+                <Mix setNodes={setNodes} setHasChanged={setHasChanged} userId={user!.id} discussion={curDis!} onClick={openInfo}/>
                 <TaskInformation taskId={taskId} infoOpen={infoOpen} setInfoOpen={setInfoOpen}/>
             </div>
         </ReactFlowProvider>

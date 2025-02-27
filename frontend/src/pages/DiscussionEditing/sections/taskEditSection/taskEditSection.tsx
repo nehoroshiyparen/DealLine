@@ -13,6 +13,9 @@ const TaskEditSection = () => {
 
     const {
         discussion,
+        updatedDiscussion,
+        addTaskToTopic,
+        deleteTask,
         selectedTopic,
         selectedTask,
         setSelectedTask,
@@ -23,17 +26,28 @@ const TaskEditSection = () => {
         selectedTaskAssignees,
     } = useDiscussionEditContext()
 
+    const createTask = () => {
+        addTaskToTopic(selectedTopic?.id!)
+    }
+
+    const removeTask = () => {
+        deleteTask(selectedTask?.id!)
+    }
+
     return (
         <div className="task-edit-section">
              <div className='task-editing' style={{zIndex: '0'}}>
                 <div className='selectedTaskTitle'>
                     Задача: 
                         {selectedTask
-                            ? <span> {selectedTask.title}</span>
+                            ? <span> {selectedTaskTitle}</span>
                             : ' Задача не выбрана'
                         }
                 </div>
-                <DefaultList list={selectedTopic} state={selectedTask} setState={setSelectedTask}/>
+                {selectedTopic 
+                    ? <DefaultList list={updatedDiscussion} state={selectedTask} setState={setSelectedTask} type="tasks"/> 
+                    : null
+                }
             </div>
             {selectedTopic && selectedTask ? 
                 <>
@@ -103,20 +117,25 @@ const TaskEditSection = () => {
                 :
                 null
             }
-            <div className='edit-functions--block'>
-                <div className='add-element edit-function'>
-                    Добавить задачу
-                </div>
-                <div 
-                    className={`delete-element edit-function ${selectedTask ? 'selected' : ''}`}
+            {selectedTopic
+                ? <div className='edit-functions--block'>
+                    <div 
+                        className='add-element edit-function' 
+                        onClick={createTask}
                     >
-                        Удалить задачу
+                        Добавить задачу
+                    </div>
+                    <div 
+                        className={`delete-element edit-function ${selectedTask ? 'selected' : ''}`}
+                        onClick={removeTask}
+                        >
+                            Удалить задачу
+                    </div>
                 </div>
-            </div>
+                : null
+            }
         </div>
     )
 }
-
-// разберешься че дальше делать. Хорошо, спасибо
 
 export default TaskEditSection

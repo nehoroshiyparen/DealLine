@@ -25,7 +25,7 @@ export const TaskNode = ({ data }: { data: { task: Task; onClick: Function} }) =
             <div className='task-info--node'>
                 <div className='task-deadline--node'>
                     Дедлайн: <span style={{ fontWeight: 'bold', textDecoration: 'underline' }}>
-                        {task.deadline === null ? `Нет ограничений` : `${task.deadline}`}
+                        {task.deadline === null ? `Нет ограничений` : `${(new Date(task.deadline)).toLocaleDateString()}`}
                     </span>
                 </div>
                 <div className='task-priority'>

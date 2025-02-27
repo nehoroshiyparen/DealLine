@@ -7,7 +7,7 @@ router.get('/', getAllTasks)
 router.get('/one/:taskId', getOneTask)
 router.post('/', createTask)
 router.post('/status/:id', changeTaskStatus)
-router.delete('/', deleteTask)
+router.post('/delete', deleteTask)
 router.post('/sendComment', sendComment)
 
 export default router

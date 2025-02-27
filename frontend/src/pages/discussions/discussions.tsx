@@ -5,6 +5,7 @@ import './discussions.scss'
 import { useSelector } from 'react-redux'
 import { useDiscussion } from '../../hooks/store/useDiscussion'
 import { Discussion as DiscussionType } from '../../types'
+import NewDiscussion from './components/newDiscussion'
 
 export default function Discussions() {
 
@@ -50,10 +51,17 @@ export default function Discussions() {
             )
         }
 
-        return filteredDiscussions.map(discussion => (
-            <Discussion discussion={discussion} key={discussion.id}/>
-        ))
+        return (
+            <>
+                {filteredDiscussions.map(discussion => (
+                    <Discussion discussion={discussion} key={discussion.id}/>
+                ))}
+                <NewDiscussion/>
+            </>
+        )
     }
+
+    console.log(discussions)
 
     return (
         <>
